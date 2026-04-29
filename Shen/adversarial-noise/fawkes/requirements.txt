@@ -1,0 +1,13 @@
+fawkes==1.0.3
+
+# Fawkes 1.0.3 是 2020 年的版本，必須搭配 Keras 2 / NumPy 1 / mtcnn 0.1.x。
+# 以下釘版避免被 PyPI 自動拉到 2026 年代的破壞性新版（TF 2.16+、Keras 3、NumPy 2、mtcnn 1.x 全部不相容）。
+tensorflow==2.15.1
+keras==2.15.0
+numpy==1.26.4
+mtcnn==0.1.1
+pillow>=9.5,<11
+bleach>=6.0,<7
+
+# 新版 setuptools 拿掉了 pkg_resources，會讓 fawkes/utils.py 啟動就壞掉。
+setuptools<81

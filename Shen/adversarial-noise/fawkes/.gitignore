@@ -1,0 +1,4 @@
+.venv/
+photos/*
+!photos/.gitkeep
+*_cloaked.*

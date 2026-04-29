@@ -1,0 +1,4 @@
+Is Adversarial Attack: False
+mobile_face ASR in FAR@0.1: 0.0000, ASR in FAR@0.01: 0.0000, ASR in FAR@0.001: 0.0000
+Is Adversarial Attack: True
+mobile_face ASR in FAR@0.1: 1.0000, ASR in FAR@0.01: 1.0000, ASR in FAR@0.001: 1.0000
