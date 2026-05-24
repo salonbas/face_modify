@@ -11,3 +11,4 @@ bleach>=6.0,<7
 
 # 新版 setuptools 拿掉了 pkg_resources，會讓 fawkes/utils.py 啟動就壞掉。
 setuptools<81
+
