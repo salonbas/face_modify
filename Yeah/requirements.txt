@@ -1,0 +1,18 @@
+# Build helpers（編譯 insightface 時會用到）
+pip>=24
+setuptools>=70
+wheel>=0.45
+cython>=3.0
+
+# Core runtime
+numpy>=2.2,<3
+opencv-python>=4.10
+matplotlib>=3.9
+onnxruntime>=1.25
+
+# Face analysis（名稱：insightface）
+insightface==0.7.3
+
+torch
+torchvision
+onnx2torch>=1.5

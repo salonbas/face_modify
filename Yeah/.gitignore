@@ -1,0 +1,25 @@
+venv/
+.venv/
+.venv311/
+venv311/
+__pycache__/
+*.py[cod]
+*.pyd
+*.pyo
+.Python
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# Large assets / experiment artifacts
+data/adversarial/*
+models/*
+results/*
+
+# Keep folder structure
+!data/adversarial/.gitkeep
+!models/.gitkeep
+!results/.gitkeep
+
+# Local personal notes
+COMMANDS.local.md

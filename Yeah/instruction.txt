@@ -1,0 +1,76 @@
+================================================================================
+使用前（每次開新終端機）
+================================================================================
+  cd ~/projects/Adversarial-Robustness-Face-Analysis
+  source .venv/bin/activate
+
+（之後同一個視窗不用再 cd／activate，除非關掉終端機。）
+
+================================================================================
+腳本總覽
+================================================================================
+  attack_gaussian.py  高斯噪聲基準實驗
+  attack_fgsm.py      FGSM / PGD / pgd_full 攻擊（--mode 切換）
+  verify_attack.py    驗證攻擊是否成功（InsightFace 重新抽 embedding 比對）
+
+================================================================================
+attack_gaussian — 高斯噪聲基準
+================================================================================
+  python scripts/attack_gaussian.py --run-name gauss1
+  python scripts/attack_gaussian.py --img data/raw/sun.png --run-name gauss1 --save-noisy
+
+================================================================================
+attack_fgsm — 三種攻擊模式（--mode 切換）
+================================================================================
+
+--- FGSM（單步，最快）---
+  python scripts/attack_fgsm.py --mode fgsm --run-name fgsm1
+  python scripts/attack_fgsm.py --mode fgsm --img data/raw/musk1.jpg --run-name fgsm_musk --no-save-noise-maps
+
+--- PGD（多步，有接縫，實驗用）---
+  python scripts/attack_fgsm.py --mode pgd --steps 20 --run-name pgd20
+  python scripts/attack_fgsm.py --mode pgd --steps 20 --img data/raw/sun.png \
+    --eps-list "0.005,0.01,0.02,0.05" --run-name pgd20_sun
+
+--- pgd_full（多步全圖，無接縫，推薦）---
+  python scripts/attack_fgsm.py --mode pgd_full --steps 100 --run-name pgdfull_sun \
+    --eps-list "0.005,0.008,0.010,0.012,0.015,0.020"
+
+  python scripts/attack_fgsm.py --mode pgd_full --steps 200 --img data/raw/musk1.jpg \
+    --run-name pgdfull_musk --eps-list "0.010,0.020,0.030,0.040" --no-save-noise-maps
+
+已知有效設定：
+  sun.png   → eps=0.012, steps=100, cosine=0.339（攻擊成功，人眼無法察覺）
+  musk1.jpg → eps=0.040, steps=200, cosine=0.347（攻擊成功，人眼無法察覺）
+
+================================================================================
+verify_attack — 驗證攻擊結果
+================================================================================
+  # 單張
+  python scripts/verify_attack.py \
+    --orig data/raw/sun.png \
+    --adv  results/pgd/pgdfull_sun_v1/pgdfull_sun_eps_0.012.png
+
+  # 批次掃描資料夾
+  python scripts/verify_attack.py \
+    --orig data/raw/sun.png \
+    --adv-dir results/pgd/pgdfull_sun_v1/ \
+    --pattern "pgdfull_sun_eps_*.png"
+
+================================================================================
+輸出目錄結構
+================================================================================
+  results/
+    fgsm/<run-name>/          fgsm_cosine_metrics.csv、折線圖、對抗圖
+    pgd/<run-name>/           pgd_cosine_metrics.csv / pgd_full_cosine_metrics.csv
+    gaussian/<run-name>/      eps_cosine_line_chart.png
+    compare/                  跨方法比較圖
+
+================================================================================
+環境變數
+================================================================================
+  GPU（需 CUDA）：
+    export ADVFACE_PROVIDERS=cuda,cpu
+
+  InsightFace 詳細 log（除錯）：
+    export ADVFACE_VERBOSE=1
