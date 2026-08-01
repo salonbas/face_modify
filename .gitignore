@@ -6,6 +6,20 @@
 *.jpg
 *.jpeg
 
+# 例外：實驗產出的結果圖要進 git，不然重跑才有
+!Shen/results/**/*.png
+!Shen/results/**/*.jpg
+!Shen/results/**/*.jpeg
+
+# 金鑰絕對不能進 repo
+*.pem
+*.key
+.env.local
+.runpod_api_key
+runpod.txt
+*_api_key
+*_token
+
 # Python cache / bytecode
 __pycache__/
 *.py[cod]
