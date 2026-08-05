@@ -10,16 +10,15 @@ __pycache__/
 .pytest_cache/
 .mypy_cache/
 .ipynb_checkpoints/
+.cache/
 
-# Large assets / experiment artifacts
-data/adversarial/*
-models/*
+# Experiment artifacts
 results/*
 
-# Keep folder structure
-!data/adversarial/.gitkeep
-!models/.gitkeep
+# Keep tracked placeholders / docs under results
 !results/.gitkeep
+!results/**/README.txt
+!results/**/*README*
 
-# Local personal notes
+# Local personal notes (also archived under archive/docs/)
 COMMANDS.local.md

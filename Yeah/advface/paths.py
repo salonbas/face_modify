@@ -1,12 +1,15 @@
 from datetime import datetime
 from pathlib import Path
 
+from advface.config import project_root
+
 _ATTACK_BASE = {
     "fgsm": "results/fgsm",
     "pgd": "results/pgd",
     "pgd_full": "results/pgd",
     "gaussian": "results/gaussian",
     "compare": "results/compare",
+    "transfer": "results/transfer",
 }
 
 
@@ -17,12 +20,12 @@ def make_run_dir(
     """
     建立並回傳本次執行的輸出目錄。
 
-    目錄結構：results/<attack_type>/<run_name>/
+    目錄結構：<project_root>/results/<attack_type>/<run_name>/
       attack_type：fgsm / pgd / gaussian / compare
       run_name   ：未指定則自動用時間戳，避免覆蓋舊實驗。
     """
-    base = Path(_ATTACK_BASE.get(attack_type, f"results/{attack_type}"))
+    rel = _ATTACK_BASE.get(attack_type, f"results/{attack_type}")
     name = run_name or datetime.now().strftime("%Y%m%d-%H%M%S")
-    out = base / name
+    out = project_root() / rel / name
     out.mkdir(parents=True, exist_ok=True)
     return out.resolve()

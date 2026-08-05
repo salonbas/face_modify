@@ -8,9 +8,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from advface.config import GAUSSIAN_FAIL_THRESHOLD
+from advface.evaluation.similarity import cosine_similarity_or_nan
 from advface.image_io import image_stem, load_bgr
-from advface.insightface_backend import create_face_app, get_embedding_from_bgr
-from advface.metrics import cosine_similarity_or_nan
+from advface.models.insightface_app import create_face_app, get_embedding_from_bgr
 
 
 def run_gaussian_noise_experiment(
@@ -63,11 +63,13 @@ def run_gaussian_noise_experiment(
         cos_text = "nan" if np.isnan(sim) else f"{sim:.6f}"
         print(f"eps={epsilon:>3} | cosine={cos_text} | {status}")
 
-    csv_path = out_dir / "eps_cosine_metrics.csv"
+    csv_path = out_dir / "gaussian_metrics.csv"
     with csv_path.open("w", encoding="utf-8") as f:
-        f.write("eps,cosine_similarity\n")
+        f.write("eps,cosine,success\n")
         for eps, s in zip(eps_values, similarities):
-            f.write(f"{eps},{s:.8f}\n")
+            success = int(np.isnan(s) or s < GAUSSIAN_FAIL_THRESHOLD)
+            cos_str = "nan" if np.isnan(s) else f"{s:.8f}"
+            f.write(f"{eps},{cos_str},{success}\n")
 
     fig = plt.figure(figsize=(10, 5))
     plt.plot(eps_values, similarities, marker="o", color="#1f77b4")
@@ -84,7 +86,7 @@ def run_gaussian_noise_experiment(
     plt.grid(alpha=0.3)
     plt.legend()
     plt.tight_layout()
-    chart_path = out_dir / "eps_cosine_line_chart.png"
+    chart_path = out_dir / "gaussian_cosine_chart.png"
     fig.savefig(chart_path, dpi=160)
     plt.close(fig)
 

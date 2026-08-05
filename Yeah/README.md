@@ -1,39 +1,57 @@
 # Adversarial Robustness — Face Analysis
 
-以 **InsightFace**（`buffalo_l` / ArcFace）作為目標模型，研究對抗性擾動對人臉辨識系統的影響。
-實作從高斯基準→ FGSM → PGD → 全圖無接縫 PGD，逐步推進攻擊效果與隱蔽性。
+以 **InsightFace**（`buffalo_l` / ArcFace）作為目標模型，研究白盒對抗性擾動對人臉辨識系統的影響。
 
-> **核心成果**：在每像素變動僅 3–10/255（人眼幾乎不可見）的條件下，
-> 使 InsightFace 的自匹配 cosine 從 ~1.0 降至 0.35 以下（門檻 0.4），
-> 達成「欺騙 AI 辨識、人眼無法察覺」的目標。
+實作從高斯基準 → FGSM → PGD（裁切）→ **PGD full（全圖，推薦）**，逐步推進攻擊效果與隱蔽性。
+
+> **目前範圍**：僅白盒攻擊（surrogate 與 victim 為同一 ArcFace 權重的不同後端）。  
+> **尚未包含**：黑箱攻擊、transfer attack、query-based attack、交通號誌攻擊。
+
+> **核心成果（legacy results）**：在每像素變動僅 3–10/255 的條件下，使 InsightFace 自匹配 cosine 降至 0.4 門檻以下。詳見 `results/pgd/pgdfull_*`。
 
 ---
 
-## 專案結構
+## 專案架構
 
-```
+```text
 .
 ├── scripts/
-│   ├── attack_gaussian.py    # 高斯噪聲基準實驗
-│   ├── attack_fgsm.py        # FGSM / PGD / 全圖PGD 攻擊（--mode 切換）
-│   └── verify_attack.py      # 用 InsightFace 驗證攻擊是否成功
+│   ├── run_attack.py         # FGSM / PGD / PGD-full（--mode）
+│   ├── run_gaussian.py       # 高斯噪聲基準
+│   ├── verify_attack.py      # InsightFace 驗收
+│   ├── attack_fgsm.py        # deprecated → run_attack.py
+│   └── attack_gaussian.py    # deprecated → run_gaussian.py
 ├── advface/
-│   ├── config.py
-│   ├── paths.py
+│   ├── config.py             # 常數、project_root、providers
+│   ├── paths.py              # results/<attack>/<run>/
 │   ├── image_io.py
-│   ├── insightface_backend.py
-│   ├── metrics.py
-│   └── attacks/
-│       ├── gaussian.py
-│       └── fgsm.py           # FGSM + PGD + 全圖PGD（pgd_full）
-├── data/raw/                 # 原始圖片
-├── results/
-│   ├── fgsm/                 # FGSM 實驗結果
-│   ├── pgd/                  # PGD / pgd_full 實驗結果
-│   └── gaussian/             # 高斯基準結果
+│   ├── models/
+│   │   ├── insightface_app.py   # 評估：完整 FaceAnalysis
+│   │   └── arcface_torch.py     # 攻擊：可微分 ArcFace
+│   ├── attacks/
+│   │   ├── common.py
+│   │   ├── gaussian.py
+│   │   ├── fgsm.py
+│   │   └── pgd.py
+│   ├── evaluation/
+│   │   ├── similarity.py
+│   │   └── attack_result.py
+│   └── experiments/
+│       └── output.py         # 統一輸出命名 + config.json
+├── data/raw/
+├── results/                  # 實驗輸出（含 legacy）
+├── archive/docs/             # 過時文件
+├── tests/
 ├── requirements.txt
 └── README.md
 ```
+
+### 兩條模型路徑（請勿混淆）
+
+| 時機 | 模組 | 用途 |
+|------|------|------|
+| **攻擊時** | `advface.models.arcface_torch` | ONNX→Torch，對齊臉／全圖可微分，對輸入求梯度 |
+| **評估時** | `advface.models.insightface_app` | 完整 FaceAnalysis（偵測→對齊→embedding）驗收 cosine |
 
 ---
 
@@ -42,57 +60,52 @@
 ```bash
 cd Adversarial-Robustness-Face-Analysis
 python3 -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
+source .venv/bin/activate
 pip install -U pip setuptools wheel
 pip install -r requirements.txt
+pip install -e .          # 可選：以套件方式安裝 advface
+```
+
+### 模型權重
+
+權重由 InsightFace 下載至 `~/.insightface/models/buffalo_l/`（含 `w600k_r50.onnx`、`det_10g.onnx` 等）。  
+本 repo **不**存放權重本體。
+
+裝置：
+
+```bash
+# 預設 CPU
+export ADVFACE_PROVIDERS=cuda,cpu   # 可選 GPU
+export ADVFACE_VERBOSE=1            # 顯示 InsightFace 載入 log
+export ADVFACE_ROOT=/path/to/repo   # 可選：強制專案根目錄
 ```
 
 ---
 
-## 攻擊方法一覽
+## 攻擊方法
 
 ### 1. 高斯噪聲（基準）
 
-在每個像素加上隨機 N(0, σ²) 噪聲。**結論：InsightFace 對隨機噪聲相當穩健**，cosine 幾乎不受影響，印證了「有方向性的梯度攻擊」才是關鍵。
+```bash
+python scripts/run_gaussian.py --img data/raw/sun.png --run-name gauss1
+```
+
+### 2. FGSM
 
 ```bash
-python scripts/attack_gaussian.py --img data/raw/sun.png --run-name gauss1
+python scripts/run_attack.py --mode fgsm --img data/raw/sun.png --run-name fgsm1
 ```
 
-### 2. FGSM（單步梯度攻擊）
-
-對 InsightFace 使用的 ArcFace ONNX（`w600k_r50.onnx`）透過 `onnx2torch` 轉換為可微分 PyTorch 模型，對 112×112 對齊人臉計算梯度，單步更新：
-
-```
-x_adv = x - eps×255 × sign(∂cosine/∂x)
-```
+### 3. PGD crop（有接縫）
 
 ```bash
-python scripts/attack_fgsm.py --mode fgsm --img data/raw/sun.png --run-name fgsm1
+python scripts/run_attack.py --mode pgd --steps 20 --img data/raw/sun.png --run-name pgd20
 ```
 
-### 3. PGD（多步迭代，裁切後貼回）
-
-FGSM 的多步版本，共 N 步，每步步長 = eps×255/N，每步後投影回 L∞ ball。
-效果比 FGSM 強約 10 倍，但對齊臉貼回原圖時有**矩形接縫**，肉眼可見。
+### 4. PGD full（**推薦**）
 
 ```bash
-python scripts/attack_fgsm.py --mode pgd --steps 20 --img data/raw/sun.png --run-name pgd20
-```
-
-### 4. pgd_full（全圖 PGD，**推薦**）
-
-關鍵改進：以 PyTorch `affine_grid` + `grid_sample` 取代 OpenCV 裁切，
-讓梯度直接流回整張圖的 delta，**完全消除接縫問題**。
-
-```
-delta 維度 = 原圖大小
-forward: x_adv → 可微分仿射裁切 → ArcFace → cosine
-backward: 梯度流回 delta（整張圖）
-```
-
-```bash
-python scripts/attack_fgsm.py --mode pgd_full --steps 100 \
+python scripts/run_attack.py --mode pgd_full --steps 100 \
   --img data/raw/sun.png \
   --eps-list "0.005,0.008,0.010,0.012,0.015,0.020" \
   --run-name pgdfull_sun
@@ -100,60 +113,80 @@ python scripts/attack_fgsm.py --mode pgd_full --steps 100 \
 
 ---
 
-## 實驗結果
+## 新輸出命名規格
 
-### sun.png（pgd_full，steps=100）
+每次新 run 寫入 `results/<fgsm|pgd|gaussian>/<run-name>/`：
 
-| eps | 每像素最大變動 | Cosine | 結果 |
-|-----|-------------|--------|------|
-| 0.005 | 1.3/255 | 0.716 | 攻擊失敗 |
-| 0.010 | 2.6/255 | 0.440 | 攻擊失敗 |
-| **0.012** | **3.1/255** | **0.339** | **攻擊成功 ✓** |
-| 0.015 | 3.8/255 | 0.181 | 攻擊成功 ✓ |
-| 0.020 | 5.1/255 | -0.038 | 攻擊成功 ✓ |
+| 檔案 | 說明 |
+|------|------|
+| `base_<stem>.png` | 原圖備份 |
+| `adv_<mode>_<stem>_eps_<eps>.png` | 對抗圖 |
+| `<mode>_metrics.csv` | `eps,eps_255,steps,cosine,success` |
+| `<mode>_cosine_chart.png` | cosine vs eps |
+| `config.json` | mode、影像路徑與 hash、eps、steps、seed、model、det_size、provider、run_name |
+| `<mode>_noise_eps_<eps>.png` | 可選擾動熱圖 |
 
-### musk1.jpg（pgd_full，steps=200）
-
-| eps | 每像素最大變動 | Cosine | 結果 |
-|-----|-------------|--------|------|
-| 0.030 | 7.6/255 | 0.413 | 攻擊失敗 |
-| **0.040** | **10.2/255** | **0.347** | **攻擊成功 ✓** |
-
-> **觀察**：不同人臉對攻擊的抵抗能力不同（musk 需要更大的 eps），
-> 這本身也是值得研究的課題。
+`mode` 為 `fgsm` / `pgd` / `pgd_full`。
 
 ---
 
-## 驗證攻擊效果
+## Legacy results
+
+`results/pgd/pgdfull_sun_v1`、`results/pgd/pgdfull_musk_v2` 等為重構前產出，**檔名與 CSV 欄位可能與新規格不同**。  
+請勿覆蓋；驗證時請直接指定檔案路徑。詳見各目錄 README 與 `MIGRATION_NOTES.md`。
+
+### 已知成功案例（legacy）
+
+**sun.png / pgd_full / steps=100**
+
+| eps | Cosine | 結果 |
+|-----|--------|------|
+| 0.012 | 0.339 | 成功 |
+| 0.020 | -0.038 | 成功 |
+
+**musk1.jpg / pgd_full / steps=200**
+
+| eps | Cosine | 結果 |
+|-----|--------|------|
+| 0.040 | 0.347 | 成功 |
+
+---
+
+## 驗證
 
 ```bash
-# 單張驗證
+# 單張（legacy 路徑範例）
 python scripts/verify_attack.py \
   --orig data/raw/sun.png \
   --adv  results/pgd/pgdfull_sun_v1/pgdfull_sun_eps_0.012.png
 
-# 批次驗證整個資料夾
+# 批次（新命名可用 --pattern "adv_*.png"）
 python scripts/verify_attack.py \
   --orig data/raw/sun.png \
-  --adv-dir results/pgd/pgdfull_sun_v1/ \
-  --pattern "pgdfull_sun_eps_*.png"
+  --adv-dir results/pgd/some_new_run/ \
+  --pattern "adv_*.png"
 ```
 
 ---
 
-## InsightFace 裝置設定
+## 測試
 
 ```bash
-# 預設 CPU（最通用）
-# 啟用 GPU（需 CUDA 環境）
-export ADVFACE_PROVIDERS=cuda,cpu
-
-# 顯示 InsightFace 載入詳細 log（除錯用）
-export ADVFACE_VERBOSE=1
+pytest
 ```
+
+---
+
+## 文件
+
+- `PROJECT_AUDIT.md` — 重構前盤點
+- `MIGRATION_NOTES.md` — 腳本／import／輸出命名遷移
+- `REFACTOR_REPORT.md` — 本輪重構報告
+- `archive/docs/` — 過時本機指令與舊說明
 
 ---
 
 ## 依賴
 
-見 `requirements.txt`。核心套件：`insightface`, `onnxruntime`, `onnx2torch`, `torch`, `opencv-python`, `matplotlib`。
+見 `requirements.txt`。核心：`insightface`, `onnxruntime`, `onnx2torch`, `torch`, `opencv-python`, `matplotlib`。  
+`pyproject.toml` 負責套件 metadata；執行時依賴以 `requirements.txt` 為準。

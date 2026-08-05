@@ -1,1 +1,1 @@
-"""攻擊模組：之後新增 PGD、組合攻擊等可放此目錄。"""
+"""攻擊模組：gaussian / fgsm / pgd / pgd_full。"""
