@@ -79,10 +79,14 @@ class InsightFaceEmbedder:
     name: str = f"insightface_{FACE_MODEL_NAME}"
     threshold: float | None = None
 
-    def __init__(self, det_size: tuple[int, int] | None = None) -> None:
+    def __init__(
+        self,
+        det_size: tuple[int, int] | None = None,
+        app: FaceAnalysis | None = None,
+    ) -> None:
         from advface.config import SIMILARITY_THRESHOLD
 
-        self.app = create_face_app(det_size=det_size)
+        self.app = app if app is not None else create_face_app(det_size=det_size)
         self.threshold = float(SIMILARITY_THRESHOLD)
 
     def get_embedding(self, image_bgr: np.ndarray, label: str = "image") -> np.ndarray:

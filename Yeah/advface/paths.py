@@ -10,6 +10,7 @@ _ATTACK_BASE = {
     "gaussian": "results/gaussian",
     "compare": "results/compare",
     "transfer": "results/transfer",
+    "benchmark": "results/benchmarks",
 }
 
 

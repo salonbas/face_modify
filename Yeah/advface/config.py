@@ -22,6 +22,14 @@ FACENET_SIMILARITY_THRESHOLD = None
 DEFAULT_TRANSFER_EPS = "0.040"
 DEFAULT_TRANSFER_STEPS = 200
 DEFAULT_VICTIM_MODEL = "facenet"
+
+# Large-scale Transfer Benchmark v0
+DEFAULT_BENCHMARK_EPS = (0.005, 0.010, 0.020, 0.030, 0.040)
+DEFAULT_BENCHMARK_PGD_STEPS = (20, 50, 100, 200)
+DEFAULT_BENCHMARK_ATTACKS = ("fgsm", "pgd_full")
+LINF_TOLERANCE = 1.0 / 255.0  # uint8 quantization
+SURROGATE_THRESHOLD_STATUS = "provisional"
+VICTIM_THRESHOLD_STATUS = "uncalibrated"
 # 無正式 victim threshold 時，觀測 transfer 的 cosine delta 下限
 TRANSFER_OBSERVED_DELTA = 0.2
 
@@ -83,5 +91,7 @@ def ensure_project_dirs(base: Path | None = None) -> None:
         "results/gaussian",
         "results/compare",
         "results/transfer",
+        "results/benchmarks",
+        "data/benchmark",
     ):
         (base / rel).mkdir(parents=True, exist_ok=True)

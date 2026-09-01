@@ -1,192 +1,134 @@
-# Adversarial Robustness — Face Analysis
+# Adversarial Face Research Platform
 
-以 **InsightFace**（`buffalo_l` / ArcFace）作為目標模型，研究白盒對抗性擾動對人臉辨識系統的影響。
+人臉辨識對抗攻擊研究平台：白盒攻擊、跨模型 transfer evaluation、單次實驗與 batch benchmark。
 
-實作從高斯基準 → FGSM → PGD（裁切）→ **PGD full（全圖，推薦）**，逐步推進攻擊效果與隱蔽性。
-
-> **目前範圍**：僅白盒攻擊（surrogate 與 victim 為同一 ArcFace 權重的不同後端）。  
-> **尚未包含**：黑箱攻擊、transfer attack、query-based attack、交通號誌攻擊。
-
-> **核心成果（legacy results）**：在每像素變動僅 3–10/255 的條件下，使 InsightFace 自匹配 cosine 降至 0.4 門檻以下。詳見 `results/pgd/pgdfull_*`。
+這是研究平台，不是一堆互不相關的實驗腳本。新增攻擊或 victim 時，應插入既有介面，而不是另寫一條 pipeline。
 
 ---
 
-## 專案架構
+## Current Capabilities
+
+- White-box：FGSM、PGD（crop）、PGD Full（全圖，推薦）
+- Transfer evaluation：ArcFace / InsightFace surrogate → FaceNet victim
+- 單次實驗（圖 + HTML report）
+- Batch benchmark（grid、checkpoint / resume、failure isolation、aggregate HTML）
+- 統一 metrics 與 reporting（report 只讀結果，不重跑攻擊）
+
+## Architecture
 
 ```text
-.
-├── scripts/
-│   ├── run_attack.py         # FGSM / PGD / PGD-full（--mode）
-│   ├── run_gaussian.py       # 高斯噪聲基準
-│   ├── verify_attack.py      # InsightFace 驗收
-│   ├── attack_fgsm.py        # deprecated → run_attack.py
-│   └── attack_gaussian.py    # deprecated → run_gaussian.py
-├── advface/
-│   ├── config.py             # 常數、project_root、providers
-│   ├── paths.py              # results/<attack>/<run>/
-│   ├── image_io.py
-│   ├── models/
-│   │   ├── insightface_app.py   # 評估：完整 FaceAnalysis
-│   │   └── arcface_torch.py     # 攻擊：可微分 ArcFace
-│   ├── attacks/
-│   │   ├── common.py
-│   │   ├── gaussian.py
-│   │   ├── fgsm.py
-│   │   └── pgd.py
-│   ├── evaluation/
-│   │   ├── similarity.py
-│   │   └── attack_result.py
-│   └── experiments/
-│       └── output.py         # 統一輸出命名 + config.json
-├── data/raw/
-├── results/                  # 實驗輸出（含 legacy）
-├── archive/docs/             # 過時文件
-├── tests/
-├── requirements.txt
-└── README.md
+advface/
+├── models/          # EmbeddingModel：get_embedding(image)；各模型自管前處理
+├── attacks/         # 攻擊實作 + registry（apply_attack）
+├── evaluation/      # cosine / euclidean / success；與模型無關的擾動度量
+├── experiments/     # canonical run_experiment + 單次輸出 / HTML
+├── benchmark/       # grid、checkpoint、聚合、失敗隔離（不實作攻擊）
+├── config.py        # 常數與路徑
+├── paths.py         # results/<family>/<run>/
+└── image_io.py
 ```
 
-### 兩條模型路徑（請勿混淆）
+資料流：`image + attack config → adversarial image → surrogate / victims evaluation → ExperimentResult`。
 
-| 時機 | 模組 | 用途 |
-|------|------|------|
-| **攻擊時** | `advface.models.arcface_torch` | ONNX→Torch，對齊臉／全圖可微分，對輸入求梯度 |
-| **評估時** | `advface.models.insightface_app` | 完整 FaceAnalysis（偵測→對齊→embedding）驗收 cosine |
+Single-image 是 `1 × 1`；batch 是 `N × M`。兩者都呼叫 `run_experiment`。
 
 ---
 
-## 環境安裝
+## Canonical Commands
 
 ```bash
-cd Adversarial-Robustness-Face-Analysis
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -U pip setuptools wheel
 pip install -r requirements.txt
-pip install -e .          # 可選：以套件方式安裝 advface
+pip install -e .
 ```
 
-### 模型權重
-
-權重由 InsightFace 下載至 `~/.insightface/models/buffalo_l/`（含 `w600k_r50.onnx`、`det_10g.onnx` 等）。  
-本 repo **不**存放權重本體。
-
-裝置：
+權重：InsightFace 下載至 `~/.insightface/models/buffalo_l/`。FaceNet 權重在專案 `.cache/torch/`。Repo 不存放權重本體。
 
 ```bash
-# 預設 CPU
-export ADVFACE_PROVIDERS=cuda,cpu   # 可選 GPU
-export ADVFACE_VERBOSE=1            # 顯示 InsightFace 載入 log
-export ADVFACE_ROOT=/path/to/repo   # 可選：強制專案根目錄
+export ADVFACE_PROVIDERS=cuda,cpu   # 可選
+export ADVFACE_VERBOSE=1
+export ADVFACE_ROOT=/path/to/repo
 ```
 
----
-
-## 攻擊方法
-
-### 1. 高斯噪聲（基準）
+### Single experiment — white-box sweep（多 eps、圖表）
 
 ```bash
+python scripts/run_attack.py --mode fgsm --img data/raw/sun.png --run-name fgsm_sun
+python scripts/run_attack.py --mode pgd_full --steps 100 --img data/raw/sun.png --run-name pgdfull_sun
 python scripts/run_gaussian.py --img data/raw/sun.png --run-name gauss1
 ```
 
-### 2. FGSM
+### Single experiment — transfer（攻擊 + surrogate/victim + HTML）
 
 ```bash
-python scripts/run_attack.py --mode fgsm --img data/raw/sun.png --run-name fgsm1
+python scripts/run_transfer.py --image data/raw/sun.png --attack pgd_full --eps 0.040 --steps 200
+python scripts/run_transfer.py --image data/raw/sun.png --attack fgsm --eps 0.040
 ```
 
-### 3. PGD crop（有接縫）
+### Batch experiment
 
 ```bash
-python scripts/run_attack.py --mode pgd --steps 20 --img data/raw/sun.png --run-name pgd20
+python scripts/run_benchmark.py \
+    --manifest data/benchmark/manifest.csv \
+    --max-images 100 \
+    --attacks fgsm pgd_full \
+    --eps 0.005 0.01 0.02 0.03 0.04 \
+    --pgd-steps 20 50 100 200 \
+    --victim facenet_vggface2 \
+    --run-name transfer_benchmark_v0
 ```
 
-### 4. PGD full（**推薦**）
+Dataset manifest：`python scripts/prepare_benchmark_dataset.py --max-images 200`
+
+驗收既有對抗圖（不重新攻擊）：
 
 ```bash
-python scripts/run_attack.py --mode pgd_full --steps 100 \
-  --img data/raw/sun.png \
-  --eps-list "0.005,0.008,0.010,0.012,0.015,0.020" \
-  --run-name pgdfull_sun
+python scripts/verify_attack.py --orig data/raw/sun.png --adv results/pgd/pgdfull_sun_v1/pgdfull_sun_eps_0.012.png
 ```
 
----
-
-## 新輸出命名規格
-
-每次新 run 寫入 `results/<fgsm|pgd|gaussian>/<run-name>/`：
-
-| 檔案 | 說明 |
-|------|------|
-| `base_<stem>.png` | 原圖備份 |
-| `adv_<mode>_<stem>_eps_<eps>.png` | 對抗圖 |
-| `<mode>_metrics.csv` | `eps,eps_255,steps,cosine,success` |
-| `<mode>_cosine_chart.png` | cosine vs eps |
-| `config.json` | mode、影像路徑與 hash、eps、steps、seed、model、det_size、provider、run_name |
-| `<mode>_noise_eps_<eps>.png` | 可選擾動熱圖 |
-
-`mode` 為 `fgsm` / `pgd` / `pgd_full`。
-
----
-
-## Legacy results
-
-`results/pgd/pgdfull_sun_v1`、`results/pgd/pgdfull_musk_v2` 等為重構前產出，**檔名與 CSV 欄位可能與新規格不同**。  
-請勿覆蓋；驗證時請直接指定檔案路徑。詳見各目錄 README 與 `MIGRATION_NOTES.md`。
-
-### 已知成功案例（legacy）
-
-**sun.png / pgd_full / steps=100**
-
-| eps | Cosine | 結果 |
-|-----|--------|------|
-| 0.012 | 0.339 | 成功 |
-| 0.020 | -0.038 | 成功 |
-
-**musk1.jpg / pgd_full / steps=200**
-
-| eps | Cosine | 結果 |
-|-----|--------|------|
-| 0.040 | 0.347 | 成功 |
-
----
-
-## 驗證
-
-```bash
-# 單張（legacy 路徑範例）
-python scripts/verify_attack.py \
-  --orig data/raw/sun.png \
-  --adv  results/pgd/pgdfull_sun_v1/pgdfull_sun_eps_0.012.png
-
-# 批次（新命名可用 --pattern "adv_*.png"）
-python scripts/verify_attack.py \
-  --orig data/raw/sun.png \
-  --adv-dir results/pgd/some_new_run/ \
-  --pattern "adv_*.png"
-```
-
----
-
-## 測試
+### Tests
 
 ```bash
 pytest
+# 含模型的 integration smoke（寫入 pytest tmp，不污染正式 results/）
+pytest -m integration
 ```
 
 ---
 
-## 文件
+## Current Research State
 
-- `PROJECT_AUDIT.md` — 重構前盤點
-- `MIGRATION_NOTES.md` — 腳本／import／輸出命名遷移
-- `REFACTOR_REPORT.md` — 本輪重構報告
-- `archive/docs/` — 過時本機指令與舊說明
+**Infrastructure（已具備）**
+
+白盒 FGSM / PGD / PGD Full、ArcFace surrogate、FaceNet victim、單圖 transfer、batch runner（checkpoint / resume / failures）、統一 metrics、HTML report。
+
+**Validated research evidence（值得保留的結果）**
+
+`results/fgsm/*_v1`、`results/pgd/sun_v1`、`results/pgd/pgd100_sun_v1`、`results/pgd/pgdfull_*`、`results/gaussian/`、`results/compare/`。
+
+已知白盒成功案例（legacy，未重跑）：
+
+- sun.png / PGD Full / steps=100：eps=0.012 cosine=0.339；eps=0.020 cosine=-0.038
+- musk1.jpg / PGD Full / steps=200：eps=0.040 cosine=0.347
+
+**不是研究成果**
+
+中斷的 `transfer_benchmark_v0_pilot` 已刪除。未跑 100-image formal benchmark。不得從 smoke / 中斷 pilot 下研究結論。
+
+**尚未實作**
+
+targeted attack、mapper、query-based black-box、Momentum / DI / TI / ensemble、calibrated victim threshold。
+
+權威狀態見 [`docs/RESEARCH_STATUS.md`](docs/RESEARCH_STATUS.md)。
 
 ---
 
-## 依賴
+## Adding an attack later
 
-見 `requirements.txt`。核心：`insightface`, `onnxruntime`, `onnx2torch`, `torch`, `opencv-python`, `matplotlib`。  
-`pyproject.toml` 負責套件 metadata；執行時依賴以 `requirements.txt` 為準。
+1. 在 `advface/attacks/` 實作
+2. 在 `advface/attacks/registry.py` 註冊（`AttackSpec`）
+3. 用 `scripts/run_transfer.py --attack <name>` 單圖測試，再用 `scripts/run_benchmark.py --attacks ...` 批量跑
+
+不必改 evaluation、CSV、checkpoint、HTML 核心。

@@ -7,7 +7,7 @@ White-box → Black-box Transfer Evaluation。
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any, Optional
+from typing import Any, Mapping, Optional
 
 import numpy as np
 
@@ -122,18 +122,36 @@ def evaluate_on_model(
     return result
 
 
+def evaluate_models(
+    original_bgr: np.ndarray,
+    adversarial_bgr: np.ndarray,
+    models: Mapping[str, EmbeddingModel],
+) -> dict[str, TransferEvalResult]:
+    """
+    對任意數量模型做 original vs adversarial 評估。
+    每個模型只用自己的 embedding；不跨模型比較。
+    """
+    return {
+        role: evaluate_on_model(original_bgr, adversarial_bgr, model)
+        for role, model in models.items()
+    }
+
+
 def evaluate_transfer(
     original_bgr: np.ndarray,
     adversarial_bgr: np.ndarray,
     *,
     surrogate: EmbeddingModel,
-    victim: EmbeddingModel,
+    victim: EmbeddingModel | None = None,
+    victims: Mapping[str, EmbeddingModel] | None = None,
 ) -> dict[str, TransferEvalResult]:
-    """分別在 surrogate / victim 上評估；不跨模型比較 embedding。"""
-    return {
-        "surrogate": evaluate_on_model(original_bgr, adversarial_bgr, surrogate),
-        "victim": evaluate_on_model(original_bgr, adversarial_bgr, victim),
-    }
+    """分別在 surrogate / victim(s) 上評估；不跨模型比較 embedding。"""
+    models: dict[str, EmbeddingModel] = {"surrogate": surrogate}
+    if victims:
+        models.update(victims)
+    elif victim is not None:
+        models["victim"] = victim
+    return evaluate_models(original_bgr, adversarial_bgr, models)
 
 
 def build_conclusion(surrogate: TransferEvalResult, victim: TransferEvalResult) -> dict[str, str]:

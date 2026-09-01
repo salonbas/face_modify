@@ -22,3 +22,16 @@ results/*
 
 # Local personal notes (also archived under archive/docs/)
 COMMANDS.local.md
+
+# Benchmark image copies (provenance docs stay tracked)
+data/benchmark/images/
+data/benchmark/_download/
+
+# Packaging / coverage / debug
+*.egg-info/
+.coverage
+htmlcov/
+.tox/
+tmp/
+debug/
+*.log

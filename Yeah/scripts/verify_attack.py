@@ -23,10 +23,10 @@ if str(_ROOT) not in sys.path:
     sys.path.insert(0, str(_ROOT))
 
 from advface.config import DEFAULT_DET_SIZE, SIMILARITY_THRESHOLD, ensure_project_dirs, project_root
-from advface.evaluation.attack_result import AttackResult, is_attack_success
-from advface.evaluation.similarity import cosine_similarity, euclidean_distance
+from advface.evaluation.attack_result import AttackResult
+from advface.evaluation.transfer import evaluate_on_model
 from advface.image_io import load_bgr
-from advface.models.insightface_app import create_face_app, get_embedding_from_bgr
+from advface.models.insightface_app import InsightFaceEmbedder, create_face_app
 
 
 def _is_candidate_adv_image(path: Path) -> bool:
@@ -47,17 +47,16 @@ def _is_candidate_adv_image(path: Path) -> bool:
 
 
 def verify_pair(app, orig_bgr, adv_bgr, label: str, threshold: float = SIMILARITY_THRESHOLD) -> AttackResult:
-    emb_orig = get_embedding_from_bgr(app, orig_bgr, label="original")
-    emb_adv = get_embedding_from_bgr(app, adv_bgr, label=label)
-    cos = float(cosine_similarity(emb_orig, emb_adv))
-    dist = float(euclidean_distance(emb_orig, emb_adv))
+    embedder = InsightFaceEmbedder(app=app)
+    embedder.threshold = float(threshold)
+    ev = evaluate_on_model(orig_bgr, adv_bgr, embedder)
     return AttackResult(
         eps=float("nan"),
-        cosine=cos,
-        success=is_attack_success(cos, threshold),
+        cosine=float(ev.cosine_after),
+        success=bool(ev.success),
         attack_mode="verify",
         output_image_path=label,
-        euclidean=dist,
+        euclidean=ev.euclidean_distance,
     )
 
 

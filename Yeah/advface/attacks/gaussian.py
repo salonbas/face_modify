@@ -8,9 +8,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from advface.config import GAUSSIAN_FAIL_THRESHOLD
-from advface.evaluation.similarity import cosine_similarity_or_nan
+from advface.evaluation.transfer import evaluate_on_model
 from advface.image_io import image_stem, load_bgr
-from advface.models.insightface_app import create_face_app, get_embedding_from_bgr
+from advface.models.insightface_app import InsightFaceEmbedder, create_face_app
 
 
 def run_gaussian_noise_experiment(
@@ -36,11 +36,11 @@ def run_gaussian_noise_experiment(
         raise ValueError("eps 範圍無有效值，請確認 eps-start / eps-end / eps-step。")
 
     app = create_face_app(det_size=det_size)
+    embedder = InsightFaceEmbedder(app=app)
     base_bgr = load_bgr(img_path)
     base_f = base_bgr.astype(np.float32)
     stem = image_stem(img_path)
 
-    emb_base = get_embedding_from_bgr(app, base_bgr, str(img_path))
     similarities: list[float] = []
 
     for epsilon in eps_values:
@@ -51,12 +51,10 @@ def run_gaussian_noise_experiment(
             out_path = save_dir / f"test_eps_{epsilon}_{stem}.jpg"
             cv2.imwrite(str(out_path), attacked_bgr)
 
-        try:
-            emb_attacked = get_embedding_from_bgr(app, attacked_bgr, f"attacked eps={epsilon}")
-            sim = cosine_similarity_or_nan(emb_base, emb_attacked)
-        except Exception as exc:
-            print(f"eps={epsilon:>3} | [偵測/embedding失敗] {exc}")
-            sim = float("nan")
+        ev = evaluate_on_model(base_bgr, attacked_bgr, embedder)
+        sim = float(ev.cosine_after) if not ev.error else float("nan")
+        if ev.error:
+            print(f"eps={epsilon:>3} | [偵測/embedding失敗] {ev.error}")
 
         similarities.append(sim)
         status = "FAILED" if np.isnan(sim) or sim < GAUSSIAN_FAIL_THRESHOLD else "OK"

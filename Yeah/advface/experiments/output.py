@@ -20,9 +20,9 @@ from advface.config import (
     SIMILARITY_THRESHOLD,
     insightface_providers,
 )
-from advface.evaluation.attack_result import AttackResult, is_attack_success
-from advface.evaluation.similarity import cosine_similarity
-from advface.models.insightface_app import get_embedding_from_bgr
+from advface.evaluation.attack_result import AttackResult
+from advface.evaluation.transfer import evaluate_on_model
+from advface.models.insightface_app import InsightFaceEmbedder
 
 
 # ---------------------------------------------------------------------------
@@ -191,31 +191,25 @@ def evaluate_and_save_attack_run(
     """
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-
-    emb_base = get_embedding_from_bgr(app, img_bgr, label="base")
     cv2.imwrite(str(out_dir / base_image_name(stem)), img_bgr)
     write_config_json(out_dir, config)
 
+    embedder = InsightFaceEmbedder(app=app)
     print("步驟 B：InsightFace 驗收，寫入 CSV／圖表")
     evaluated: List[AttackResult] = []
     metric_rows: List[dict[str, Any]] = []
 
     for r in results:
         r_steps = getattr(r, "steps", steps)
-        try:
-            cos = float(
-                cosine_similarity(
-                    emb_base,
-                    get_embedding_from_bgr(app, r.attacked_bgr, label=f"eps={r.eps}"),
-                )
-            )
+        ev = evaluate_on_model(img_bgr, r.attacked_bgr, embedder)
+        cos = float(ev.cosine_after)
+        if ev.error or cos != cos:
+            status = "cosine=NaN（擾動過大，人臉偵測失敗）" if cos != cos else f"error={ev.error}"
+        else:
             status = f"cosine={cos:.6f}"
-        except ValueError:
-            cos = float("nan")
-            status = "cosine=NaN（擾動過大，人臉偵測失敗）"
 
         r.cosine = cos
-        success = is_attack_success(cos)
+        success = bool(ev.success)
         adv_name = adv_image_name(mode, stem, r.eps)
         adv_path = out_dir / adv_name
         cv2.imwrite(str(adv_path), r.attacked_bgr)
@@ -234,6 +228,7 @@ def evaluate_and_save_attack_run(
             attack_mode=mode,
             output_image_path=str(adv_path),
             steps=int(r_steps) if r_steps is not None else None,
+            euclidean=ev.euclidean_distance,
             eps_255=float(r.eps_255),
             attacked_bgr=r.attacked_bgr,
         )

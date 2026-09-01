@@ -24,6 +24,7 @@ if str(_ROOT) not in sys.path:
 
 from advface.attacks.fgsm import run_fgsm_demo
 from advface.attacks.pgd import run_pgd_demo, run_pgd_full_demo
+from advface.attacks.registry import ATTACKS, normalize_attack_name
 from advface.config import (
     DEFAULT_DET_SIZE,
     DEFAULT_FGSM_EPS_LIST,
@@ -53,9 +54,9 @@ def main() -> int:
     p.add_argument("--run-name", type=str, default=None)
     p.add_argument(
         "--mode",
-        choices=["fgsm", "pgd", "pgd_full"],
+        choices=sorted(ATTACKS),
         default="fgsm",
-        help="攻擊模式：fgsm（單步）/ pgd（多步有接縫）/ pgd_full（多步無接縫，推薦）",
+        help="攻擊模式：fgsm / pgd / pgd_full（推薦）",
     )
     p.add_argument("--steps", type=int, default=20, help="PGD 迭代步數（pgd/pgd_full 有效），預設 20")
     p.add_argument("--no-save-noise-maps", action="store_false", dest="save_noise_maps")
@@ -63,7 +64,8 @@ def main() -> int:
     args = p.parse_args()
 
     ensure_project_dirs()
-    attack_type = "fgsm" if args.mode == "fgsm" else "pgd"
+    mode = normalize_attack_name(args.mode)
+    attack_type = "fgsm" if mode == "fgsm" else "pgd"
     out = Path(args.out_dir) if args.out_dir else make_run_dir(attack_type=attack_type, run_name=args.run_name)
     img_path = _resolve_img(args.img)
 
@@ -76,12 +78,12 @@ def main() -> int:
         run_name=args.run_name or out.name,
     )
 
-    if args.mode == "fgsm":
-        run_fgsm_demo(**kwargs)
-    elif args.mode == "pgd":
-        run_pgd_demo(**kwargs, steps=args.steps)
-    else:
-        run_pgd_full_demo(**kwargs, steps=args.steps)
+    demos = {
+        "fgsm": lambda: run_fgsm_demo(**kwargs),
+        "pgd": lambda: run_pgd_demo(**kwargs, steps=args.steps),
+        "pgd_full": lambda: run_pgd_full_demo(**kwargs, steps=args.steps),
+    }
+    demos[mode]()
 
     return 0
 

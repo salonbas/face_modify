@@ -136,6 +136,7 @@ def build_transfer_metrics(
     config: dict[str, Any],
 ) -> dict[str, Any]:
     conclusion = build_conclusion(surrogate, victim)
+    victim_row = victim.to_metrics_dict()
     return {
         "experiment": {
             "name": experiment_name,
@@ -146,7 +147,8 @@ def build_transfer_metrics(
         },
         "attack": attack,
         "surrogate": surrogate.to_metrics_dict(),
-        "victim": victim.to_metrics_dict(),
+        "victim": victim_row,
+        "victims": {victim.model_name: victim_row},
         "images": images,
         "config": config,
         "conclusion": conclusion,
@@ -183,7 +185,9 @@ def write_report_html(out_dir: Path, metrics: dict[str, Any]) -> Path:
         exp = {"name": exp, "run_id": m.get("run_id", ""), "date": m.get("date", "")}
 
     s = m["surrogate"]
-    v = m["victim"]
+    v = m.get("victim")
+    if v is None and m.get("victims"):
+        v = next(iter(m["victims"].values()))
     a = m["attack"]
     imgs = m["images"]
     c = m["conclusion"]
@@ -194,6 +198,7 @@ def write_report_html(out_dir: Path, metrics: dict[str, Any]) -> Path:
     image_label = exp.get("image") or cfg.get("source_image") or ""
     victim_name = v.get("model") or cfg.get("victim_model") or m.get("victim_model", "")
     experiment_title = exp.get("name") or "Transfer Evaluation Experiment"
+    attack_type = a.get("type") or a.get("name") or "Attack"
 
     transfer_status = c.get("transfer", "Not Observed")
     whitebox_success = "Successful" if s.get("success") else "Failed"
@@ -327,7 +332,7 @@ def write_report_html(out_dir: Path, metrics: dict[str, Any]) -> Path:
 <body>
 <main>
   <h1>{experiment_title}</h1>
-  <p class="lead">White-box PGD → Surrogate / Victim Evaluation → Presentation Report</p>
+  <p class="lead">White-box Attack → Surrogate / Victim Evaluation → Presentation Report</p>
 
   <h2>1. Experiment Information</h2>
   <dl class="meta">
@@ -344,7 +349,7 @@ def write_report_html(out_dir: Path, metrics: dict[str, Any]) -> Path:
   <div class="pipeline">Original
     │
     ▼
-PGD Full Attack
+{attack_type}
     │
     ▼
 Adversarial Image

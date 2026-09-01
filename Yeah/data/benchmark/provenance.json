@@ -1,0 +1,31 @@
+{
+  "created_utc": "2026-08-16T06:28:56.109285+00:00",
+  "n_images": 200,
+  "sources": {
+    "local_raw": {
+      "n": 3,
+      "description": "Existing repository images under data/raw (project test assets)."
+    },
+    "lfw": {
+      "n": 197,
+      "homepage": "http://vis-www.cs.umass.edu/lfw/",
+      "note": "Labeled Faces in the Wild (LFW) is a public academic face dataset released by the University of Massachusetts for research. This project copies a subset of original JPEG files into data/benchmark/images/.",
+      "fetch": {
+        "attempted": true,
+        "status": "ok",
+        "n_copied": 197,
+        "lfw_funneled_dir": "/home/ssilthorin/scikit_learn_data/lfw_home/lfw_funneled"
+      }
+    }
+  },
+  "identity_pair_calibration": false,
+  "contract": {
+    "manifest": "data/benchmark/manifest.csv",
+    "fields": [
+      "image_id",
+      "image_path",
+      "identity_id",
+      "source"
+    ]
+  }
+}
