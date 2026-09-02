@@ -8,7 +8,7 @@
 
 ## Current Capabilities
 
-- White-box：FGSM、PGD（crop）、PGD Full（全圖，推薦）
+- White-box：FGSM、PGD（crop）、PGD Full（全圖，推薦）、MI-FGSM（全圖）
 - Transfer evaluation：ArcFace / InsightFace surrogate → FaceNet victim
 - 單次實驗（圖 + HTML report）
 - Batch benchmark（grid、checkpoint / resume、failure isolation、aggregate HTML）
@@ -65,6 +65,7 @@ python scripts/run_gaussian.py --img data/raw/sun.png --run-name gauss1
 ```bash
 python scripts/run_transfer.py --image data/raw/sun.png --attack pgd_full --eps 0.040 --steps 200
 python scripts/run_transfer.py --image data/raw/sun.png --attack fgsm --eps 0.040
+python scripts/run_transfer.py --image data/raw/sun.png --attack mi_fgsm --eps 0.040 --steps 10 --momentum 1.0
 ```
 
 ### Batch experiment
@@ -119,7 +120,7 @@ pytest -m integration
 
 **尚未實作**
 
-targeted attack、mapper、query-based black-box、Momentum / DI / TI / ensemble、calibrated victim threshold。
+targeted attack、mapper、query-based black-box、DI / TI / ensemble、calibrated victim threshold。
 
 權威狀態見 [`docs/RESEARCH_STATUS.md`](docs/RESEARCH_STATUS.md)。
 

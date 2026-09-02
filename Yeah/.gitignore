@@ -27,6 +27,12 @@ COMMANDS.local.md
 data/benchmark/images/
 data/benchmark/_download/
 
+# Locally generated LFW manifests, pair lists, split files, and image link.
+# Recreate these with scripts/prepare_lfw_dataset.py and
+# scripts/prepare_lfw_attack_splits.py; keep only the usage documentation.
+data/datasets/lfw/*
+!data/datasets/lfw/README.md
+
 # Packaging / coverage / debug
 *.egg-info/
 .coverage

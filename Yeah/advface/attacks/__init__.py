@@ -1,4 +1,4 @@
-"""攻擊模組：gaussian / fgsm / pgd / pgd_full。新增攻擊請登錄 registry。"""
+"""攻擊模組：gaussian / fgsm / pgd / pgd_full / mi_fgsm。"""
 
 from advface.attacks.registry import (
     ATTACKS,

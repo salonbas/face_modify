@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 
 from advface.config import project_root
-from advface.paths import make_run_dir
+from advface.paths import get_dataset_path, make_run_dir
 
 
 def test_project_root_from_package_location():
@@ -32,3 +32,9 @@ def test_make_run_dir_under_project_root(tmp_path, monkeypatch):
     out = make_run_dir(attack_type="fgsm", run_name="unit_test_run")
     assert out == (tmp_path / "results" / "fgsm" / "unit_test_run").resolve()
     assert out.is_dir()
+
+
+def test_get_dataset_path_rejects_nested_names(tmp_path, monkeypatch):
+    monkeypatch.setenv("ADVFACE_ROOT", str(tmp_path))
+    (tmp_path / "data" / "datasets" / "lfw").mkdir(parents=True)
+    assert get_dataset_path("lfw") == tmp_path / "data" / "datasets" / "lfw"

@@ -6,7 +6,7 @@
 
 已具備：
 
-- White-box FGSM、PGD crop、PGD Full（ArcFace / InsightFace `buffalo_l`）
+- White-box FGSM、PGD crop、PGD Full、MI-FGSM（ArcFace / InsightFace `buffalo_l`）
 - Embedding 評估介面：InsightFace、FaceNet（VGGFace2）
 - Canonical `run_experiment`（攻擊 → surrogate / victims 評估 → `ExperimentResult`）
 - Single-image transfer HTML（只讀 metrics）
@@ -28,6 +28,8 @@
 Transfer：僅完成單圖評估流程與平台能力，**沒有**正式 large-scale transfer 研究結論。
 
 ## Engineering Validation Only
+
+- MI-FGSM implemented; minimal model smoke is pending the local runtime dependencies. No comparative research claim.
 
 - Batch framework smoke / 中斷 pilot：只證明 runner 能跑，不是研究成果。
 - `transfer_benchmark_v0_pilot` 已刪除，不要 resume、不要分析。

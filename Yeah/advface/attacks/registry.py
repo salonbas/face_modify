@@ -19,6 +19,8 @@ class AttackConfig:
     name: str
     eps: float
     steps: Optional[int] = None
+    alpha: Optional[float] = None
+    momentum: float = 1.0
     seed: int = 0
     target_image: Optional[np.ndarray] = None
     target_embedding: Optional[np.ndarray] = None
@@ -88,6 +90,35 @@ def _apply_pgd_full(img_bgr, *, app, config: AttackConfig, device=None) -> Attac
             "eps_255": float(r.eps_255),
             "alpha_px": (float(config.eps) * PIXEL_MAX) / max(steps, 1),
             "random_start": False,
+            "linf_tensor": r.linf_tensor,
+        },
+    )
+
+
+def _apply_mi_fgsm(img_bgr, *, app, config: AttackConfig, device=None) -> AttackOutput:
+    from advface.attacks.mi_fgsm import run_mi_fgsm
+
+    steps = int(config.steps if config.steps is not None else 20)
+    alpha = float(config.alpha) if config.alpha is not None else float(config.eps) / max(steps, 1)
+    run_result = run_mi_fgsm(
+        img_bgr, float(config.eps), app, steps=steps, alpha=alpha,
+        momentum=float(config.momentum), device=device, return_metadata=True,
+    )
+    if isinstance(run_result, tuple):
+        adversarial, metrics = run_result
+    else:  # compatibility with callers/tests replacing the attack function
+        adversarial, metrics = run_result, {}
+    return AttackOutput(
+        adversarial_bgr=adversarial,
+        name="mi_fgsm",
+        parameters={
+            "method": "mi_fgsm", "eps": float(config.eps), "steps": steps,
+            "alpha": alpha, "alpha_px": alpha * PIXEL_MAX,
+            "eps_255": float(config.eps) * PIXEL_MAX,
+            "momentum": float(config.momentum), "decay": float(config.momentum),
+            "random_start": False, "gradient_normalization": "per-image L1 norm",
+            "seed": int(config.seed),
+            **metrics,
         },
     )
 
@@ -116,6 +147,10 @@ ATTACKS: dict[str, AttackSpec] = {
         default_steps=100,
         linf_constraint_domain="full_image",
         aliases=("pgd_full", "pgd-full", "pgdfull"),
+    ),
+    "mi_fgsm": AttackSpec(
+        name="mi_fgsm", apply=_apply_mi_fgsm, requires_steps=True,
+        default_steps=20, linf_constraint_domain="full_image", aliases=("mi_fgsm",),
     ),
 }
 
@@ -159,6 +194,8 @@ def apply_attack(
         name=spec.name,
         eps=float(config.eps),
         steps=config.steps if config.steps is not None else spec.default_steps,
+        alpha=config.alpha,
+        momentum=float(config.momentum),
         seed=config.seed,
         target_image=config.target_image,
         target_embedding=config.target_embedding,

@@ -53,6 +53,7 @@ class PgdResult:
     steps: int
     cosine: float
     attacked_bgr: np.ndarray
+    linf_tensor: float | None = None
 
 
 def run_pgd(
@@ -215,6 +216,9 @@ def run_pgd_full(
         results.append(PgdResult(
             eps=eps, eps_255=eps_px, steps=steps, cosine=float("nan"),
             attacked_bgr=adv_bgr,
+            # Measured before uint8 serialization; this is observational only
+            # and does not alter the established PGD update or projection.
+            linf_tensor=float(torch.max(torch.abs(adv - x_full)).item() / PIXEL_MAX),
         ))
     return results
 

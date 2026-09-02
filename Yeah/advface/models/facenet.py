@@ -10,19 +10,41 @@ FaceNet（InceptionResnetV1）— 黑箱 Transfer 的 Victim 模型。
 from __future__ import annotations
 
 import os
+from pathlib import Path
 from typing import Optional
 
 import cv2
 import numpy as np
 
-from advface.config import FACENET_SIMILARITY_THRESHOLD, project_root
+from advface.config import FACENET_SIMILARITY_THRESHOLD
+
+
+FACENET_WEIGHT_FILENAME = "20180402-114759-vggface2.pt"
+
+
+def facenet_cache_dir() -> Path:
+    """Return the repository-local Torch cache, independent of ADVFACE_ROOT."""
+    return project_root_from_package() / ".cache" / "torch"
+
+
+def project_root_from_package():
+    # facenet.py -> models -> advface -> repository root
+    return Path(__file__).resolve().parents[2]
+
+
+def facenet_pretrained_weight_path() -> Path:
+    return facenet_cache_dir() / "checkpoints" / FACENET_WEIGHT_FILENAME
+
+
+def facenet_pretrained_available() -> bool:
+    return facenet_pretrained_weight_path().is_file()
 
 
 def _ensure_torch_cache_dir() -> None:
-    """權重下載目錄改到專案內，避免依賴不可寫的 ~/.cache。"""
-    cache = project_root() / ".cache" / "torch"
+    """權重下載目錄固定於 repository，避免測試 root 改變 cache。"""
+    cache = facenet_cache_dir()
     cache.mkdir(parents=True, exist_ok=True)
-    os.environ.setdefault("TORCH_HOME", str(cache))
+    os.environ["TORCH_HOME"] = str(cache)
 
 
 class FaceNetEmbedder:

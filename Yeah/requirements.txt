@@ -1,26 +1,32 @@
-# Build helpers（編譯 insightface 時會用到）
-pip>=24
-setuptools>=70
-wheel>=0.45
-cython>=3.0
+# Canonical environment: Python 3.12.3 (the existing repository-local .venv).
+# Versions below are the versions verified in that environment on 2026-09-01.
+# Do not replace these with an unpinned pip freeze or upgrade them casually.
+
+# Build/install helpers
+pip==26.1.1
+setuptools==81.0.0
+wheel==0.47.0
+cython==3.2.4
 
 # Core runtime
-numpy>=2.2,<3
-opencv-python>=4.10
-matplotlib>=3.9
-onnxruntime>=1.25
+numpy==2.4.4
+opencv-python==4.13.0.92
+matplotlib==3.10.9
+scikit-learn==1.8.0
+pillow==12.2.0
+onnxruntime==1.26.0
 
 # Face analysis（名稱：insightface）
 insightface==0.7.3
 
-torch
-torchvision
-onnx2torch>=1.5
+torch==2.12.0
+torchvision==0.27.0
+onnx2torch==1.5.15
 
 # Black-box transfer victim（InceptionResnetV1 / MTCNN）
 # 建議：pip install facenet-pytorch --no-deps
 # （套件正式依賴會鎖舊版 torch/numpy；本專案以現有 torch 為準）
-facenet-pytorch>=2.5.3
+facenet-pytorch==2.6.0
 
 # Tests
-pytest>=8.0
+pytest==9.1.1

@@ -3,6 +3,26 @@ from pathlib import Path
 
 from advface.config import project_root
 
+
+def get_dataset_path(name: str) -> Path:
+    """Return the canonical local path for a repository dataset.
+
+    Dataset binaries remain outside the repository.  The repository entry is
+    a lightweight metadata directory and, when available, a symlink to the
+    external cache.
+    """
+    if not name or Path(name).name != name:
+        raise ValueError("dataset name must be a single directory name")
+    path = project_root() / "data" / "datasets" / name
+    if not path.is_dir():
+        raise FileNotFoundError(f"dataset entry not found: {path}")
+    return path.resolve()
+
+
+def get_lfw_path() -> Path:
+    """Return the canonical LFW entry, resolving its external image cache."""
+    return get_dataset_path("lfw")
+
 _ATTACK_BASE = {
     "fgsm": "results/fgsm",
     "pgd": "results/pgd",

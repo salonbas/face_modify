@@ -70,6 +70,8 @@ def run_experiment(
             name=config.name or attack,
             eps=float(config.eps if config.eps is not None else eps),
             steps=config.steps if config.steps is not None else steps,
+            alpha=config.alpha,
+            momentum=float(config.momentum),
             seed=int(config.seed if config.seed is not None else seed),
             target_image=config.target_image,
             target_embedding=config.target_embedding,
@@ -90,6 +92,9 @@ def run_experiment(
     models: dict[str, EmbeddingModel] = {"surrogate": surrogate, **victim_map}
     evals = evaluate_models(original_bgr, output.adversarial_bgr, models)
     pert = perturbation_metrics(original_bgr, output.adversarial_bgr)
+    for key in ("linf_tensor", "linf_serialized", "linf_serialization_note"):
+        if key in output.parameters:
+            pert[key] = output.parameters[key]
     runtime = time.perf_counter() - t0
 
     sur = evals["surrogate"]

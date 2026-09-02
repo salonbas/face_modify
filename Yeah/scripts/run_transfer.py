@@ -55,6 +55,8 @@ def main() -> int:
     p.add_argument("--attack", type=str, default="pgd_full", help="已註冊攻擊名稱（預設 pgd_full）")
     p.add_argument("--eps", type=str, default=DEFAULT_TRANSFER_EPS)
     p.add_argument("--steps", type=int, default=DEFAULT_TRANSFER_STEPS)
+    p.add_argument("--alpha", type=float, default=None, help="MI-FGSM step size in normalized pixel units")
+    p.add_argument("--momentum", "--decay", dest="momentum", type=float, default=1.0)
     p.add_argument("--det-size", type=int, nargs=2, default=list(DEFAULT_DET_SIZE), metavar=("W", "H"))
     p.add_argument("--victim", type=str, default=DEFAULT_VICTIM_MODEL)
     p.add_argument("--run-name", type=str, default=None)
@@ -96,7 +98,10 @@ def main() -> int:
         victims={"victim": victim},
         eps=eps,
         steps=int(args.steps),
-        config=AttackConfig(name=attack, eps=eps, steps=int(args.steps)),
+        config=AttackConfig(
+            name=attack, eps=eps, steps=int(args.steps),
+            alpha=args.alpha, momentum=args.momentum,
+        ),
         device=args.device,
         app=surrogate.app,
     )
@@ -136,6 +141,8 @@ def main() -> int:
         "source_image_hash": file_sha256(img_path),
         "eps": eps,
         "steps": int(args.steps),
+        "alpha": args.alpha,
+        "momentum": args.momentum,
         "seed": 0,
         "detector_size": list(det_size),
         "surrogate_model": sur.model_name,

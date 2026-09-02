@@ -73,6 +73,8 @@ def empty_result_row(unit, *, run_id: str, seed: int, device: str) -> dict[str, 
         "failure_message": "",
         "runtime_sec": None,
         "linf": None,
+        "linf_tensor": None,
+        "linf_serialized": None,
         "l2_pixel": None,
         "linf_ok": None,
         "surrogate_cosine": None,
@@ -123,6 +125,8 @@ def run_experiment_unit(
         linf = float(result.perturbation["linf"])
         l2_pixel = float(result.perturbation["l2_pixel"])
         row["linf"] = linf
+        row["linf_serialized"] = result.perturbation.get("linf_serialized", linf)
+        row["linf_tensor"] = result.perturbation.get("linf_tensor")
         row["l2_pixel"] = l2_pixel
         row["linf_constraint_domain"] = spec.linf_constraint_domain
         if spec.linf_constraint_domain == "aligned_crop_paste":
@@ -131,8 +135,9 @@ def run_experiment_unit(
                 "full-image L∞ may exceed eps due to affine paste in canonical FGSM"
             )
         else:
-            linf_ok = validate_linf(linf, unit.eps)
-            row["linf_note"] = ""
+            constraint_linf = result.perturbation.get("linf_tensor", linf)
+            linf_ok = validate_linf(constraint_linf, unit.eps)
+            row["linf_note"] = result.perturbation.get("linf_serialization_note", "")
         row["linf_ok"] = bool(linf_ok)
 
         sur = result.surrogate

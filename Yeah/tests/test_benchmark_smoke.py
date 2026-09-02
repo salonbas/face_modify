@@ -21,6 +21,11 @@ def test_benchmark_pipeline_smoke(tmp_path, monkeypatch):
     if not img_a.is_file() or not img_b.is_file():
         pytest.skip("local smoke images missing")
 
+    from advface.models.facenet import facenet_pretrained_available
+
+    if not facenet_pretrained_available():
+        pytest.skip("FaceNet pretrained weights unavailable in local cache")
+
     from advface.benchmark.dataset import ManifestRow, write_manifest
     from advface.benchmark.runner import run_benchmark
 

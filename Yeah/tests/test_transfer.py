@@ -1,6 +1,8 @@
 """Transfer evaluation helpers（不載入重型模型）。"""
 from __future__ import annotations
 
+from pathlib import Path
+
 import numpy as np
 
 from advface.evaluation.transfer import (
@@ -8,6 +10,29 @@ from advface.evaluation.transfer import (
     build_conclusion,
     evaluate_on_model,
 )
+
+
+def test_calibrated_transfer_runner_is_development_only_and_keeps_models_separate():
+    root = Path(__file__).resolve().parents[1]
+    script = (root / "scripts/run_transfer_verification.py").read_text(encoding="utf-8")
+    assert 'choices=["development"]' in script
+    assert 'load_thresholds(victim_source)' in script
+    assert 'load_thresholds(root / "results/calibration/arcface_lfw_v1")' in script
+    assert 'victim_gradient_participation": False' in script
+    assert 'ATTACKS["pgd_full"].apply(b, app=app' in script
+    assert "victim.get_embedding" in script
+    assert "transfer_verification_success=source_crossed and victim_crossed" in script
+    assert "victim_self_B_Badv" in script and "victim_adv_A_Badv" in script
+
+
+def test_facenet_calibration_reuses_canonical_embedder_and_protocol():
+    root = Path(__file__).resolve().parents[1]
+    script = (root / "scripts/calibrate_threshold.py").read_text(encoding="utf-8")
+    assert '"facenet_vggface2"' in script
+    assert "load_embedder(model_name)" in script
+    assert 'data / "pairs/dev_train.csv"' in script
+    assert 'data / "pairs/dev_test.csv"' in script
+    assert 'FaceNetEmbedder: MTCNN detect/crop' in script
 
 
 class _DummyModel:
