@@ -28,5 +28,10 @@ onnx2torch==1.5.15
 # （套件正式依賴會鎖舊版 torch/numpy；本專案以現有 torch 為準）
 facenet-pytorch==2.6.0
 
+# Perceptual Evaluation v1 (evaluates serialized RGB image pairs; see
+# scripts/evaluate_perceptual_v1.py for the fixed preprocessing protocol).
+lpips==0.1.4
+DISTS-pytorch==0.1
+
 # Tests
 pytest==9.1.1
