@@ -1,0 +1,1007 @@
+{
+  "scope": "read-only existing formal artifacts; no attack rerun",
+  "thresholds": {
+    "arcface": {
+      "value": 0.14072093367576602,
+      "artifact": "results/calibration/arcface_lfw_v1/thresholds.json",
+      "field": "far_1e-2.threshold"
+    },
+    "facenet": {
+      "value": 0.40478909015655523,
+      "artifact": "results/calibration/facenet_lfw_v1/thresholds.json",
+      "field": "far_1e-2.threshold"
+    }
+  },
+  "metric_definitions": {
+    "units": "decoded uint8 RGB levels unless ratio",
+    "epsilon_saturation": "abs(delta)==11 over H*W*3",
+    "changed_pixel": "any RGB channel changed"
+  },
+  "perturbation_summary": {
+    "PGD": {
+      "n": 20,
+      "linf_rgb255": {
+        "mean": 11.0,
+        "median": 11.0,
+        "std": 0.0
+      },
+      "l1_rgb255": {
+        "mean": 250155.4,
+        "median": 250734.5,
+        "std": 26531.618952725665
+      },
+      "mean_abs_rgb255": {
+        "mean": 1.3341621333333333,
+        "median": 1.3372506666666668,
+        "std": 0.1415019677478702
+      },
+      "l2_rgb255": {
+        "mean": 1266.3831733128584,
+        "median": 1285.2595102106138,
+        "std": 76.76593508537138
+      },
+      "rms_rgb255": {
+        "mean": 2.924586664037565,
+        "median": 2.968179696794498,
+        "std": 0.17728333314452996
+      },
+      "changed_pixel_ratio": {
+        "mean": 0.2998112,
+        "median": 0.295192,
+        "std": 0.03196861728501546
+      },
+      "changed_pixel_count": {
+        "mean": 18738.2,
+        "median": 18449.5,
+        "std": 1998.0385803134664
+      },
+      "epsilon_saturation_element_ratio": {
+        "mean": 0.004859466666666667,
+        "median": 0.0048453333333333334,
+        "std": 0.0017979527486977258
+      },
+      "changed_element_ratio": {
+        "mean": 0.27958266666666665,
+        "median": 0.27589600000000003,
+        "std": 0.029384876074973
+      }
+    },
+    "MI-FGSM": {
+      "n": 20,
+      "linf_rgb255": {
+        "mean": 11.0,
+        "median": 11.0,
+        "std": 0.0
+      },
+      "l1_rgb255": {
+        "mean": 405856.8,
+        "median": 403569.5,
+        "std": 41264.68443392702
+      },
+      "mean_abs_rgb255": {
+        "mean": 2.1645695999999996,
+        "median": 2.1523706666666667,
+        "std": 0.2200783169809441
+      },
+      "l2_rgb255": {
+        "mean": 1897.467338634824,
+        "median": 1906.8932588257098,
+        "std": 97.59529116163591
+      },
+      "rms_rgb255": {
+        "mean": 4.3820131149573545,
+        "median": 4.403781345195625,
+        "std": 0.2253866704952415
+      },
+      "changed_pixel_ratio": {
+        "mean": 0.29998959999999997,
+        "median": 0.295336,
+        "std": 0.031983614868274425
+      },
+      "changed_pixel_count": {
+        "mean": 18749.35,
+        "median": 18458.5,
+        "std": 1998.975929267152
+      },
+      "epsilon_saturation_element_ratio": {
+        "mean": 0.052402399999999995,
+        "median": 0.051584,
+        "std": 0.006960406516326085
+      },
+      "changed_element_ratio": {
+        "mean": 0.29061440000000005,
+        "median": 0.28641333333333335,
+        "std": 0.03081018091809667
+      }
+    },
+    "PGD+Mask": {
+      "n": 20,
+      "linf_rgb255": {
+        "mean": 11.0,
+        "median": 11.0,
+        "std": 0.0
+      },
+      "l1_rgb255": {
+        "mean": 120229.8,
+        "median": 118791.0,
+        "std": 21243.27987264133
+      },
+      "mean_abs_rgb255": {
+        "mean": 0.6412256000000001,
+        "median": 0.6335519999999999,
+        "std": 0.1132974926540871
+      },
+      "l2_rgb255": {
+        "mean": 934.0591896494738,
+        "median": 934.6360137438555,
+        "std": 76.66283139325095
+      },
+      "rms_rgb255": {
+        "mean": 2.1571172983326696,
+        "median": 2.1584494165173354,
+        "std": 0.17704522536692932
+      },
+      "changed_pixel_ratio": {
+        "mean": 0.12095120000000001,
+        "median": 0.11571999999999999,
+        "std": 0.026385448225549585
+      },
+      "changed_pixel_count": {
+        "mean": 7559.45,
+        "median": 7232.5,
+        "std": 1649.0905140968493
+      },
+      "epsilon_saturation_element_ratio": {
+        "mean": 0.005342133333333334,
+        "median": 0.005181333333333333,
+        "std": 0.0016710272443805302
+      },
+      "changed_element_ratio": {
+        "mean": 0.11461573333333333,
+        "median": 0.11030133333333333,
+        "std": 0.02450849595371879
+      }
+    },
+    "MI-FGSM+Mask": {
+      "n": 20,
+      "linf_rgb255": {
+        "mean": 11.0,
+        "median": 11.0,
+        "std": 0.0
+      },
+      "l1_rgb255": {
+        "mean": 173727.15,
+        "median": 167592.0,
+        "std": 33714.195150715466
+      },
+      "mean_abs_rgb255": {
+        "mean": 0.9265448,
+        "median": 0.893824,
+        "std": 0.17980904080381588
+      },
+      "l2_rgb255": {
+        "mean": 1257.839207129765,
+        "median": 1242.2867741794716,
+        "std": 116.11101315534961
+      },
+      "rms_rgb255": {
+        "mean": 2.904855219334541,
+        "median": 2.868938413932919,
+        "std": 0.26814689880448517
+      },
+      "changed_pixel_ratio": {
+        "mean": 0.121008,
+        "median": 0.11571999999999999,
+        "std": 0.026399077240651703
+      },
+      "changed_pixel_count": {
+        "mean": 7563.0,
+        "median": 7232.5,
+        "std": 1649.9423275407314
+      },
+      "epsilon_saturation_element_ratio": {
+        "mean": 0.0254864,
+        "median": 0.024426666666666666,
+        "std": 0.004713365256598014
+      },
+      "changed_element_ratio": {
+        "mean": 0.117808,
+        "median": 0.11296533333333333,
+        "std": 0.02544646120458122
+      }
+    }
+  },
+  "perturbation_correlations_pooled_80": {
+    "pooled_n80": {
+      "L1_vs_LPIPS": {
+        "pearson_r": 0.861334786561949,
+        "pearson_p": 1.1949465723562549e-24,
+        "spearman_rho": 0.8913970932958274,
+        "spearman_p": 1.5681209737624672e-28
+      },
+      "L2_vs_LPIPS": {
+        "pearson_r": 0.8320698034238196,
+        "pearson_p": 1.1660632278084703e-21,
+        "spearman_rho": 0.8413267698077825,
+        "spearman_p": 1.5384005171811084e-22
+      },
+      "changed_ratio_vs_LPIPS": {
+        "pearson_r": 0.7151210052482262,
+        "pearson_p": 9.211486234998602e-14,
+        "spearman_rho": 0.7904289172013202,
+        "spearman_p": 2.8228273364983462e-18
+      },
+      "changed_ratio_vs_SSIM": {
+        "pearson_r": -0.7613337004329267,
+        "pearson_p": 2.458945207474456e-16,
+        "spearman_rho": -0.8523373906463205,
+        "spearman_p": 1.1601198797922039e-23
+      },
+      "changed_ratio_vs_DISTS": {
+        "pearson_r": 0.7992724290061708,
+        "pearson_p": 6.298572125399213e-19,
+        "spearman_rho": 0.855748099804309,
+        "spearman_p": 4.990845144194359e-24
+      }
+    },
+    "within_method_n20": {
+      "PGD": {
+        "L1_vs_LPIPS": {
+          "pearson_r": 0.3749264533539672,
+          "pearson_p": 0.10335244721565386,
+          "spearman_rho": 0.3443609022556391,
+          "spearman_p": 0.13707258150434387
+        },
+        "L2_vs_LPIPS": {
+          "pearson_r": 0.20224665248991994,
+          "pearson_p": 0.3924825724685359,
+          "spearman_rho": 0.23909774436090225,
+          "spearman_p": 0.30998626440604465
+        },
+        "changed_ratio_vs_LPIPS": {
+          "pearson_r": 0.5699461221875868,
+          "pearson_p": 0.008700648967793326,
+          "spearman_rho": 0.5954887218045113,
+          "spearman_p": 0.00560144103007422
+        },
+        "changed_ratio_vs_SSIM": {
+          "pearson_r": -0.8423397900409875,
+          "pearson_p": 3.1776053171405833e-06,
+          "spearman_rho": -0.8090225563909773,
+          "spearman_p": 1.5678260081933242e-05
+        },
+        "changed_ratio_vs_DISTS": {
+          "pearson_r": 0.45695387657130443,
+          "pearson_p": 0.042815304001935554,
+          "spearman_rho": 0.4481203007518797,
+          "spearman_p": 0.04753173575066422
+        }
+      },
+      "MI-FGSM": {
+        "L1_vs_LPIPS": {
+          "pearson_r": 0.5025144634437144,
+          "pearson_p": 0.023940365671606442,
+          "spearman_rho": 0.5774436090225563,
+          "spearman_p": 0.0076732613749090055
+        },
+        "L2_vs_LPIPS": {
+          "pearson_r": 0.4568659083511729,
+          "pearson_p": 0.042860417865806355,
+          "spearman_rho": 0.5503759398496241,
+          "spearman_p": 0.011919637001913336
+        },
+        "changed_ratio_vs_LPIPS": {
+          "pearson_r": 0.548737138085045,
+          "pearson_p": 0.012227857349196559,
+          "spearman_rho": 0.6375939849624059,
+          "spearman_p": 0.0024928448093271324
+        },
+        "changed_ratio_vs_SSIM": {
+          "pearson_r": -0.8016942994372351,
+          "pearson_p": 2.138041040254756e-05,
+          "spearman_rho": -0.8240601503759398,
+          "spearman_p": 7.946551309934535e-06
+        },
+        "changed_ratio_vs_DISTS": {
+          "pearson_r": 0.5071551381227228,
+          "pearson_p": 0.0224678094482111,
+          "spearman_rho": 0.5293233082706766,
+          "spearman_p": 0.016394084731294382
+        }
+      },
+      "PGD+Mask": {
+        "L1_vs_LPIPS": {
+          "pearson_r": 0.3089177818258235,
+          "pearson_p": 0.18508543855578657,
+          "spearman_rho": 0.22255639097744356,
+          "spearman_p": 0.34562063374685487
+        },
+        "L2_vs_LPIPS": {
+          "pearson_r": 0.23311928163102305,
+          "pearson_p": 0.3225999297149651,
+          "spearman_rho": 0.20300751879699244,
+          "spearman_p": 0.3906662393541965
+        },
+        "changed_ratio_vs_LPIPS": {
+          "pearson_r": 0.3397318551433547,
+          "pearson_p": 0.1427840474826988,
+          "spearman_rho": 0.32481203007518794,
+          "spearman_p": 0.16232315576999945
+        },
+        "changed_ratio_vs_SSIM": {
+          "pearson_r": -0.9102424340078615,
+          "pearson_p": 2.5832103259410146e-08,
+          "spearman_rho": -0.9368421052631578,
+          "spearman_p": 1.2059368966099284e-09
+        },
+        "changed_ratio_vs_DISTS": {
+          "pearson_r": 0.6880978445946627,
+          "pearson_p": 0.000797428186270616,
+          "spearman_rho": 0.7684210526315788,
+          "spearman_p": 7.571881175260256e-05
+        }
+      },
+      "MI-FGSM+Mask": {
+        "L1_vs_LPIPS": {
+          "pearson_r": 0.5540529939325495,
+          "pearson_p": 0.01125090701585612,
+          "spearman_rho": 0.5052631578947367,
+          "spearman_p": 0.023059229474174218
+        },
+        "L2_vs_LPIPS": {
+          "pearson_r": 0.556218641781746,
+          "pearson_p": 0.010871494398307254,
+          "spearman_rho": 0.5097744360902255,
+          "spearman_p": 0.02166896662153533
+        },
+        "changed_ratio_vs_LPIPS": {
+          "pearson_r": 0.5488351884733776,
+          "pearson_p": 0.012209236999690067,
+          "spearman_rho": 0.5067669172932331,
+          "spearman_p": 0.022588172380591843
+        },
+        "changed_ratio_vs_SSIM": {
+          "pearson_r": -0.9261157022669704,
+          "pearson_p": 4.755344360498973e-09,
+          "spearman_rho": -0.9293233082706768,
+          "spearman_p": 3.2275217543825805e-09
+        },
+        "changed_ratio_vs_DISTS": {
+          "pearson_r": 0.6865957249481354,
+          "pearson_p": 0.0008275169490888595,
+          "spearman_rho": 0.7654135338345864,
+          "spearman_p": 8.403045414071626e-05
+        }
+      }
+    }
+  },
+  "mask_coverage_correlations": {
+    "PGD+Mask": {
+      "arcface_drop": {
+        "pearson_r": 0.5556208825986774,
+        "pearson_p": 0.01097516693683615,
+        "spearman_rho": 0.45563909774436084,
+        "spearman_p": 0.043493409805465975
+      },
+      "facenet_drop": {
+        "pearson_r": -0.036570533220387884,
+        "pearson_p": 0.87834455638384,
+        "spearman_rho": -0.10225563909774435,
+        "spearman_p": 0.6679353573533201
+      },
+      "ssim": {
+        "pearson_r": -0.882805202879334,
+        "pearson_p": 2.5696214715352165e-07,
+        "spearman_rho": -0.9353383458646616,
+        "spearman_p": 1.4821142098475236e-09
+      },
+      "lpips": {
+        "pearson_r": 0.2976179278870468,
+        "pearson_p": 0.2025209076133784,
+        "spearman_rho": 0.3218045112781954,
+        "spearman_p": 0.16647434857875798
+      },
+      "dists": {
+        "pearson_r": 0.6784114355483775,
+        "pearson_p": 0.0010088570629704803,
+        "spearman_rho": 0.7383458646616541,
+        "spearman_p": 0.0002014294307883675
+      },
+      "changed_ratio": {
+        "pearson_r": 0.994000989844052,
+        "pearson_p": 9.351265182934907e-19,
+        "spearman_rho": 0.9834586466165413,
+        "spearman_p": 8.293403515243339e-15
+      }
+    },
+    "MI-FGSM+Mask": {
+      "arcface_drop": {
+        "pearson_r": 0.4783351671493082,
+        "pearson_p": 0.03289199924593967,
+        "spearman_rho": 0.3669172932330827,
+        "spearman_p": 0.1115351994023919
+      },
+      "facenet_drop": {
+        "pearson_r": -0.020493336392115064,
+        "pearson_p": 0.9316601564523117,
+        "spearman_rho": -0.18345864661654135,
+        "spearman_p": 0.438794886569103
+      },
+      "ssim": {
+        "pearson_r": -0.9065198917025559,
+        "pearson_p": 3.672335295887449e-08,
+        "spearman_rho": -0.9127819548872179,
+        "spearman_p": 2.014185827066197e-08
+      },
+      "lpips": {
+        "pearson_r": 0.511488273852859,
+        "pearson_p": 0.02115860401011323,
+        "spearman_rho": 0.5067669172932331,
+        "spearman_p": 0.022588172380591843
+      },
+      "dists": {
+        "pearson_r": 0.6802584587700347,
+        "pearson_p": 0.0009652505133046649,
+        "spearman_rho": 0.7218045112781954,
+        "spearman_p": 0.0003270659389347301
+      },
+      "changed_ratio": {
+        "pearson_r": 0.994032260558768,
+        "pearson_p": 8.922605442845222e-19,
+        "spearman_rho": 0.9894736842105262,
+        "spearman_p": 1.4505702136964124e-16
+      }
+    },
+    "pooled_masked": {
+      "arcface_drop": {
+        "pearson_r": 0.4641036679447507,
+        "pearson_p": 0.0025565398637877445,
+        "spearman_rho": 0.3767137810901118,
+        "spearman_p": 0.01657463591870302
+      },
+      "facenet_drop": {
+        "pearson_r": -0.027929182956949333,
+        "pearson_p": 0.8641674206064806,
+        "spearman_rho": -0.15887330947269918,
+        "spearman_p": 0.32749189120008665
+      },
+      "ssim": {
+        "pearson_r": -0.6390475537288453,
+        "pearson_p": 9.075771806324723e-06,
+        "spearman_rho": -0.6324885417305566,
+        "spearman_p": 1.1950827819465262e-05
+      },
+      "lpips": {
+        "pearson_r": 0.3424657806902916,
+        "pearson_p": 0.03052988796787459,
+        "spearman_rho": 0.34178418822731976,
+        "spearman_p": 0.030884175075653136
+      },
+      "dists": {
+        "pearson_r": 0.6414142497795128,
+        "pearson_p": 8.204855216723668e-06,
+        "spearman_rho": 0.7147420991171314,
+        "spearman_p": 2.2104034537307162e-07
+      },
+      "changed_ratio": {
+        "pearson_r": 0.9940159903127505,
+        "pearson_p": 3.709920171229537e-38,
+        "spearman_rho": 0.9855865699061093,
+        "spearman_p": 6.189343250907274e-31
+      }
+    }
+  },
+  "paired_tests": {
+    "PGD_to_PGD+Mask": {
+      "arcface_cosine_drop": {
+        "median_mask_minus_full": -0.273229562677443,
+        "mean_mask_minus_full": -0.27189365510130303,
+        "shapiro_p": 0.7497894398537382,
+        "wilcoxon_statistic": 0.0,
+        "wilcoxon_p": 1.9073486328125e-06,
+        "n_nonzero": 20
+      },
+      "facenet_cosine_drop": {
+        "median_mask_minus_full": -0.005362033843994141,
+        "mean_mask_minus_full": -0.0032640548422932627,
+        "shapiro_p": 0.031742085508251985,
+        "wilcoxon_statistic": 104.0,
+        "wilcoxon_p": 0.9854354858398438,
+        "n_nonzero": 20
+      },
+      "ssim": {
+        "median_mask_minus_full": 0.0172346830368042,
+        "mean_mask_minus_full": 0.017238691449165344,
+        "shapiro_p": 0.871626559021355,
+        "wilcoxon_statistic": 0.0,
+        "wilcoxon_p": 1.9073486328125e-06,
+        "n_nonzero": 20
+      },
+      "lpips": {
+        "median_mask_minus_full": -0.02077064011245966,
+        "mean_mask_minus_full": -0.025758942821994424,
+        "shapiro_p": 0.02030764049210035,
+        "wilcoxon_statistic": 0.0,
+        "wilcoxon_p": 1.9073486328125e-06,
+        "n_nonzero": 20
+      },
+      "dists": {
+        "median_mask_minus_full": -0.02640765905380249,
+        "mean_mask_minus_full": -0.03113606870174408,
+        "shapiro_p": 0.007547747340974661,
+        "wilcoxon_statistic": 0.0,
+        "wilcoxon_p": 1.9073486328125e-06,
+        "n_nonzero": 20
+      },
+      "l1_rgb255": {
+        "median_mask_minus_full": -133658.0,
+        "mean_mask_minus_full": -129925.6,
+        "shapiro_p": 0.9038801568780986,
+        "wilcoxon_statistic": 0.0,
+        "wilcoxon_p": 1.9073486328125e-06,
+        "n_nonzero": 20
+      },
+      "l2_rgb255": {
+        "median_mask_minus_full": -323.3240613653789,
+        "mean_mask_minus_full": -332.3239836633847,
+        "shapiro_p": 0.4331020373691578,
+        "wilcoxon_statistic": 0.0,
+        "wilcoxon_p": 1.9073486328125e-06,
+        "n_nonzero": 20
+      },
+      "changed_pixel_ratio": {
+        "median_mask_minus_full": -0.18403200000000003,
+        "mean_mask_minus_full": -0.17886000000000002,
+        "shapiro_p": 0.41874144787235346,
+        "wilcoxon_statistic": 0.0,
+        "wilcoxon_p": 1.9073486328125e-06,
+        "n_nonzero": 20
+      },
+      "arcface_mcnemar_exact": {
+        "success_to_fail": 4,
+        "fail_to_success": 0,
+        "p": 0.125
+      },
+      "facenet_mcnemar_exact": {
+        "success_to_fail": 1,
+        "fail_to_success": 1,
+        "p": 1.0
+      }
+    },
+    "MI-FGSM_to_MI-FGSM+Mask": {
+      "arcface_cosine_drop": {
+        "median_mask_minus_full": -0.18127509858459234,
+        "mean_mask_minus_full": -0.19485414465889334,
+        "shapiro_p": 0.5673471007085019,
+        "wilcoxon_statistic": 0.0,
+        "wilcoxon_p": 1.9073486328125e-06,
+        "n_nonzero": 20
+      },
+      "facenet_cosine_drop": {
+        "median_mask_minus_full": -0.028316013514995575,
+        "mean_mask_minus_full": -0.049135685339570044,
+        "shapiro_p": 0.1786658785941327,
+        "wilcoxon_statistic": 34.0,
+        "wilcoxon_p": 0.006389617919921875,
+        "n_nonzero": 20
+      },
+      "ssim": {
+        "median_mask_minus_full": 0.03857496380805969,
+        "mean_mask_minus_full": 0.04023885428905487,
+        "shapiro_p": 0.5735638364862161,
+        "wilcoxon_statistic": 0.0,
+        "wilcoxon_p": 1.9073486328125e-06,
+        "n_nonzero": 20
+      },
+      "lpips": {
+        "median_mask_minus_full": -0.05118053872138262,
+        "mean_mask_minus_full": -0.056206540856510404,
+        "shapiro_p": 0.07185003098654966,
+        "wilcoxon_statistic": 0.0,
+        "wilcoxon_p": 1.9073486328125e-06,
+        "n_nonzero": 20
+      },
+      "dists": {
+        "median_mask_minus_full": -0.03776860237121582,
+        "mean_mask_minus_full": -0.04226110279560089,
+        "shapiro_p": 0.04484717138099517,
+        "wilcoxon_statistic": 0.0,
+        "wilcoxon_p": 1.9073486328125e-06,
+        "n_nonzero": 20
+      },
+      "l1_rgb255": {
+        "median_mask_minus_full": -245487.5,
+        "mean_mask_minus_full": -232129.65,
+        "shapiro_p": 0.30544625786708035,
+        "wilcoxon_statistic": 0.0,
+        "wilcoxon_p": 1.9073486328125e-06,
+        "n_nonzero": 20
+      },
+      "l2_rgb255": {
+        "median_mask_minus_full": -648.1283796754869,
+        "mean_mask_minus_full": -639.6281315050588,
+        "shapiro_p": 0.3140059497043618,
+        "wilcoxon_statistic": 0.0,
+        "wilcoxon_p": 1.9073486328125e-06,
+        "n_nonzero": 20
+      },
+      "changed_pixel_ratio": {
+        "median_mask_minus_full": -0.184056,
+        "mean_mask_minus_full": -0.1789816,
+        "shapiro_p": 0.4242459120441968,
+        "wilcoxon_statistic": 0.0,
+        "wilcoxon_p": 1.9073486328125e-06,
+        "n_nonzero": 20
+      },
+      "arcface_mcnemar_exact": {
+        "success_to_fail": 11,
+        "fail_to_success": 0,
+        "p": 0.0009765625
+      },
+      "facenet_mcnemar_exact": {
+        "success_to_fail": 2,
+        "fail_to_success": 0,
+        "p": 0.5
+      }
+    }
+  },
+  "paired_transition_summary": {
+    "PGD_to_PGD+Mask": {
+      "perceptual_all_improve": 20,
+      "facenet_drop_increase": 9,
+      "facenet_drop_same": 0,
+      "facenet_drop_decrease": 11,
+      "facenet_transitions": {
+        "success→fail": 1,
+        "fail→success": 1,
+        "success→success": 3,
+        "fail→fail": 15
+      }
+    },
+    "MI-FGSM_to_MI-FGSM+Mask": {
+      "perceptual_all_improve": 20,
+      "facenet_drop_increase": 5,
+      "facenet_drop_same": 0,
+      "facenet_drop_decrease": 15,
+      "facenet_transitions": {
+        "success→fail": 2,
+        "fail→success": 0,
+        "success→success": 6,
+        "fail→fail": 12
+      }
+    }
+  },
+  "crossing_tables": {
+    "PGD": {
+      "arc_success_face_success": 4,
+      "arc_success_face_fail": 16,
+      "arc_fail_face_success": 0,
+      "arc_fail_face_fail": 0
+    },
+    "MI-FGSM": {
+      "arc_success_face_success": 8,
+      "arc_success_face_fail": 10,
+      "arc_fail_face_success": 0,
+      "arc_fail_face_fail": 2
+    },
+    "PGD+Mask": {
+      "arc_success_face_success": 3,
+      "arc_success_face_fail": 13,
+      "arc_fail_face_success": 1,
+      "arc_fail_face_fail": 3
+    },
+    "MI-FGSM+Mask": {
+      "arc_success_face_success": 4,
+      "arc_success_face_fail": 3,
+      "arc_fail_face_success": 2,
+      "arc_fail_face_fail": 11
+    }
+  },
+  "arcface_fail_facenet_success_identities": {
+    "PGD": [],
+    "MI-FGSM": [],
+    "PGD+Mask": [
+      "Justin_Timberlake"
+    ],
+    "MI-FGSM+Mask": [
+      "Justin_Timberlake",
+      "Sally_Kirkland"
+    ]
+  },
+  "threshold_margin_correlations": {
+    "PGD": {
+      "facenet_clean_margin_vs_drop": {
+        "pearson_r": 0.2571758856119559,
+        "pearson_p": 0.27368671772016206,
+        "spearman_rho": 0.08721804511278194,
+        "spearman_p": 0.7146383646582315
+      },
+      "arcface_clean_margin_vs_success": {
+        "pearson_r": null,
+        "pearson_p": null,
+        "spearman_rho": null,
+        "spearman_p": null
+      },
+      "facenet_clean_margin_vs_success": {
+        "pearson_r": -0.20363010065943316,
+        "pearson_p": 0.38918349558561716,
+        "spearman_rho": -0.303488489333442,
+        "spearman_p": 0.19333136463862863
+      }
+    },
+    "MI-FGSM": {
+      "facenet_clean_margin_vs_drop": {
+        "pearson_r": 0.30720167926026704,
+        "pearson_p": 0.1876656819600956,
+        "spearman_rho": 0.24962406015037594,
+        "spearman_p": 0.28851258969719185
+      },
+      "arcface_clean_margin_vs_success": {
+        "pearson_r": -0.26791284256692666,
+        "pearson_p": 0.2534429927699237,
+        "spearman_rho": -0.317940322158844,
+        "spearman_p": 0.1719142059213839
+      },
+      "facenet_clean_margin_vs_success": {
+        "pearson_r": -0.07705763113329357,
+        "pearson_p": 0.7467684669477215,
+        "spearman_rho": -0.24779731389167606,
+        "spearman_p": 0.2921717210743481
+      }
+    },
+    "PGD+Mask": {
+      "facenet_clean_margin_vs_drop": {
+        "pearson_r": 0.19992496636899054,
+        "pearson_p": 0.3980537082789492,
+        "spearman_rho": 0.12330827067669171,
+        "spearman_p": 0.604508830626885
+      },
+      "arcface_clean_margin_vs_success": {
+        "pearson_r": -0.26073939875824353,
+        "pearson_p": 0.2668592581301268,
+        "spearman_rho": -0.34684398780964804,
+        "spearman_p": 0.13407612120334206
+      },
+      "facenet_clean_margin_vs_success": {
+        "pearson_r": -0.306495760584331,
+        "pearson_p": 0.1887340700876754,
+        "spearman_rho": -0.498588232476369,
+        "spearman_p": 0.025244970412083973
+      }
+    },
+    "MI-FGSM+Mask": {
+      "facenet_clean_margin_vs_drop": {
+        "pearson_r": 0.20817486695268161,
+        "pearson_p": 0.3784548490545015,
+        "spearman_rho": 0.13684210526315788,
+        "spearman_p": 0.5650957921363964
+      },
+      "arcface_clean_margin_vs_success": {
+        "pearson_r": -0.3393794609923666,
+        "pearson_p": 0.14322556928984626,
+        "spearman_rho": -0.2999628168314381,
+        "spearman_p": 0.19881609782430026
+      },
+      "facenet_clean_margin_vs_success": {
+        "pearson_r": -0.153769756775279,
+        "pearson_p": 0.5174589801203945,
+        "spearman_rho": -0.30275025304343856,
+        "spearman_p": 0.19447130924218925
+      }
+    }
+  },
+  "facenet_transfer_successes": [
+    {
+      "method": "PGD",
+      "identity_id": "Michel_Temer",
+      "clean_margin": 0.43570894002914423,
+      "adv_margin": -0.14874053001403814,
+      "drop": 0.5844494700431824
+    },
+    {
+      "method": "PGD",
+      "identity_id": "Christine_Baumgartner",
+      "clean_margin": 0.17491757869720453,
+      "adv_margin": -0.10206320881843572,
+      "drop": 0.27698078751564026
+    },
+    {
+      "method": "PGD",
+      "identity_id": "Justin_Timberlake",
+      "clean_margin": 0.2537000179290771,
+      "adv_margin": -0.049155145883560236,
+      "drop": 0.30285516381263733
+    },
+    {
+      "method": "PGD",
+      "identity_id": "Patrick_McEnroe",
+      "clean_margin": 0.12124705314636225,
+      "adv_margin": -0.16222822666168218,
+      "drop": 0.28347527980804443
+    },
+    {
+      "method": "MI-FGSM",
+      "identity_id": "Cyndi_Thompson",
+      "clean_margin": 0.41055852174758906,
+      "adv_margin": -0.03906241059303289,
+      "drop": 0.44962093234062195
+    },
+    {
+      "method": "MI-FGSM",
+      "identity_id": "Jerry_Springer",
+      "clean_margin": 0.34571623802185053,
+      "adv_margin": -0.05985614657402044,
+      "drop": 0.40557238459587097
+    },
+    {
+      "method": "MI-FGSM",
+      "identity_id": "Michel_Temer",
+      "clean_margin": 0.43570894002914423,
+      "adv_margin": -0.04492774605751043,
+      "drop": 0.48063668608665466
+    },
+    {
+      "method": "MI-FGSM",
+      "identity_id": "Christine_Baumgartner",
+      "clean_margin": 0.17491757869720453,
+      "adv_margin": -0.1510670185089112,
+      "drop": 0.3259845972061157
+    },
+    {
+      "method": "MI-FGSM",
+      "identity_id": "Justin_Timberlake",
+      "clean_margin": 0.2537000179290771,
+      "adv_margin": -0.13931539654731756,
+      "drop": 0.39301541447639465
+    },
+    {
+      "method": "MI-FGSM",
+      "identity_id": "Maria_Shriver",
+      "clean_margin": 0.29975014925003046,
+      "adv_margin": -0.0655194520950318,
+      "drop": 0.36526960134506226
+    },
+    {
+      "method": "MI-FGSM",
+      "identity_id": "Sally_Kirkland",
+      "clean_margin": 0.343091607093811,
+      "adv_margin": -0.18203541636466986,
+      "drop": 0.5251270234584808
+    },
+    {
+      "method": "MI-FGSM",
+      "identity_id": "Patrick_McEnroe",
+      "clean_margin": 0.12124705314636225,
+      "adv_margin": -0.22204351425170904,
+      "drop": 0.3432905673980713
+    },
+    {
+      "method": "PGD+Mask",
+      "identity_id": "Christine_Baumgartner",
+      "clean_margin": 0.17491757869720453,
+      "adv_margin": -0.05589160323143011,
+      "drop": 0.23080918192863464
+    },
+    {
+      "method": "PGD+Mask",
+      "identity_id": "Justin_Timberlake",
+      "clean_margin": 0.2537000179290771,
+      "adv_margin": -0.040326029062271174,
+      "drop": 0.29402604699134827
+    },
+    {
+      "method": "PGD+Mask",
+      "identity_id": "Maria_Shriver",
+      "clean_margin": 0.29975014925003046,
+      "adv_margin": -0.02637928724288946,
+      "drop": 0.3261294364929199
+    },
+    {
+      "method": "PGD+Mask",
+      "identity_id": "Patrick_McEnroe",
+      "clean_margin": 0.12124705314636225,
+      "adv_margin": -0.19850261509418493,
+      "drop": 0.3197496682405472
+    },
+    {
+      "method": "MI-FGSM+Mask",
+      "identity_id": "Cyndi_Thompson",
+      "clean_margin": 0.41055852174758906,
+      "adv_margin": -0.06062558293342596,
+      "drop": 0.471184104681015
+    },
+    {
+      "method": "MI-FGSM+Mask",
+      "identity_id": "Jerry_Springer",
+      "clean_margin": 0.34571623802185053,
+      "adv_margin": -0.09506347775459295,
+      "drop": 0.4407797157764435
+    },
+    {
+      "method": "MI-FGSM+Mask",
+      "identity_id": "Christine_Baumgartner",
+      "clean_margin": 0.17491757869720453,
+      "adv_margin": -0.05614280700683599,
+      "drop": 0.23106038570404053
+    },
+    {
+      "method": "MI-FGSM+Mask",
+      "identity_id": "Justin_Timberlake",
+      "clean_margin": 0.2537000179290771,
+      "adv_margin": -0.043286204338073786,
+      "drop": 0.2969862222671509
+    },
+    {
+      "method": "MI-FGSM+Mask",
+      "identity_id": "Sally_Kirkland",
+      "clean_margin": 0.343091607093811,
+      "adv_margin": -0.05275371670722967,
+      "drop": 0.39584532380104065
+    },
+    {
+      "method": "MI-FGSM+Mask",
+      "identity_id": "Patrick_McEnroe",
+      "clean_margin": 0.12124705314636225,
+      "adv_margin": -0.19047375023365026,
+      "drop": 0.3117208033800125
+    }
+  ],
+  "source_vs_transfer_correlations": {
+    "PGD": {
+      "pearson_r": 0.3978791790131016,
+      "pearson_p": 0.08232312852831522,
+      "spearman_rho": 0.24360902255639094,
+      "spearman_p": 0.30066819440044384
+    },
+    "MI-FGSM": {
+      "pearson_r": 0.42414868251315957,
+      "pearson_p": 0.062345989328390305,
+      "spearman_rho": 0.4586466165413533,
+      "spearman_p": 0.041954311609335444
+    },
+    "PGD+Mask": {
+      "pearson_r": 0.33159367042090193,
+      "pearson_p": 0.15322584339068235,
+      "spearman_rho": 0.18646616541353384,
+      "spearman_p": 0.431194910434251
+    },
+    "MI-FGSM+Mask": {
+      "pearson_r": 0.4542083217333762,
+      "pearson_p": 0.044240720630152205,
+      "spearman_rho": 0.4240601503759398,
+      "spearman_p": 0.06240648623134542
+    }
+  },
+  "q_answers": {
+    "Q1": {
+      "observation": "PGD has larger mean ArcFace drop, while MI-FGSM has larger mean FaceNet drop and more FaceNet crossings.",
+      "analysis": "Within-method source/transfer correlations are recorded in the derived JSON; they describe association, not causation.",
+      "interpretation": "Existing artifacts support only that surrogate strength and transferability are not interchangeable rankings in this fixed n=20 sample.",
+      "limitation": "They do not identify a momentum mechanism; gradient alignment or trajectory evidence is required."
+    },
+    "Q2": {
+      "observation": "Both masked variants have substantially lower LPIPS/DISTS and higher SSIM; paired deltas quantify whether their FaceNet drop is retained per identity.",
+      "analysis": "The decoded-PNG L1/L2/changed-ratio and mask coverage correlations separate total/spatial perturbation from shared L∞.",
+      "interpretation": "Masking redistributes/reduces perturbation under the same peak bound; the observed FaceNet effect is method- and identity-dependent, not proof that a particular facial feature was preserved.",
+      "limitation": "Coverage and pixel statistics do not establish feature-level causality."
+    },
+    "Q3": {
+      "observation": "MI-FGSM→MI-FGSM+Mask changes ArcFace ASR from 18/20 to 7/20; 11 pairs go success→fail and none fail→success (exact McNemar p=0.001).",
+      "analysis": "Mask coverage is positively associated with ArcFace drop, but has essentially no association with FaceNet drop (pooled Pearson r=-0.028); paired perturbation reductions are documented.",
+      "interpretation": "Coverage alone does not explain the MI-FGSM white-box ASR reduction, although the observed effect is large in this development sample.",
+      "limitation": "The optimization mechanism remains a Remaining Question: it needs per-step gradients/loss/trajectory or gradient-alignment analysis."
+    },
+    "Q4": {
+      "observation": "MI-FGSM+Mask crossing counts are Arc success/FN success=4, Arc success/FN fail=3, Arc fail/FN success=2, Arc fail/FN fail=11.",
+      "analysis": "The matrix and identity list in mechanism_analysis.json directly resolve the 35% versus 30% overlap.",
+      "interpretation": "ArcFace success is not a necessary condition for FaceNet success whenever Arc-fail/FN-success cells are nonzero.",
+      "limitation": "A 2×2 overlap does not infer cross-model causal direction."
+    },
+    "Q5": {
+      "observation": "Every decoded PNG reaches 11/255 L∞, whereas L1/L2, mean |δ|, changed ratio and saturation ratio differ across methods.",
+      "analysis": "Pearson/Spearman tests are reported both pooled (n=80) and within each method (n=20). The latter are heterogeneous, so the pooled pattern is not treated as an individual-level relation.",
+      "interpretation": "L∞ controls only the single largest element; between-method perturbation amount/distribution and perceptual quality are aligned, explaining why equal L∞ can look different.",
+      "limitation": "The n=20 within-method associations are exploratory and do not establish pixel- or feature-level causality."
+    }
+  }
+}

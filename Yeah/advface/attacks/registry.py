@@ -77,9 +77,14 @@ def _apply_pgd(img_bgr, *, app, config: AttackConfig, device=None) -> AttackOutp
 
 def _apply_pgd_full(img_bgr, *, app, config: AttackConfig, device=None) -> AttackOutput:
     from advface.attacks.pgd import run_pgd_full
+    from advface.constraints import build_constraint
 
     steps = int(config.steps if config.steps is not None else 100)
-    results = run_pgd_full(img_bgr, [float(config.eps)], app, steps=steps, device=device)
+    constraint_name = config.extra.get("constraint")
+    constraint = build_constraint(constraint_name, **dict(config.extra.get("constraint_options", {})))
+    tv_weight = float(config.extra.get("tv_weight", 0.0))
+    diagnostics = bool(config.extra.get("diagnostics", False))
+    results = run_pgd_full(img_bgr, [float(config.eps)], app, steps=steps, device=device, constraint=constraint, tv_weight=tv_weight, diagnostics=diagnostics)
     r = results[0]
     return AttackOutput(
         adversarial_bgr=r.attacked_bgr,
@@ -91,18 +96,28 @@ def _apply_pgd_full(img_bgr, *, app, config: AttackConfig, device=None) -> Attac
             "alpha_px": (float(config.eps) * PIXEL_MAX) / max(steps, 1),
             "random_start": False,
             "linf_tensor": r.linf_tensor,
+            "constraint": constraint_name or None,
+            "tv_weight": tv_weight,
+            **({"diagnostics": r.diagnostics, "final_mask": r.final_mask} if diagnostics else {}),
         },
     )
 
 
 def _apply_mi_fgsm(img_bgr, *, app, config: AttackConfig, device=None) -> AttackOutput:
     from advface.attacks.mi_fgsm import run_mi_fgsm
+    from advface.constraints import build_constraint
 
     steps = int(config.steps if config.steps is not None else 20)
     alpha = float(config.alpha) if config.alpha is not None else float(config.eps) / max(steps, 1)
+    constraint_name = config.extra.get("constraint")
+    constraint = build_constraint(constraint_name, **dict(config.extra.get("constraint_options", {})))
+    tv_weight = float(config.extra.get("tv_weight", 0.0))
+    diagnostics = bool(config.extra.get("diagnostics", False))
     run_result = run_mi_fgsm(
         img_bgr, float(config.eps), app, steps=steps, alpha=alpha,
         momentum=float(config.momentum), device=device, return_metadata=True,
+        constraint=constraint, tv_weight=tv_weight,
+        diagnostics=diagnostics,
     )
     if isinstance(run_result, tuple):
         adversarial, metrics = run_result
@@ -118,6 +133,7 @@ def _apply_mi_fgsm(img_bgr, *, app, config: AttackConfig, device=None) -> Attack
             "momentum": float(config.momentum), "decay": float(config.momentum),
             "random_start": False, "gradient_normalization": "per-image L1 norm",
             "seed": int(config.seed),
+            "constraint": constraint_name or None, "tv_weight": tv_weight,
             **metrics,
         },
     )

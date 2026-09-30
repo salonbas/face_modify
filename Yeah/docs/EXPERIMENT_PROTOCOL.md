@@ -15,6 +15,9 @@
   development candidate split；**只有此五人**屬於目前正式 v1 的固定樣本。
 - 每個 attack 有 `n=5`，PGD 與 MI-FGSM 合併為 10 個 attack observations。
   這是 development comparison，不可宣稱為 general transfer-rate estimate。
+- v2 expansion 使用同一 frozen `attack_dev.csv` 的全部 20 identities，不更改
+  split 且不使用 test/reserve。它是較大的 development baseline，仍非 general
+  transfer-rate estimate；v1 的固定五人不被覆寫。
 
 ## Models and decision rule
 
@@ -59,6 +62,14 @@ artifact 為 11/255（0.043137），不得與 configured epsilon 混為同一數
   `results/transfer/mi_fgsm_arcface_to_facenet_verification_v1/`。
 - 最終 5+5 perceptual aggregation：
   `results/perceptual/lfw_development_transfer_v2/`。
+- v2 20-identity complete baseline：
+  `results/transfer/lfw_attack_dev_20_baseline_v2/{pgd_full,mi_fgsm}/`。每個
+  identity 由獨立 subprocess 執行；所有報告 metrics 都從同一 serialized PNG
+  decode 後取得。
+- v2 five-identity Mask ablation：
+  `results/transfer/lfw_attack_dev_mask_ablation_v2/{pgd_full,pgd_landmark_superpixel_mask}/`；
+  200 steps、ε=0.04、`tv_weight=0`。landmark index layout 是經 overlay 檢驗的
+  implementation assumption，不是 1k3d68 artifact 已證實的官方 semantic mapping。
 
 任何不在上述範圍的 single-image、smoke、historical 或 exploratory output，均不
 可併入正式統計或用來支持正式結論。

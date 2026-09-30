@@ -54,6 +54,8 @@ class PgdResult:
     cosine: float
     attacked_bgr: np.ndarray
     linf_tensor: float | None = None
+    diagnostics: dict[str, Any] | None = None
+    final_mask: np.ndarray | None = None
 
 
 def run_pgd(
@@ -147,6 +149,9 @@ def run_pgd_full(
     app: Any,
     steps: int = 100,
     device: Optional[str] = None,
+    constraint: Any | None = None,
+    tv_weight: float = 0.0,
+    diagnostics: bool = False,
 ) -> List[PgdResult]:
     """
     全圖 PGD：delta 維度 = 原圖大小，透過可微分仿射裁切讓梯度流回整張圖。
@@ -189,6 +194,22 @@ def run_pgd_full(
             model((crop - ARCFACE_INPUT_MEAN) / ARCFACE_INPUT_SCALE), dim=1
         )
 
+    if tv_weight < 0:
+        raise ValueError("tv_weight must be non-negative")
+    # The constraint is built once on clean B and is held fixed through the
+    # iterative optimization.  It lives in original image coordinates, like
+    # full-image delta; only the gradient, not the objective, is spatially
+    # constrained.
+    mask_t = None
+    final_mask = None
+    if constraint is not None:
+        mask, _, _ = constraint.build(img_bgr)
+        final_mask = mask.copy()
+        mask_t = torch.from_numpy(mask).to(device=device, dtype=x_full.dtype)[None, None]
+
+    def _total_variation(delta: "torch.Tensor") -> "torch.Tensor":
+        return (delta[:, :, 1:, :] - delta[:, :, :-1, :]).abs().mean() + (delta[:, :, :, 1:] - delta[:, :, :, :-1]).abs().mean()
+
     with torch.no_grad():
         emb_ref = _emb_full(x_full).detach()
 
@@ -197,15 +218,79 @@ def run_pgd_full(
         eps_px = eps * PIXEL_MAX
         step_size = eps_px / steps
         delta = torch.zeros_like(x_full)
+        trace: list[dict[str, float | int | bool | None]] = []
+        previous_raw = None
+        previous_update = None
 
-        for _ in range(steps):
+        def _cos(a: "torch.Tensor", b: "torch.Tensor") -> float | None:
+            denom = a.norm() * b.norm()
+            return None if float(denom.item()) == 0.0 else float((a * b).sum().div(denom).item())
+
+        for step in range(steps):
             delta.requires_grad_(True)
-            (
-                _emb_full(clip_pixel_range(x_full + delta)) * emb_ref
-            ).sum().backward()
+            cosine = (_emb_full(clip_pixel_range(x_full + delta)) * emb_ref).sum()
+            # TV is optional and intentionally independent of the mask.  The
+            # negative update minimizes the cosine objective; positive TV is
+            # added to the minimized loss only when explicitly requested.
+            objective = cosine + float(tv_weight) * _total_variation(delta)
+            objective.backward()
             with torch.no_grad():
-                delta = delta.detach() - step_size * delta.grad.detach().sign()
+                gradient = delta.grad.detach()
+                # Diagnostic observations are made before the optional spatial
+                # constraint.  They do not participate in autograd or updates.
+                raw_gradient = gradient
+                record: dict[str, float | int | bool | None] | None = None
+                if diagnostics:
+                    raw_abs = raw_gradient.abs()
+                    record = {
+                        "step": step + 1,
+                        "raw_grad_l1": float(raw_abs.sum().item()),
+                        "raw_grad_l2": float(raw_gradient.norm().item()),
+                        "raw_grad_max_abs": float(raw_abs.max().item()),
+                        "raw_grad_mean_abs": float(raw_abs.mean().item()),
+                        "raw_grad_prev_cosine": _cos(raw_gradient, previous_raw) if previous_raw is not None else None,
+                    }
+                    if mask_t is not None:
+                        inside = raw_gradient * mask_t
+                        outside = raw_gradient * (1.0 - mask_t)
+                        inside_abs, outside_abs = inside.abs(), outside.abs()
+                        raw_l1, raw_l2 = raw_abs.sum(), raw_gradient.norm()
+                        elements_inside = mask_t.sum() * raw_gradient.shape[1]
+                        elements_outside = (1.0 - mask_t).sum() * raw_gradient.shape[1]
+                        record.update({
+                            "inside_l1_ratio": float((inside_abs.sum() / raw_l1.clamp_min(1e-12)).item()),
+                            "inside_l2_ratio": float((inside.norm() / raw_l2.clamp_min(1e-12)).item()),
+                            "inside_grad_abs_sum": float(inside_abs.sum().item()),
+                            "outside_grad_abs_sum": float(outside_abs.sum().item()),
+                            "mask_coverage": float(mask_t.mean().item()),
+                            "inside_grad_mean_abs": float((inside_abs.sum() / elements_inside.clamp_min(1)).item()),
+                            "outside_grad_mean_abs": float((outside_abs.sum() / elements_outside.clamp_min(1)).item()),
+                        })
+                if mask_t is not None:
+                    gradient = gradient * mask_t
+                update = -gradient.sign()
+                delta = delta.detach() + step_size * update
                 delta = project_delta_linf(delta, eps_px)
+                if diagnostics:
+                    assert record is not None
+                    current_cosine = (_emb_full(clip_pixel_range(x_full + delta)) * emb_ref).sum()
+                    delta_abs = delta.abs()
+                    changed = torch.any(delta != 0, dim=1)
+                    record.update({
+                        "arcface_cosine": float(current_cosine.item()),
+                        "objective": float(objective.item()),
+                        "arcface_threshold_crossing": None,  # populated by diagnostic runner using calibrated threshold
+                        "current_linf": float(delta_abs.max().item() / PIXEL_MAX),
+                        "current_l1": float(delta_abs.sum().item()),
+                        "current_l2": float(delta.norm().item()),
+                        "changed_pixel_ratio": float(changed.float().mean().item()),
+                        "epsilon_saturation_ratio": float((delta_abs >= eps_px - 1e-6).float().mean().item()),
+                        "update_raw_grad_cosine": _cos(update, raw_gradient),
+                        "update_prev_cosine": _cos(update, previous_update) if previous_update is not None else None,
+                    })
+                    trace.append(record)
+                    previous_raw = raw_gradient.detach().clone()
+                    previous_update = update.detach().clone()
 
         with torch.no_grad():
             adv = clip_pixel_range(x_full + delta)
@@ -219,6 +304,8 @@ def run_pgd_full(
             # Measured before uint8 serialization; this is observational only
             # and does not alter the established PGD update or projection.
             linf_tensor=float(torch.max(torch.abs(adv - x_full)).item() / PIXEL_MAX),
+            diagnostics={"trajectory": trace, "operation_order": "raw gradient → optional mask → sign → update → L∞ projection → pixel clipping"} if diagnostics else None,
+            final_mask=final_mask,
         ))
     return results
 

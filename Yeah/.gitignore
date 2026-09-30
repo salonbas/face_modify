@@ -15,6 +15,11 @@ __pycache__/
 # Experiment artifacts
 results/*
 
+# Versioned meeting-report assets (small curated visualizations only)
+!docs/reports/
+!docs/reports/**/
+!docs/reports/**/*.png
+
 # Keep tracked placeholders / docs under results
 !results/.gitkeep
 !results/**/README.txt

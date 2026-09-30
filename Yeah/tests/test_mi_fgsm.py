@@ -81,3 +81,16 @@ def test_mi_fgsm_metadata_keeps_tensor_constraint_primary(monkeypatch):
     assert validate_linf(output.parameters["linf_tensor"], 0.01)
     assert output.parameters["linf_serialized"] == pytest.approx(3 / PIXEL_MAX)
     assert output.parameters["linf_tensor"] <= 0.01
+
+
+def test_registry_passes_constraint_and_tv_to_full_image_attacks(monkeypatch):
+    original = np.full((2, 2, 3), 100, dtype=np.uint8)
+    seen = {}
+    def fake_pgd(*args, **kwargs):
+        seen.update(kwargs)
+        from advface.attacks.pgd import PgdResult
+        return [PgdResult(eps=0.01, eps_255=2.55, steps=3, cosine=float('nan'), attacked_bgr=original, linf_tensor=0.01)]
+    monkeypatch.setattr("advface.attacks.pgd.run_pgd_full", fake_pgd)
+    output = apply_attack(original, attack="pgd_full", app=object(), config=AttackConfig(name="pgd_full", eps=0.01, steps=3, extra={"constraint": "landmark_superpixel_mask", "tv_weight": 0.0}))
+    assert output.parameters["constraint"] == "landmark_superpixel_mask"
+    assert seen["constraint"].name == "landmark_superpixel_mask"
