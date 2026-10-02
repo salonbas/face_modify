@@ -106,3 +106,19 @@ class FaceNetEmbedder:
         if out.size == 0:
             raise ValueError(f"FaceNet embedding 為空：{label}")
         return out
+
+    def get_embeddings(self, images_bgr: list[np.ndarray], label: str = "images") -> np.ndarray:
+        """Evaluate a trajectory in one MTCNN/model batch."""
+        if not images_bgr:
+            return np.empty((0, 512), dtype=np.float32)
+        rgbs = [cv2.cvtColor(image, cv2.COLOR_BGR2RGB) for image in images_bgr]
+        faces = self._mtcnn(rgbs)
+        if faces is None or any(face is None for face in faces):
+            raise ValueError(f"FaceNet/MTCNN 未偵測到人臉：{label}")
+        if isinstance(faces, list):
+            faces = self._torch.stack(faces)
+        faces = faces.to(self.device)
+        with self._torch.no_grad():
+            emb = self._model(faces)
+            emb = self._torch.nn.functional.normalize(emb, p=2, dim=1)
+        return emb.detach().cpu().numpy().astype(np.float32)
