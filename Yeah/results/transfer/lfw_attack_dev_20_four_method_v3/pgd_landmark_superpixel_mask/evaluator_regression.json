@@ -1,0 +1,31 @@
+{
+  "identities": {
+    "Meryl_Streep": {
+      "absolute_deltas": {
+        "actual_linf_serialized": 0.0,
+        "arcface_adv_cosine": 0.0,
+        "arcface_clean_cosine": 0.0,
+        "dists": 0.0,
+        "facenet_adv_cosine": 0.0,
+        "facenet_clean_cosine": 0.0,
+        "lpips": 0.0,
+        "ssim": 0.0
+      },
+      "passed": true
+    },
+    "Michelle_Collins": {
+      "absolute_deltas": {
+        "actual_linf_serialized": 0.0,
+        "arcface_adv_cosine": 0.0,
+        "arcface_clean_cosine": 0.0,
+        "dists": 0.0,
+        "facenet_adv_cosine": 0.0,
+        "facenet_clean_cosine": 0.0,
+        "lpips": 0.0,
+        "ssim": 0.0
+      },
+      "passed": true
+    }
+  },
+  "passed": true
+}

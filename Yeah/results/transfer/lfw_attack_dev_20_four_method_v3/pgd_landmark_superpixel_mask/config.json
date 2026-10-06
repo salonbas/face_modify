@@ -1,0 +1,11 @@
+{
+  "attack": "pgd_full",
+  "configured_epsilon": 0.04,
+  "constraint": "landmark_superpixel_mask",
+  "execution": "sequential independent subprocess per identity",
+  "formal": true,
+  "identity_count": 20,
+  "split": "data/datasets/lfw/evaluation_splits/attack_dev.csv",
+  "steps": 200,
+  "tv_weight": 0.0
+}

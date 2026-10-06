@@ -13,6 +13,8 @@ __pycache__/
 .cache/
 
 # Experiment artifacts
+# Keep runtime output out by default, then explicitly version the formal
+# calibration, benchmark and diagnostic evidence below.
 results/*
 
 # Versioned meeting-report assets (small curated visualizations only)
@@ -25,6 +27,35 @@ results/*
 !results/**/README.txt
 !results/**/*README*
 
+# Formal calibration authority: configs, metadata, thresholds and tabular
+# calibration evidence.  Derived embedding arrays remain local caches.
+!results/calibration/
+!results/calibration/**/
+!results/calibration/**/*.json
+!results/calibration/**/*.csv
+results/calibration/**/*.npz
+results/calibration/**/failures.csv
+
+# Frozen-20 formal four-method benchmark authority.  Serialized images and
+# visualizations are reproducible runtime assets; curated report figures live
+# under docs/reports instead.
+!results/transfer/
+results/transfer/*
+!results/transfer/lfw_attack_dev_20_four_method_v3/
+results/transfer/lfw_attack_dev_20_four_method_v3/**/*.png
+results/transfer/lfw_attack_dev_20_four_method_v3/**/*.jpg
+results/transfer/lfw_attack_dev_20_four_method_v3/**/*.jpeg
+results/transfer/lfw_attack_dev_20_four_method_v3/**/*.npy
+
+# Compact formal regression evidence; trajectory frames, tensors and
+# checkpoints are deliberately local-only.
+!results/diagnostics/
+results/diagnostics/*
+!results/diagnostics/lfw_gradient_trajectory_v1/
+results/diagnostics/lfw_gradient_trajectory_v1/*
+!results/diagnostics/lfw_gradient_trajectory_v1/regression_smoke.json
+!results/diagnostics/lfw_gradient_trajectory_v1/regression_smoke.csv
+
 # Local personal notes (also archived under archive/docs/)
 COMMANDS.local.md
 
@@ -32,11 +63,23 @@ COMMANDS.local.md
 data/benchmark/images/
 data/benchmark/_download/
 
-# Locally generated LFW manifests, pair lists, split files, and image link.
-# Recreate these with scripts/prepare_lfw_dataset.py and
-# scripts/prepare_lfw_attack_splits.py; keep only the usage documentation.
+# Raw LFW images and their local link/cache never enter Git.  The manifest,
+# official pair definitions and frozen split definitions are research inputs
+# and must remain versioned.
 data/datasets/lfw/*
 !data/datasets/lfw/README.md
+!data/datasets/lfw/manifest.csv
+!data/datasets/lfw/pairs/
+!data/datasets/lfw/pairs/**
+!data/datasets/lfw/evaluation_splits/
+!data/datasets/lfw/evaluation_splits/**
+
+# Local model/cache locations and large weight formats.  Model identifiers,
+# expected filenames and setup instructions belong in source/docs instead.
+models/**/*.onnx
+models/**/*.pth
+models/**/*.pt
+.cache/torch/
 
 # Packaging / coverage / debug
 *.egg-info/
@@ -46,3 +89,5 @@ htmlcov/
 tmp/
 debug/
 *.log
+*.tmp
+*.temp

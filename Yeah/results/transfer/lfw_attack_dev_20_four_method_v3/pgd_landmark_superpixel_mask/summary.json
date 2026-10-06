@@ -1,0 +1,46 @@
+{
+  "aggregate": {
+    "actual_linf_serialized": 0.04313725490196078,
+    "arcface_asr": 0.8,
+    "arcface_cosine_drop": 0.6478854880086147,
+    "dists": 0.017759332060813905,
+    "facenet_asr": 0.2,
+    "facenet_cosine_drop": 0.2092953560873866,
+    "lpips": 0.013953316444531082,
+    "ssim": 0.9851946651935577
+  },
+  "attack": {
+    "configured_epsilon": 0.04,
+    "constraint": "landmark_superpixel_mask",
+    "name": "pgd_full",
+    "steps": 200,
+    "tv_weight": 0.0
+  },
+  "completeness": {
+    "complete": true,
+    "expected": 20,
+    "failures": 0,
+    "records": 20,
+    "valid": 20
+  },
+  "formal": true,
+  "landmark_ordering_validation": {
+    "assumed_zero_based_regions": {
+      "eyebrows": "17-26",
+      "eyes": "36-47",
+      "mouth": "48-67",
+      "nose": "27-35"
+    },
+    "inspection_files": "visualizations/<identity>/landmark_indices_overlay.png",
+    "model": "InsightFace buffalo_l/1k3d68.onnx",
+    "status": "implementation_assumption verified by saved overlay; no official semantic index mapping was found in the model artifact"
+  },
+  "provenance": {
+    "all_metrics_read_from_decoded_B_adv_png": true,
+    "per_identity_subprocess": true,
+    "resume_skips_valid_completed_records": true,
+    "single_serialized_artifact_per_observation": true
+  },
+  "scope": "attack_dev.csv frozen development identities; n=20",
+  "title": "LFW frozen attack_dev 20-identity PGD+landmark-superpixel-mask v3"
+}

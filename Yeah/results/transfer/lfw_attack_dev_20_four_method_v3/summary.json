@@ -1,0 +1,131 @@
+{
+  "title": "LFW frozen attack_dev 20-identity four-method comparison v3",
+  "generated_at_utc": "2026-09-30T11:05:43.109406+00:00",
+  "formal": true,
+  "methods": {
+    "PGD": "results/transfer/lfw_attack_dev_20_baseline_v2/pgd_full",
+    "MI-FGSM": "results/transfer/lfw_attack_dev_20_baseline_v2/mi_fgsm",
+    "PGD+Mask": "results/transfer/lfw_attack_dev_20_four_method_v3/pgd_landmark_superpixel_mask",
+    "MI-FGSM+Mask": "results/transfer/lfw_attack_dev_20_four_method_v3/mi_fgsm_landmark_superpixel_mask"
+  },
+  "attack_contract": {
+    "configured_epsilon": 0.04,
+    "steps": 200,
+    "tv_weight": 0,
+    "mask": "68-point landmarks (eyebrows/eyes/nose/mouth), SLIC expansion, gradient *= mask"
+  },
+  "provenance": {
+    "baseline_methods": "Existing formal v2 serialized B_adv artifacts are retained without mutation.",
+    "mask_methods": "Formal v3 per-identity subprocess outputs."
+  },
+  "sanity_check": {
+    "passed": true,
+    "frozen_split": "attack_dev.csv",
+    "no_test_or_reserve": true,
+    "methods": {
+      "PGD": {
+        "records": 20,
+        "valid": 20,
+        "serialized_B_adv_present": true,
+        "serialized_linf_within_epsilon_plus_uint8_quantization": true,
+        "mask_outside_serialized_delta_zero": false
+      },
+      "MI-FGSM": {
+        "records": 20,
+        "valid": 20,
+        "serialized_B_adv_present": true,
+        "serialized_linf_within_epsilon_plus_uint8_quantization": true,
+        "mask_outside_serialized_delta_zero": false
+      },
+      "PGD+Mask": {
+        "records": 20,
+        "valid": 20,
+        "serialized_B_adv_present": true,
+        "serialized_linf_within_epsilon_plus_uint8_quantization": true,
+        "mask_outside_serialized_delta_zero": true
+      },
+      "MI-FGSM+Mask": {
+        "records": 20,
+        "valid": 20,
+        "serialized_B_adv_present": true,
+        "serialized_linf_within_epsilon_plus_uint8_quantization": true,
+        "mask_outside_serialized_delta_zero": true
+      }
+    },
+    "all_metrics_from_serialized_B_adv": true
+  },
+  "aggregate": [
+    {
+      "method": "PGD",
+      "sample_count": 20,
+      "configured_epsilon": 0.04,
+      "actual_linf_serialized_rgb_01": 0.04313725490196078,
+      "actual_linf_serialized_rgb_255": 11.0,
+      "arcface_clean_cosine": 0.6657979935407639,
+      "arcface_adv_cosine": -0.2539811495691538,
+      "arcface_cosine_drop": 0.9197791431099176,
+      "arcface_asr": 1.0,
+      "facenet_clean_cosine": 0.7184675812721253,
+      "facenet_adv_cosine": 0.5059081703424454,
+      "facenet_cosine_drop": 0.21255941092967987,
+      "facenet_transfer_asr": 0.2,
+      "ssim": 0.9679559737443924,
+      "lpips": 0.03971225926652551,
+      "dists": 0.04889540076255798
+    },
+    {
+      "method": "MI-FGSM",
+      "sample_count": 20,
+      "configured_epsilon": 0.04,
+      "actual_linf_serialized_rgb_01": 0.04313725490196078,
+      "actual_linf_serialized_rgb_255": 11.0,
+      "arcface_clean_cosine": 0.6657979935407639,
+      "arcface_adv_cosine": -0.02737566139549017,
+      "arcface_cosine_drop": 0.693173654936254,
+      "arcface_asr": 0.9,
+      "facenet_clean_cosine": 0.7184675812721253,
+      "facenet_adv_cosine": 0.44735345244407654,
+      "facenet_cosine_drop": 0.2711141288280487,
+      "facenet_transfer_asr": 0.4,
+      "ssim": 0.9346060305833817,
+      "lpips": 0.08144896123558283,
+      "dists": 0.0669789582490921
+    },
+    {
+      "method": "PGD+Mask",
+      "sample_count": 20,
+      "configured_epsilon": 0.04,
+      "actual_linf_serialized_rgb_01": 0.04313725490196078,
+      "actual_linf_serialized_rgb_255": 11.0,
+      "arcface_clean_cosine": 0.6657979935407639,
+      "arcface_adv_cosine": 0.017912505532149226,
+      "arcface_cosine_drop": 0.6478854880086147,
+      "arcface_asr": 0.8,
+      "facenet_clean_cosine": 0.7184675812721253,
+      "facenet_adv_cosine": 0.5091722251847386,
+      "facenet_cosine_drop": 0.2092953560873866,
+      "facenet_transfer_asr": 0.2,
+      "ssim": 0.9851946651935577,
+      "lpips": 0.013953316444531082,
+      "dists": 0.017759332060813905
+    },
+    {
+      "method": "MI-FGSM+Mask",
+      "sample_count": 20,
+      "configured_epsilon": 0.04,
+      "actual_linf_serialized_rgb_01": 0.04313725490196078,
+      "actual_linf_serialized_rgb_255": 11.0,
+      "arcface_clean_cosine": 0.6657979935407639,
+      "arcface_adv_cosine": 0.16747848326340317,
+      "arcface_cosine_drop": 0.49831951027736066,
+      "arcface_asr": 0.35,
+      "facenet_clean_cosine": 0.7184675812721253,
+      "facenet_adv_cosine": 0.49648913778364656,
+      "facenet_cosine_drop": 0.22197844348847867,
+      "facenet_transfer_asr": 0.3,
+      "ssim": 0.9748448848724365,
+      "lpips": 0.025242420379072428,
+      "dists": 0.02471785545349121
+    }
+  ]
+}

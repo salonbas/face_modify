@@ -1,0 +1,16 @@
+{
+  "actual_linf_tensor": 0.039999991772221584,
+  "adversarial_image": "results/transfer/lfw_attack_dev_20_four_method_v3/mi_fgsm_landmark_superpixel_mask/adversarial_probes/Richard_Myers_B_adv_mi_fgsm_mask.png",
+  "attack": "mi_fgsm",
+  "configured_epsilon": 0.04,
+  "constraint": "landmark_superpixel_mask",
+  "failure_reason": "",
+  "identity_id": "Richard_Myers",
+  "mask_outside_delta_max": 0.0,
+  "probe_image": "data/datasets/lfw/images/Richard_Myers/Richard_Myers_0002.jpg",
+  "reference_image": "data/datasets/lfw/images/Richard_Myers/Richard_Myers_0001.jpg",
+  "runtime_seconds": 32.987918910999724,
+  "steps": 200,
+  "tv_weight": 0.0,
+  "valid": true
+}

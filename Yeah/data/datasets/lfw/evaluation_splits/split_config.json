@@ -1,0 +1,15 @@
+{
+  "calibration_identity_source": "results/calibration/arcface_lfw_v1/pair_scores.csv",
+  "eligible_identity_count": 328,
+  "eligible_image_count": 1517,
+  "manifest_source": "data/datasets/lfw/manifest.csv",
+  "pair_selection": "canonical original_filename ascending; first image is reference A, second is probe B; remaining images unused",
+  "protocol": "LFW White-box Verification Attack Protocol v1",
+  "seed": 20260902,
+  "selection": "eligible calibration-unused identities shuffled with Python random.Random(seed)",
+  "splits": {
+    "development": 20,
+    "reserve": 208,
+    "test": 100
+  }
+}

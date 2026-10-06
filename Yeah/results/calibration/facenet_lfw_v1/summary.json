@@ -1,0 +1,249 @@
+{
+  "acceptance_rule": "cosine_similarity >= threshold => same identity",
+  "distributions": {
+    "train_genuine_cosine": {
+      "count": 1100,
+      "max": 0.9557569026947021,
+      "mean": 0.7241047917683185,
+      "median": 0.7726868689060211,
+      "min": -0.2526988685131073,
+      "p01": -0.04788036473095416,
+      "p05": 0.3799890205264092,
+      "p25": 0.6799376755952835,
+      "p75": 0.8330601453781128,
+      "p95": 0.8963762164115906,
+      "p99": 0.9366741156578063,
+      "std": 0.1867176722922777
+    },
+    "train_genuine_euclidean": {
+      "count": 1100,
+      "max": 1.5828449726104736,
+      "mean": 0.7121653332222592,
+      "median": 0.6742599010467529,
+      "min": 0.29746654629707336,
+      "p01": 0.3558812803030014,
+      "p05": 0.45524475276470183,
+      "p25": 0.5778233557939529,
+      "p75": 0.8000780642032623,
+      "p95": 1.1135486185550678,
+      "p99": 1.4476715278625485,
+      "std": 0.21121331186562606
+    },
+    "train_impostor_cosine": {
+      "count": 1100,
+      "max": 0.6058812737464905,
+      "mean": 0.0251533223064193,
+      "median": 0.022132904268801212,
+      "min": -0.49535027146339417,
+      "p01": -0.30634806990623475,
+      "p05": -0.2191058687865734,
+      "p25": -0.08224091306328773,
+      "p75": 0.12647419050335884,
+      "p95": 0.27968193888664233,
+      "p99": 0.404829785823822,
+      "std": 0.153794698215513
+    },
+    "train_impostor_euclidean": {
+      "count": 1100,
+      "max": 1.7293641567230225,
+      "mean": 1.3917896220900796,
+      "median": 1.398475706577301,
+      "min": 0.8878273963928223,
+      "p01": 1.0910272097587586,
+      "p05": 1.2002649188041687,
+      "p25": 1.3217608332633972,
+      "p75": 1.4712178409099579,
+      "p95": 1.5614773511886595,
+      "p99": 1.6163835954666137,
+      "std": 0.11231701679990028
+    }
+  },
+  "euclidean_cosine_consistency": {
+    "formula": "sqrt(2 - 2*cosine_similarity)",
+    "max_abs_error": 5.229029818587527e-07
+  },
+  "metric": "cosine_similarity",
+  "model": {
+    "embedding_dimension": 512,
+    "embedding_normalized": true,
+    "model_id": "facenet_vggface2",
+    "preprocessing_alignment": "FaceNetEmbedder: MTCNN detect/crop (160x160, post_process=True) -> InceptionResnetV1 VGGFace2 -> L2 normalization",
+    "weights": "20180402-114759-vggface2.pt",
+    "weights_path": ".cache/torch/checkpoints/20180402-114759-vggface2.pt"
+  },
+  "operating_points": {
+    "eer": {
+      "accuracy": 0.9572727272727273,
+      "development": {
+        "accuracy": 0.9572727272727273,
+        "far": 0.042727272727272725,
+        "fn": 47,
+        "fnr": 0.042727272727272725,
+        "fp": 47,
+        "fpr": 0.042727272727272725,
+        "frr": 0.042727272727272725,
+        "tar": 0.9572727272727273,
+        "threshold": 0.29717835783958435,
+        "tn": 1053,
+        "tp": 1053,
+        "tpr": 0.9572727272727273
+      },
+      "eer": 0.042727272727272725,
+      "far": 0.042727272727272725,
+      "fn": 47,
+      "fnr": 0.042727272727272725,
+      "fp": 47,
+      "fpr": 0.042727272727272725,
+      "frr": 0.042727272727272725,
+      "held_out_test": {
+        "accuracy": 0.944,
+        "far": 0.058,
+        "fn": 27,
+        "fnr": 0.054,
+        "fp": 29,
+        "fpr": 0.058,
+        "frr": 0.054,
+        "tar": 0.946,
+        "threshold": 0.29717835783958435,
+        "tn": 471,
+        "tp": 473,
+        "tpr": 0.946
+      },
+      "selection_method": "discrete ROC point minimizing |FAR-FRR|",
+      "support_status": "CALIBRATED",
+      "tar": 0.9572727272727273,
+      "threshold": 0.29717835783958435,
+      "tn": 1053,
+      "tp": 1053,
+      "tpr": 0.9572727272727273
+    },
+    "far_1e-2": {
+      "allowed_false_accepts": 11,
+      "dev_far": 0.01,
+      "development": {
+        "accuracy": 0.9686363636363636,
+        "far": 0.01,
+        "fn": 58,
+        "fnr": 0.05272727272727273,
+        "fp": 11,
+        "fpr": 0.01,
+        "frr": 0.05272727272727273,
+        "tar": 0.9472727272727273,
+        "threshold": 0.40478909015655523,
+        "tn": 1089,
+        "tp": 1042,
+        "tpr": 0.9472727272727273
+      },
+      "far_resolution": 0.0009090909090909091,
+      "held_out_test": {
+        "accuracy": 0.962,
+        "far": 0.018,
+        "fn": 29,
+        "fnr": 0.058,
+        "fp": 9,
+        "fpr": 0.018,
+        "frr": 0.058,
+        "tar": 0.942,
+        "threshold": 0.40478909015655523,
+        "tn": 491,
+        "tp": 471,
+        "tpr": 0.942
+      },
+      "impostor_count": 1100,
+      "selection_method": "conservative empirical order statistic: threshold just above the (floor(alpha*N)+1)-th highest impostor score",
+      "support_status": "CALIBRATED",
+      "target_far": 0.01,
+      "threshold": 0.40478909015655523
+    },
+    "far_1e-3": {
+      "allowed_false_accepts": 1,
+      "dev_far": 0.0009090909090909091,
+      "development": {
+        "accuracy": 0.9577272727272728,
+        "far": 0.0009090909090909091,
+        "fn": 92,
+        "fnr": 0.08363636363636363,
+        "fp": 1,
+        "fpr": 0.0009090909090909091,
+        "frr": 0.08363636363636363,
+        "tar": 0.9163636363636364,
+        "threshold": 0.5273855924606324,
+        "tn": 1099,
+        "tp": 1008,
+        "tpr": 0.9163636363636364
+      },
+      "far_resolution": 0.0009090909090909091,
+      "held_out_test": {
+        "accuracy": 0.96,
+        "far": 0.0,
+        "fn": 40,
+        "fnr": 0.08,
+        "fp": 0,
+        "fpr": 0.0,
+        "frr": 0.08,
+        "tar": 0.92,
+        "threshold": 0.5273855924606324,
+        "tn": 500,
+        "tp": 460,
+        "tpr": 0.92
+      },
+      "impostor_count": 1100,
+      "selection_method": "conservative empirical order statistic: threshold just above the (floor(alpha*N)+1)-th highest impostor score",
+      "support_status": "EXPLORATORY",
+      "target_far": 0.001,
+      "threshold": 0.5273855924606324
+    },
+    "legacy_0.4": {
+      "development": {
+        "accuracy": 0.9681818181818181,
+        "far": 0.011818181818181818,
+        "fn": 57,
+        "fnr": 0.05181818181818182,
+        "fp": 13,
+        "fpr": 0.011818181818181818,
+        "frr": 0.05181818181818182,
+        "tar": 0.9481818181818182,
+        "threshold": 0.4,
+        "tn": 1087,
+        "tp": 1043,
+        "tpr": 0.9481818181818182
+      },
+      "held_out_test": {
+        "accuracy": 0.961,
+        "far": 0.02,
+        "fn": 29,
+        "fnr": 0.058,
+        "fp": 10,
+        "fpr": 0.02,
+        "frr": 0.058,
+        "tar": 0.942,
+        "threshold": 0.4,
+        "tn": 490,
+        "tp": 471,
+        "tpr": 0.942
+      },
+      "selection_method": "legacy fixed threshold; not selected by this calibration",
+      "support_status": "REFERENCE_ONLY",
+      "threshold": 0.4
+    }
+  },
+  "pair_counts": {
+    "test": {
+      "failed": 0,
+      "genuine": 500,
+      "impostor": 500,
+      "requested": 1000,
+      "valid": 1000
+    },
+    "train": {
+      "failed": 0,
+      "genuine": 1100,
+      "impostor": 1100,
+      "requested": 2200,
+      "valid": 2200
+    }
+  },
+  "protocol": "official LFW Development Train -> Development Test; thresholds selected on train only",
+  "selection_method": "conservative empirical order statistic: threshold just above the (floor(alpha*N)+1)-th highest impostor score",
+  "title": "FaceNet VGGFace2 \u00d7 LFW Threshold Calibration v1"
+}

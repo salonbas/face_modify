@@ -1,0 +1,18 @@
+{
+  "dataset": "lfw",
+  "far_support_rule": "CALIBRATED when target FAR * N_impostor >= 5; otherwise EXPLORATORY",
+  "model": {
+    "embedding_dimension": 512,
+    "embedding_normalized": true,
+    "model_id": "facenet_vggface2",
+    "preprocessing_alignment": "FaceNetEmbedder: MTCNN detect/crop (160x160, post_process=True) -> InceptionResnetV1 VGGFace2 -> L2 normalization",
+    "weights": "20180402-114759-vggface2.pt",
+    "weights_path": ".cache/torch/checkpoints/20180402-114759-vggface2.pt"
+  },
+  "protocol": "official LFW Development Train -> Development Test; thresholds selected on train only",
+  "targets": [
+    0.01,
+    0.001
+  ],
+  "threshold_selection": "conservative empirical order statistic: threshold just above the (floor(alpha*N)+1)-th highest impostor score"
+}

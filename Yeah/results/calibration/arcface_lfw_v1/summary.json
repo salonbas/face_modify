@@ -1,0 +1,248 @@
+{
+  "acceptance_rule": "cosine_similarity >= threshold => same identity",
+  "distributions": {
+    "train_genuine_cosine": {
+      "count": 1093,
+      "max": 0.933648943901062,
+      "mean": 0.6601529721321269,
+      "median": 0.6785979270935059,
+      "min": -0.10867759585380554,
+      "p01": 0.0031290022190660237,
+      "p05": 0.48078652024269103,
+      "p25": 0.6034488081932068,
+      "p75": 0.740056037902832,
+      "p95": 0.8233494162559509,
+      "p99": 0.8766409635543823,
+      "std": 0.13696111391863308
+    },
+    "train_genuine_euclidean": {
+      "count": 1093,
+      "max": 1.4890785217285156,
+      "mean": 0.8107007500346604,
+      "median": 0.8017507791519165,
+      "min": 0.36428302526474,
+      "p01": 0.496707398891449,
+      "p05": 0.5943915724754334,
+      "p25": 0.7210326194763184,
+      "p75": 0.8905629515647888,
+      "p95": 1.0190313339233394,
+      "p99": 1.4119992399215697,
+      "std": 0.14986129712231847
+    },
+    "train_impostor_cosine": {
+      "count": 1093,
+      "max": 0.2019648551940918,
+      "mean": 0.004716761146644324,
+      "median": 0.002856017090380192,
+      "min": -0.15410862863063812,
+      "p01": -0.1271764451265335,
+      "p05": -0.08929578959941864,
+      "p25": -0.029951712116599083,
+      "p75": 0.040931396186351776,
+      "p95": 0.10211229771375656,
+      "p99": 0.14034520924091337,
+      "std": 0.05614014914348274
+    },
+    "train_impostor_euclidean": {
+      "count": 1093,
+      "max": 1.5192818641662598,
+      "mean": 1.4103096288382626,
+      "median": 1.4121925830841064,
+      "min": 1.2633568048477173,
+      "p01": 1.3112245655059815,
+      "p05": 1.3400654554367066,
+      "p25": 1.3849684000015259,
+      "p75": 1.4352364540100098,
+      "p95": 1.4760053157806396,
+      "p99": 1.5014503479003907,
+      "std": 0.0399155082131283
+    }
+  },
+  "euclidean_cosine_consistency": {
+    "formula": "sqrt(2 - 2*cosine_similarity)",
+    "max_abs_error": 2.281879901144812e-07
+  },
+  "metric": "cosine_similarity",
+  "model": {
+    "embedding_dimension": 512,
+    "embedding_normalized": true,
+    "model_id": "buffalo_l",
+    "preprocessing_alignment": "InsightFace FaceAnalysis detection -> alignment -> face.normed_embedding",
+    "recognition_model": "w600k_r50.onnx"
+  },
+  "operating_points": {
+    "eer": {
+      "accuracy": 0.9789569990850869,
+      "development": {
+        "accuracy": 0.9789569990850869,
+        "far": 0.021043000914913082,
+        "fn": 23,
+        "fnr": 0.021043000914913082,
+        "fp": 23,
+        "fpr": 0.021043000914913082,
+        "frr": 0.021043000914913082,
+        "tar": 0.9789569990850869,
+        "threshold": 0.12654972076416016,
+        "tn": 1070,
+        "tp": 1070,
+        "tpr": 0.9789569990850869
+      },
+      "eer": 0.021043000914913082,
+      "far": 0.021043000914913082,
+      "fn": 23,
+      "fnr": 0.021043000914913082,
+      "fp": 23,
+      "fpr": 0.021043000914913082,
+      "frr": 0.021043000914913082,
+      "held_out_test": {
+        "accuracy": 0.9726996966632963,
+        "far": 0.026156941649899398,
+        "fn": 14,
+        "fnr": 0.028455284552845527,
+        "fp": 13,
+        "fpr": 0.026156941649899398,
+        "frr": 0.028455284552845527,
+        "tar": 0.9715447154471545,
+        "threshold": 0.12654972076416016,
+        "tn": 484,
+        "tp": 478,
+        "tpr": 0.9715447154471545
+      },
+      "selection_method": "discrete ROC point minimizing |FAR-FRR|",
+      "support_status": "CALIBRATED",
+      "tar": 0.9789569990850869,
+      "threshold": 0.12654972076416016,
+      "tn": 1070,
+      "tp": 1070,
+      "tpr": 0.9789569990850869
+    },
+    "far_1e-2": {
+      "allowed_false_accepts": 10,
+      "dev_far": 0.009149130832570906,
+      "development": {
+        "accuracy": 0.984903934126258,
+        "far": 0.009149130832570906,
+        "fn": 23,
+        "fnr": 0.021043000914913082,
+        "fp": 10,
+        "fpr": 0.009149130832570906,
+        "frr": 0.021043000914913082,
+        "tar": 0.9789569990850869,
+        "threshold": 0.14072093367576602,
+        "tn": 1083,
+        "tp": 1070,
+        "tpr": 0.9789569990850869
+      },
+      "far_resolution": 0.0009149130832570906,
+      "held_out_test": {
+        "accuracy": 0.9787664307381193,
+        "far": 0.014084507042253521,
+        "fn": 14,
+        "fnr": 0.028455284552845527,
+        "fp": 7,
+        "fpr": 0.014084507042253521,
+        "frr": 0.028455284552845527,
+        "tar": 0.9715447154471545,
+        "threshold": 0.14072093367576602,
+        "tn": 490,
+        "tp": 478,
+        "tpr": 0.9715447154471545
+      },
+      "impostor_count": 1093,
+      "selection_method": "conservative empirical order statistic: threshold just above the (floor(alpha*N)+1)-th highest impostor score",
+      "support_status": "CALIBRATED",
+      "target_far": 0.01,
+      "threshold": 0.14072093367576602
+    },
+    "far_1e-3": {
+      "allowed_false_accepts": 1,
+      "dev_far": 0.0009149130832570906,
+      "development": {
+        "accuracy": 0.9881061299176578,
+        "far": 0.0009149130832570906,
+        "fn": 25,
+        "fnr": 0.022872827081427266,
+        "fp": 1,
+        "fpr": 0.0009149130832570906,
+        "frr": 0.022872827081427266,
+        "tar": 0.9771271729185728,
+        "threshold": 0.1883727461099625,
+        "tn": 1092,
+        "tp": 1068,
+        "tpr": 0.9771271729185728
+      },
+      "far_resolution": 0.0009149130832570906,
+      "held_out_test": {
+        "accuracy": 0.9838220424671386,
+        "far": 0.002012072434607646,
+        "fn": 15,
+        "fnr": 0.03048780487804878,
+        "fp": 1,
+        "fpr": 0.002012072434607646,
+        "frr": 0.03048780487804878,
+        "tar": 0.9695121951219512,
+        "threshold": 0.1883727461099625,
+        "tn": 496,
+        "tp": 477,
+        "tpr": 0.9695121951219512
+      },
+      "impostor_count": 1093,
+      "selection_method": "conservative empirical order statistic: threshold just above the (floor(alpha*N)+1)-th highest impostor score",
+      "support_status": "EXPLORATORY",
+      "target_far": 0.001,
+      "threshold": 0.1883727461099625
+    },
+    "legacy_0.4": {
+      "development": {
+        "accuracy": 0.9862763037511436,
+        "far": 0.0,
+        "fn": 30,
+        "fnr": 0.027447392497712716,
+        "fp": 0,
+        "fpr": 0.0,
+        "frr": 0.027447392497712716,
+        "tar": 0.9725526075022873,
+        "threshold": 0.4,
+        "tn": 1093,
+        "tp": 1063,
+        "tpr": 0.9725526075022873
+      },
+      "held_out_test": {
+        "accuracy": 0.980788675429727,
+        "far": 0.0,
+        "fn": 19,
+        "fnr": 0.03861788617886179,
+        "fp": 0,
+        "fpr": 0.0,
+        "frr": 0.03861788617886179,
+        "tar": 0.9613821138211383,
+        "threshold": 0.4,
+        "tn": 497,
+        "tp": 473,
+        "tpr": 0.9613821138211383
+      },
+      "selection_method": "legacy fixed threshold; not selected by this calibration",
+      "support_status": "REFERENCE_ONLY",
+      "threshold": 0.4
+    }
+  },
+  "pair_counts": {
+    "test": {
+      "failed": 11,
+      "genuine": 492,
+      "impostor": 497,
+      "requested": 1000,
+      "valid": 989
+    },
+    "train": {
+      "failed": 14,
+      "genuine": 1093,
+      "impostor": 1093,
+      "requested": 2200,
+      "valid": 2186
+    }
+  },
+  "protocol": "official LFW Development Train -> Development Test; thresholds selected on train only",
+  "selection_method": "conservative empirical order statistic: threshold just above the (floor(alpha*N)+1)-th highest impostor score",
+  "title": "ArcFace \u00d7 LFW Threshold Calibration v1"
+}

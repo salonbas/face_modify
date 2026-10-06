@@ -1,0 +1,17 @@
+{
+  "dataset": "lfw",
+  "far_support_rule": "CALIBRATED when target FAR * N_impostor >= 5; otherwise EXPLORATORY",
+  "model": {
+    "embedding_dimension": 512,
+    "embedding_normalized": true,
+    "model_id": "buffalo_l",
+    "preprocessing_alignment": "InsightFace FaceAnalysis detection -> alignment -> face.normed_embedding",
+    "recognition_model": "w600k_r50.onnx"
+  },
+  "protocol": "official LFW Development Train -> Development Test; thresholds selected on train only",
+  "targets": [
+    0.01,
+    0.001
+  ],
+  "threshold_selection": "conservative empirical order statistic: threshold just above the (floor(alpha*N)+1)-th highest impostor score"
+}

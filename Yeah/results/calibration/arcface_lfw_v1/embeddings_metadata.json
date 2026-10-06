@@ -1,0 +1,7 @@
+{
+  "embedding_dimension": 512,
+  "embedding_normalized": true,
+  "model_id": "buffalo_l",
+  "preprocessing_alignment": "InsightFace FaceAnalysis detection -> alignment -> face.normed_embedding",
+  "recognition_model": "w600k_r50.onnx"
+}
