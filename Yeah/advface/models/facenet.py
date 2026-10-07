@@ -23,7 +23,7 @@ FACENET_WEIGHT_FILENAME = "20180402-114759-vggface2.pt"
 
 
 def facenet_cache_dir() -> Path:
-    """Return the repository-local Torch cache, independent of ADVFACE_ROOT."""
+    """Return the legacy repository-local Torch cache, independent of ADVFACE_ROOT."""
     return project_root_from_package() / ".cache" / "torch"
 
 
@@ -33,11 +33,17 @@ def project_root_from_package():
 
 
 def facenet_pretrained_weight_path() -> Path:
+    """Canonical repo-local asset path, kept separate from Torch's cache."""
+    return project_root_from_package() / "models" / "facenet" / FACENET_WEIGHT_FILENAME
+
+
+def facenet_legacy_weight_path() -> Path:
+    """Old cache location retained as a fallback for existing workspaces."""
     return facenet_cache_dir() / "checkpoints" / FACENET_WEIGHT_FILENAME
 
 
 def facenet_pretrained_available() -> bool:
-    return facenet_pretrained_weight_path().is_file()
+    return facenet_pretrained_weight_path().is_file() or facenet_legacy_weight_path().is_file()
 
 
 def _ensure_torch_cache_dir() -> None:
@@ -78,7 +84,24 @@ class FaceNetEmbedder:
             device=device,
             keep_all=False,
         )
-        self._model = InceptionResnetV1(pretrained="vggface2").eval().to(device)
+        local_weight = facenet_pretrained_weight_path()
+        legacy_weight = facenet_legacy_weight_path()
+        if local_weight.is_file() or legacy_weight.is_file():
+            # Avoid treating a tracked experiment asset as a Torch cache.  The
+            # state dict is exactly the upstream VGGFace2 file, unchanged.
+            weight_path = local_weight if local_weight.is_file() else legacy_weight
+            # The upstream state dict contains the 8,631-class VGGFace2 head.
+            # Instantiate it for strict loading, then turn classification off
+            # to preserve FaceNet's original embedding behavior.
+            self._model = InceptionResnetV1(
+                pretrained=None, classify=True, num_classes=8631,
+            )
+            self._model.load_state_dict(torch.load(weight_path, map_location=device))
+            self._model.classify = False
+        else:
+            # Preserve facenet-pytorch's original automatic-download fallback.
+            self._model = InceptionResnetV1(pretrained="vggface2")
+        self._model = self._model.eval().to(device)
         for p in self._model.parameters():
             p.requires_grad_(False)
 

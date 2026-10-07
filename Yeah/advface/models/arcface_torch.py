@@ -10,12 +10,13 @@ import os
 from typing import Optional
 
 from advface.config import ARCFACE_ONNX_FILENAME, FACE_MODEL_NAME
+from advface.models.insightface_app import insightface_model_root
 
 
 def _recognition_onnx_path() -> str:
     from insightface.utils import ensure_available
 
-    root = os.path.expanduser("~/.insightface")
+    root = str(insightface_model_root())
     model_dir = ensure_available("models", FACE_MODEL_NAME, root=root)
     path = os.path.join(model_dir, ARCFACE_ONNX_FILENAME)
     if not os.path.isfile(path):

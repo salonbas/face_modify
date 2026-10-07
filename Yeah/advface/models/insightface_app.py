@@ -20,7 +20,30 @@ from advface.config import (
     EMBEDDING_DIM,
     FACE_MODEL_NAME,
     insightface_providers,
+    project_root,
 )
+
+
+BUFFALO_L_FILENAMES = (
+    "w600k_r50.onnx",
+    "det_10g.onnx",
+    "1k3d68.onnx",
+    "2d106det.onnx",
+    "genderage.onnx",
+)
+
+
+def repo_insightface_root() -> Path:
+    """Return the repository-owned InsightFace root (not a cache root)."""
+    return project_root() / "models" / "insightface"
+
+
+def insightface_model_root() -> Path:
+    """Prefer the reviewed repository-local package; retain legacy fallback."""
+    local_package = repo_insightface_root() / "buffalo_l"
+    if all((local_package / name).is_file() for name in BUFFALO_L_FILENAMES):
+        return repo_insightface_root()
+    return Path.home() / ".insightface"
 
 
 def _insightface_verbose_stdout() -> bool:
@@ -31,13 +54,19 @@ def _insightface_verbose_stdout() -> bool:
 def create_face_app(det_size: tuple[int, int] | None = None) -> FaceAnalysis:
     det = det_size or DEFAULT_DET_SIZE
     if _insightface_verbose_stdout():
-        app = FaceAnalysis(name=FACE_MODEL_NAME, providers=insightface_providers())
+        app = FaceAnalysis(
+            name=FACE_MODEL_NAME, root=str(insightface_model_root()),
+            providers=insightface_providers(),
+        )
         app.prepare(ctx_id=0, det_size=det)
         return app
 
     # InsightFace / model_zoo 用 print 印載入過程；預設關掉以免洗版
     with contextlib.redirect_stdout(io.StringIO()):
-        app = FaceAnalysis(name=FACE_MODEL_NAME, providers=insightface_providers())
+        app = FaceAnalysis(
+            name=FACE_MODEL_NAME, root=str(insightface_model_root()),
+            providers=insightface_providers(),
+        )
         app.prepare(ctx_id=0, det_size=det)
     return app
 

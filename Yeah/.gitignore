@@ -63,9 +63,11 @@ COMMANDS.local.md
 data/benchmark/images/
 data/benchmark/_download/
 
-# Raw LFW images and their local link/cache never enter Git.  The manifest,
-# official pair definitions and frozen split definitions are research inputs
-# and must remain versioned.
+# Raw LFW images are installed by scripts/setup_research_assets.py after the
+# user accepts the upstream research terms.  They remain outside Git until an
+# explicit redistribution permission is recorded.  The manifest, official
+# pair definitions and frozen split definitions are research inputs and must
+# remain versioned.
 data/datasets/lfw/*
 !data/datasets/lfw/README.md
 !data/datasets/lfw/manifest.csv
@@ -74,8 +76,9 @@ data/datasets/lfw/*
 !data/datasets/lfw/evaluation_splits/
 !data/datasets/lfw/evaluation_splits/**
 
-# Local model/cache locations and large weight formats.  Model identifiers,
-# expected filenames and setup instructions belong in source/docs instead.
+# Repo-local downloaded model assets are intentionally untracked because their
+# upstream redistribution terms do not currently permit committing them.  The
+# setup script installs only the fixed files needed by the experiment.
 models/**/*.onnx
 models/**/*.pth
 models/**/*.pt

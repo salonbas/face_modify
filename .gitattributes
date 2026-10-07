@@ -8,3 +8,7 @@
 *.pth filter=lfs diff=lfs merge=lfs -text
 *.pt filter=lfs diff=lfs merge=lfs -text
 *.npz filter=lfs diff=lfs merge=lfs -text
+
+# Scope any future, explicitly-approved LFW admission to the raw dataset
+# only.  Do not blanket-track report or documentation JPEGs.
+Yeah/data/datasets/lfw/images/**/*.jpg filter=lfs diff=lfs merge=lfs -text

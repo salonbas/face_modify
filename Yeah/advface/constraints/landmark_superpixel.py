@@ -14,7 +14,7 @@ import numpy as np
 from skimage.segmentation import slic
 
 from advface.config import DEFAULT_DET_SIZE, insightface_providers
-from advface.models.insightface_app import pick_best_face
+from advface.models.insightface_app import insightface_model_root, pick_best_face
 
 # Standard 68-point layout, zero based.  The paper-level feature selection is
 # eyebrows, eyes, nose and mouth; we intentionally do not add face contour,
@@ -51,7 +51,7 @@ class LandmarkSuperpixelMask:
         from insightface.app import FaceAnalysis
 
         app = FaceAnalysis(
-            name="buffalo_l", providers=insightface_providers(),
+            name="buffalo_l", root=str(insightface_model_root()), providers=insightface_providers(),
             allowed_modules=["detection", "landmark_3d_68"],
         )
         app.prepare(ctx_id=0, det_size=DEFAULT_DET_SIZE)

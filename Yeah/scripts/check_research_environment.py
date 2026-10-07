@@ -49,15 +49,15 @@ def report(label: str, state: tuple[bool, str]) -> bool:
 
 
 def main() -> int:
-    insightface = Path.home() / ".insightface/models/buffalo_l"
+    insightface = PROJECT_ROOT / "models/insightface/buffalo_l"
     required = (
-        ("frozen attack_dev split", repository_file("data/datasets/lfw/evaluation_splits/attack_dev.csv")),
-        ("LFW manifest", repository_file("data/datasets/lfw/manifest.csv")),
+        ("frozen split", repository_file("data/datasets/lfw/evaluation_splits/attack_dev.csv")),
+        ("manifest", repository_file("data/datasets/lfw/manifest.csv")),
         ("LFW raw images", lfw_images_state()),
-        ("ArcFace weight", asset_state(insightface / "w600k_r50.onnx")),
-        ("InsightFace detector model", asset_state(insightface / "det_10g.onnx")),
-        ("landmark model", asset_state(insightface / "1k3d68.onnx")),
-        ("FaceNet weight", repository_file(".cache/torch/checkpoints/20180402-114759-vggface2.pt")),
+        ("ArcFace / buffalo_l recognition model", asset_state(insightface / "w600k_r50.onnx")),
+        ("detector", asset_state(insightface / "det_10g.onnx")),
+        ("68-point landmark model", asset_state(insightface / "1k3d68.onnx")),
+        ("FaceNet VGGFace2 weight", repository_file("models/facenet/20180402-114759-vggface2.pt")),
         ("ArcFace calibration", repository_file("results/calibration/arcface_lfw_v1/thresholds.json")),
         ("FaceNet calibration", repository_file("results/calibration/facenet_lfw_v1/thresholds.json")),
         ("formal four-method result", repository_file("results/transfer/lfw_attack_dev_20_four_method_v3/summary.json")),
@@ -65,7 +65,9 @@ def main() -> int:
         ("mechanism analysis", repository_file("docs/reports/meeting_2026_09_30/assets/analysis/mechanism_analysis.json")),
     )
 
-    complete = all(report(label, state) for label, state in required)
+    # Do not short-circuit: a clean-clone diagnosis must display every missing
+    # asset, not merely the first one.
+    complete = all([report(label, state) for label, state in required])
     return 0 if complete else 1
 
 
