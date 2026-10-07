@@ -9,6 +9,7 @@ dodging、transfer 與 perceptual quality。
 
 1. [研究狀態與可引用結果](docs/RESEARCH_STATUS.md)
 2. [正式實驗 protocol](docs/EXPERIMENT_PROTOCOL.md)
+3. [Reproducibility 與 research asset setup](docs/REPRODUCIBILITY.md)
 
 `docs/RESEARCH_STATUS.md` 是正式研究結論與結果 provenance 的最高權威。
 若文件、HTML report 或舊輸出與它不一致，請以它為準。

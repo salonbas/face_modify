@@ -1,9 +1,51 @@
 # Reproducibility and asset contract
 
-This repository versions the research definition and formal evidence. It does
-not redistribute raw LFW images or third-party model weights: the required
-assets do not all have a clear public redistribution grant, and InsightFace
-explicitly limits its pretrained buffalo_l package to non-commercial research.
+This repository versions the research definition and formal evidence. Third-party
+dataset and pretrained-model binaries are not redistributed directly with this
+Git repository.
+
+## Repository does NOT include
+
+- LFW funneled raw images.
+- InsightFace `buffalo_l` model files, including:
+  - ArcFace recognition model;
+  - detector;
+  - 68-point landmark model;
+  - other runtime-required ONNX files.
+- FaceNet VGGFace2 weight.
+
+These third-party dataset / pretrained model binaries are not redistributed
+directly with this Git repository.
+
+## How to install required research assets
+
+In a new clone, after creating the Python environment and installing project
+dependencies, run from `Yeah/`:
+
+```bash
+python3 scripts/setup_research_assets.py --accept-upstream-research-terms
+```
+
+The script downloads required assets from their original upstream sources,
+installs them at the repository's expected fixed paths, and verifies required
+checksums / integrity. No manual file hunting or cache copying is required.
+
+Then verify the environment:
+
+```bash
+python3 scripts/check_research_environment.py
+```
+
+Minimal new-machine flow:
+
+```bash
+git clone <repo>
+cd face_modify/Yeah
+
+# Create a Python environment and install dependencies first.
+python3 scripts/setup_research_assets.py --accept-upstream-research-terms
+python3 scripts/check_research_environment.py
+```
 
 ## Versioned in ordinary Git
 
