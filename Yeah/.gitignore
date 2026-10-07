@@ -80,6 +80,15 @@ models/**/*.onnx
 models/**/*.pth
 models/**/*.pt
 .cache/torch/
+.cache/huggingface/
+.cache/pip/
+.cache/perceptual_torch/
+
+# Hugging Face / Torch global caches are machine-local dependency caches, not
+# reproducibility assets.  Deliberately admitted assets belong in a reviewed
+# repository path and are covered by the root .gitattributes LFS rules.
+hf_cache/
+torch_cache/
 
 # Packaging / coverage / debug
 *.egg-info/
