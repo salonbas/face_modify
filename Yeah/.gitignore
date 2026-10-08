@@ -88,8 +88,8 @@ models/**/*.pt
 .cache/perceptual_torch/
 
 # Hugging Face / Torch global caches are machine-local dependency caches, not
-# reproducibility assets.  Deliberately admitted assets belong in a reviewed
-# repository path and are covered by the root .gitattributes LFS rules.
+# reproducibility assets.  Third-party research assets are never committed;
+# install them with scripts/setup_research_assets.py instead.
 hf_cache/
 torch_cache/
 

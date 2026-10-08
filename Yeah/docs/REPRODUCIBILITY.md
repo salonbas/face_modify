@@ -4,6 +4,10 @@ This repository versions the research definition and formal evidence. Third-part
 dataset and pretrained-model binaries are not redistributed directly with this
 Git repository.
 
+Large third-party research assets are not versioned in this repository.
+Run `python3 scripts/setup_research_assets.py --accept-upstream-research-terms`
+after cloning to install required LFW and pretrained model assets.
+
 ## Repository does NOT include
 
 - LFW funneled raw images.
@@ -58,15 +62,6 @@ python3 scripts/check_research_environment.py
 `.venv`, global and project caches, downloaded model binaries, raw LFW images,
 embeddings and disposable run output are not versioned.
 
-## Git LFS
-
-The root `.gitattributes` reserves LFS for `*.onnx`, `*.pth`, `*.pt`, and
-`*.npz`; its LFW JPEG rule is scoped only to
-`data/datasets/lfw/images/**/*.jpg`, never to report images. There are no LFS
-objects in this revision. The audited machine's `git-lfs` executable is broken,
-but that is not the deciding blocker: no required asset currently has recorded
-redistribution approval for this repository.
-
 ## Fixed runtime paths and setup
 
 After reviewing the upstream terms, run this once from `Yeah/`:
@@ -91,7 +86,6 @@ fallback to `~/.insightface` and the former `.cache/torch` FaceNet path.
 
 ## Clean-clone status
 
-A clone contains every ordinary-Git research artifact. It is not a complete
-`git clone` + `git lfs pull` runtime reproduction: an internet-connected user
+A clone contains every versioned research artifact. An internet-connected user
 must run the one setup command above and accept the upstream research terms.
 No manual locating or copying of LFW, InsightFace, or FaceNet files is needed.

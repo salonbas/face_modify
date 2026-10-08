@@ -1,14 +1,2 @@
 # Auto detect text files and perform LF normalization
 * text=auto
-
-# Reproducibility binaries may be admitted only after their upstream licence
-# and this repository's visibility have been reviewed.  Do not use these
-# patterns for ordinary report figures or generated diagnostics.
-*.onnx filter=lfs diff=lfs merge=lfs -text
-*.pth filter=lfs diff=lfs merge=lfs -text
-*.pt filter=lfs diff=lfs merge=lfs -text
-*.npz filter=lfs diff=lfs merge=lfs -text
-
-# Scope any future, explicitly-approved LFW admission to the raw dataset
-# only.  Do not blanket-track report or documentation JPEGs.
-Yeah/data/datasets/lfw/images/**/*.jpg filter=lfs diff=lfs merge=lfs -text
