@@ -1,0 +1,8 @@
+{
+  "scripts/compare_reference.py": "1472a170cb68cbc0f1d557dc1b619384d62f476a542ecc2656cf53f1255e58a6",
+  "advface/attacks/mi_fgsm.py": "4d9ad6b0168113489d176c15ac42806ec45e86a78b2b0c12233aa82cf4b34cf0",
+  "advface/models/arcface_torch.py": "8b766e223bba9f74ce0771b708fc1b81684f2fae8f878a9977ac6b167c225641",
+  "advface/models/insightface_app.py": "689566e377eb84d35748871b967393ff3fb6c8b8733d4b62bc49bcda8a450bc8",
+  "advface/models/facenet.py": "683063afec7ac0a6ef07db4189f2b0316f8fc3b9f0ea06f00788aa57893546c2",
+  "advface/constraints/landmark_superpixel.py": "b36199b294ce3a13cbfab6fceab655a1d5d4256ff925d76748ea4b565748e012"
+}

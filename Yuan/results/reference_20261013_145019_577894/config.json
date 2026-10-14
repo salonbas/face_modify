@@ -1,0 +1,52 @@
+{
+  "experimental": true,
+  "formal": false,
+  "split": "C:\\senior_project\\face_modify\\Yeah\\data\\datasets\\lfw\\evaluation_splits\\attack_dev.csv",
+  "split_sha256": "7f32cb497abc1969b09710b8d482cdee3065c8f1881eb723bfca134704690d10",
+  "identities": [
+    "Michelle_Collins",
+    "Meryl_Streep",
+    "Jolanta_Kwasniewski",
+    "Dino_de_Laurentis",
+    "Cyndi_Thompson",
+    "Jerry_Springer",
+    "Richard_Myers",
+    "Michel_Temer",
+    "Christine_Baumgartner",
+    "Angela_Lansbury",
+    "Justin_Timberlake",
+    "Pierre_Pettigrew",
+    "Maria_Shriver",
+    "Jorge_Rodolfo_Canicoba_Corral",
+    "Sally_Kirkland",
+    "Patrick_McEnroe",
+    "Paul_Bremer",
+    "Junichiro_Koizumi",
+    "Jennifer_Rodriguez",
+    "Heizo_Takenaka"
+  ],
+  "eps": 0.04,
+  "steps": 200,
+  "alpha": 0.0002,
+  "momentum": 1.0,
+  "seed": 0,
+  "mask": null,
+  "random_start": false,
+  "threads": 4,
+  "runtime": {
+    "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+    "torch": "2.5.1+cu121",
+    "numpy": "1.26.4",
+    "opencv": "4.10.0",
+    "cuda_available": true,
+    "cudnn_deterministic": true,
+    "cudnn_benchmark": false
+  },
+  "victim_gradient_participation": false,
+  "source_calibration": "C:\\senior_project\\face_modify\\Yeah\\results\\calibration\\arcface_lfw_v1\\thresholds.json",
+  "victim_calibration": "C:\\senior_project\\face_modify\\Yeah\\results\\calibration\\facenet_lfw_v1\\thresholds.json",
+  "objectives": {
+    "self": "min cos(ArcFace(B_adv), ArcFace(B))",
+    "pair": "min cos(ArcFace(B_adv), ArcFace(A))"
+  }
+}

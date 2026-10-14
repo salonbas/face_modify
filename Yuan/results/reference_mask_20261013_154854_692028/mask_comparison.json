@@ -1,0 +1,80 @@
+{
+  "runs": {
+    "unmasked": "C:\\senior_project\\face_modify\\Yuan\\results\\reference_20261013_145019_577894",
+    "mask": "C:\\senior_project\\face_modify\\Yuan\\results\\reference_mask_20261013_154854_692028"
+  },
+  "aggregate": {
+    "self_unmasked": {
+      "n": 20,
+      "source": {
+        "eligible": 20,
+        "successes": 20,
+        "asr": 1.0,
+        "mean_cosine_drop": 0.7340397988206451
+      },
+      "victim": {
+        "eligible": 19,
+        "successes": 8,
+        "asr": 0.42105263157894735,
+        "mean_cosine_drop": 0.2984276440425421
+      },
+      "ssim_rgb": 0.9347425744619239,
+      "rgb_mae": 2.1708743999999998,
+      "changed_pixel_ratio": 0.3000016
+    },
+    "pair_unmasked": {
+      "n": 20,
+      "source": {
+        "eligible": 20,
+        "successes": 20,
+        "asr": 1.0,
+        "mean_cosine_drop": 1.1147244612357734
+      },
+      "victim": {
+        "eligible": 19,
+        "successes": 13,
+        "asr": 0.6842105263157895,
+        "mean_cosine_drop": 0.3985063773568402
+      },
+      "ssim_rgb": 0.9343002802486431,
+      "rgb_mae": 2.178232266666667,
+      "changed_pixel_ratio": 0.29999040000000005
+    },
+    "self_mask": {
+      "n": 20,
+      "source": {
+        "eligible": 20,
+        "successes": 8,
+        "asr": 0.4,
+        "mean_cosine_drop": 0.5294804742950224
+      },
+      "victim": {
+        "eligible": 19,
+        "successes": 6,
+        "asr": 0.3157894736842105,
+        "mean_cosine_drop": 0.25624098244071053
+      },
+      "ssim_rgb": 0.9746163913536059,
+      "rgb_mae": 0.9345706666666667,
+      "changed_pixel_ratio": 0.1210056
+    },
+    "pair_mask": {
+      "n": 20,
+      "source": {
+        "eligible": 20,
+        "successes": 20,
+        "asr": 1.0,
+        "mean_cosine_drop": 0.8345294452992809
+      },
+      "victim": {
+        "eligible": 19,
+        "successes": 9,
+        "asr": 0.47368421052631576,
+        "mean_cosine_drop": 0.3279864121069038
+      },
+      "ssim_rgb": 0.9744541764562096,
+      "rgb_mae": 0.9450413333333332,
+      "changed_pixel_ratio": 0.121008
+    }
+  }
+}
