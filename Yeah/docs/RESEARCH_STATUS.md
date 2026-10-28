@@ -160,3 +160,63 @@ candidate split 只有 **20 identities**（含原 v1 的 5 identities）。本�
 授權將全部 20 identities 建為 development baseline v2；沒有以
 `attack_test.csv` 或 `attack_reserve.csv` 補樣本。n=20 仍不得描述成 30–50 或
 general transfer-rate estimate。
+
+## 2026-10-28 mechanism and LFW split audit
+
+- **35% mechanism:** Source inspection confirms both masked attacks minimize the same
+  ArcFace self-reference cosine, mask the raw gradient before updating, use a
+  negative sign step of `0.04/200`, then L∞ projection and pixel clipping.
+  MI-FGSM alone L1-normalizes each masked gradient and accumulates it with
+  `m_t=μm_(t-1)+g_t/||g_t||_1`. At `μ=0`, positive normalization leaves the
+  sign unchanged, so its update is mathematically PGD+Mask's update (assuming
+  identical image, mask, and numerical execution). This is a source-level
+  counterfactual, **not a newly measured ablation**. Existing paired formal
+  observations for Michelle Collins and Meryl Streep show MI+Mask ArcFace
+  failures (0.167739, 0.282256) while PGD+Mask succeeds (-0.064170,
+  0.127616; threshold 0.140721). This supports the accumulated-direction
+  interaction as a candidate, but does not measure `μ=0` or `μ=0.5` and does
+  not isolate normalization within nonzero momentum. The current checkout lacks
+  raw LFW images and all required model weights, so the 200-step smoke and
+  controlled ablation could not run. Only the two-file diagnostic regression
+  smoke is present here; the asserted 80/80 trajectory artifacts are not
+  available in this checkout. No new attack result is claimed.
+- **Split census:** Versioned manifest has 13,233 images / 5,749 identities;
+  1,680 identities have at least two usable images. Official calibration
+  `dev_train` has 2,200 pairs and `dev_test` 1,000 pairs; thresholds use train
+  only. Their pair definitions cover 3,095 identities / 4,992 images. Frozen
+  attack splits contain dev 20, test 100, reserve 208; the aliases without
+  `attack_` are identical A/B assignments. The three attack partitions have
+  zero identity or A/B image overlap with one another. They were built by
+  excluding only **valid ArcFace calibration-score rows**, not every official
+  calibration pair: calibration definitions overlap dev in Richard Myers
+  (identity only), test in Nadia Petrova (identity and one A/B image), and
+  reserve in nine identities (13 A/B images). Thus strict independence from
+  calibration is not established for the existing pilot or entire holdout.
+  The formal 20-person results show clean ArcFace genuine eligibility for
+  20/20 but clean FaceNet eligibility for 19/20; Richard Myers is the FaceNet
+  exception (clean cosine 0.186422 versus threshold 0.404789). A future
+  100-person denominator must state whether it requires both models to accept
+  the clean A/B pair.
+  The ten official evaluation folds have 6,000 defined pairs, but this audit
+  found no corresponding scored evaluation run in the current authority table;
+  pair definitions alone are not evidence of model-based selection.
+- **Expansion decision:** All 328 eligible identities selected by the original
+  script are already assigned (20/100/208). Excluding *all* calibration pair
+  identities leaves 317 multi-image identities, all within those splits:
+  strict, unused, unassigned development candidates = **0**. Test/reserve
+  contain 298 calibration-disjoint identities (99/199), still unopened for
+  attack/model eligibility in this audit; their 10 overlapping identities
+  need quarantine for a strict holdout. Across the manifest, 2,635 identities
+  have no calibration-pair or attack-development participation recorded here;
+  2,337 of these have only one image, leaving the same 298 two-image identities
+  in frozen test/reserve. No clean-genuine, detection, alignment,
+  or preprocessing eligibility can be certified without the missing images and
+  models. Do not form a 100-person development set by drawing from frozen
+  test/reserve or call previously examined development identities untouched OOS.
+  A new protocol must preserve the 20-person pilot as historical, obtain a new
+  unused identity-disjoint development source for 80 additional people,
+  separately freeze calibration and reserve/OOS, fix seed and canonical A/B
+  selection, and verify identity/image intersections before model scoring.
+  Threshold changes or dataset changes must be versioned and compared fairly;
+  the current thresholds and pilot are not an independent basis for a strict
+  100-person expansion.
