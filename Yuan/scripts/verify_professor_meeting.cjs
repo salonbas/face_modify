@@ -1,0 +1,96 @@
+const fs = require('fs');
+const path = require('path');
+const vm = require('vm');
+const {pathToFileURL} = require('url');
+const {chromium} = require('C:/Users/user/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+
+(async()=>{
+ const report=process.argv[2];
+ if(!report)throw new Error('Pass absolute report path');
+ const html=fs.readFileSync(report,'utf8');
+ const scripts=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].filter(m=>!m[0].includes('application/json'));
+ scripts.forEach(m=>new vm.Script(m[1]));
+ const out=path.join(path.dirname(report),'qa');fs.mkdirSync(out,{recursive:true});
+ const browser=await chromium.launch({headless:true,executablePath:'C:/Program Files/Google/Chrome/Application/chrome.exe',args:['--disable-gpu']});
+ const context=await browser.newContext({viewport:{width:1440,height:1000},deviceScaleFactor:1});
+ const page=await context.newPage(),errors=[],network=[];
+ page.on('pageerror',e=>errors.push(e.message));
+ await context.route('http://**/*',r=>{network.push(r.request().url());return r.abort();});
+ await context.route('https://**/*',r=>{network.push(r.request().url());return r.abort();});
+ await page.goto(pathToFileURL(report).href,{waitUntil:'load'});
+ await page.evaluate(()=>Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))));
+ const count=await page.locator('.slide').count();
+ if(count!==14)throw new Error(`Expected 14 slides, got ${count}`);
+ const fullNotes=await page.locator('.notes[data-full-transcript="true"]').count();
+ if(fs.existsSync(path.join(path.dirname(report),'transcript.md'))&&fullNotes!==14)throw new Error('Full transcript not synchronized to all slides');
+ const layout=[];
+ for(let i=0;i<count;i++){
+  await page.evaluate(i=>go(i),i);
+  layout.push(await page.evaluate(()=>{let s=document.querySelector('.slide.active'),r=s.getBoundingClientRect();return {slide:Number(s.dataset.number),title:s.dataset.title,height:Math.round(r.height),bottom:Math.round(r.bottom),horizontalOverflow:s.scrollWidth>s.clientWidth+1};}));
+  if([0,6,7,8,9,10,11,12].includes(i))await page.screenshot({path:path.join(out,`slide-${String(i+1).padStart(2,'0')}.png`),fullPage:true});
+ }
+ const images=await page.evaluate(()=>[...document.images].filter(i=>i.getAttribute('src')).map(i=>({alt:i.alt,ok:i.complete&&i.naturalWidth>0})));
+ if(images.some(i=>!i.ok))throw new Error('Missing image');
+ await page.setViewportSize({width:1366,height:768});
+ const projector=[];
+ for(let i=0;i<count;i++){await page.evaluate(i=>go(i),i);projector.push(await page.evaluate(()=>{const s=document.querySelector('.slide.active').getBoundingClientRect(),n=document.querySelector('.nav').getBoundingClientRect();return {slide:current+1,bottom:Math.round(s.bottom),navTop:Math.round(n.top),fits:s.bottom<=n.top+1};}));}
+ if(projector.some(s=>!s.fits))errors.push('Projector viewport clips slides');
+ await page.setViewportSize({width:1440,height:1000});
+ await page.evaluate(()=>go(0));
+ await page.keyboard.press('ArrowRight');
+ if(await page.locator('#counter').innerText()!=='2 / 14')throw new Error('Arrow navigation failed');
+ await page.click('#next');
+ await page.keyboard.press('ArrowRight');
+ if(await page.locator('#counter').innerText()!=='4 / 14')errors.push('Arrow navigation blocked after button focus');
+ await page.evaluate(()=>go(7));
+ await page.click('#den19');
+ if(!(await page.locator('#bars').innerText()).includes('84.2%'))throw new Error('Denominator switch failed');
+ await page.click('#den20');
+ await page.click('#notesButton');
+ if(!await page.locator('.slide.active .notes').isVisible())throw new Error('Speaker notes failed');
+ await page.click('#notesButton');
+ await page.evaluate(()=>go(9));
+ await page.locator('.slide.active img[data-zoom-title]').first().click();
+ if(!await page.locator('#imageDialog').isVisible())throw new Error('Image zoom failed');
+ await page.keyboard.press('Escape');
+ await page.click('#overviewButton');
+ if(await page.locator('.slide:visible').count()!==14)throw new Error('Overview failed');
+ await page.click('#overviewButton');
+ await page.emulateMedia({media:'print'});
+ if(await page.locator('.slide:visible').count()!==14)throw new Error('Print hides slides');
+ const printPdf=await page.pdf({format:'A4',landscape:true,printBackground:true,preferCSSPageSize:true});
+ fs.writeFileSync(path.join(out,'print-check.pdf'),printPdf);
+ const printPages=(printPdf.toString('latin1').match(/\/Type\s*\/Page\b/g)||[]).length;
+ if(printPages!==14)errors.push(`Print pagination: ${printPages} pages, expected 14`);
+ await page.emulateMedia({media:'screen'});
+ await page.setViewportSize({width:390,height:844});
+ await page.evaluate(()=>go(7));
+ const mobile=await page.evaluate(()=>({viewport:innerWidth,document:document.documentElement.scrollWidth}));
+ await page.screenshot({path:path.join(out,'mobile-results.png'),fullPage:true});
+ if(mobile.document>mobile.viewport+1)errors.push('Mobile horizontal overflow');
+ if(network.length)errors.push('Unexpected external network requests');
+ if(layout.some(s=>s.horizontalOverflow))errors.push('Desktop horizontal overflow');
+ const mobileSlides=[];
+ for(let i=0;i<count;i++){await page.evaluate(i=>go(i),i);mobileSlides.push(await page.evaluate(()=>({slide:current+1,viewport:innerWidth,width:document.documentElement.scrollWidth})));}
+ if(mobileSlides.some(s=>s.width>s.viewport+1))errors.push('Some mobile slides overflow horizontally');
+ let transcriptReader=null;
+ const readerPath=path.join(path.dirname(report),'transcript.html');
+ if(fs.existsSync(readerPath)){
+  const reader=await context.newPage();reader.on('pageerror',e=>errors.push(e.message));
+  await reader.goto(pathToFileURL(readerPath).href,{waitUntil:'load'});
+  const speechPages=await reader.locator('main h2[id^="slide-"]').count();
+  const questions=await reader.locator('main h3').count();
+  if(speechPages!==14||questions!==10)errors.push('Transcript reader section count mismatch');
+  await reader.screenshot({path:path.join(out,'transcript-desktop.png'),fullPage:false});
+  await reader.setViewportSize({width:390,height:844});
+  const width=await reader.evaluate(()=>document.documentElement.scrollWidth);
+  if(width>390)errors.push('Transcript reader mobile overflow');
+  await reader.screenshot({path:path.join(out,'transcript-mobile.png'),fullPage:false});
+  transcriptReader={speechPages,questions,mobileWidth:width};await reader.close();
+ }
+ const result={slides:count,fullTranscriptSlides:fullNotes,transcriptReader,images:images.length,externalRequests:network.length,printPages,layout,projector,mobile,mobileSlides,errors};
+ fs.writeFileSync(path.join(out,'verification.json'),JSON.stringify(result,null,2));
+ console.log(JSON.stringify(result,null,2));
+ await browser.close();
+ if(errors.length)process.exitCode=1;
+})().catch(e=>{console.error(e);process.exit(1)});

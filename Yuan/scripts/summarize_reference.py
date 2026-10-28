@@ -17,7 +17,8 @@ with (run / 'results.csv').open(encoding='utf-8', newline='') as handle:
     rows = list(csv.DictReader(handle))
 assert not summary['failures'], summary['failures']
 assert summary['completed_pairs'] == summary['requested']
-assert len(rows) == 2 * summary['requested']
+modes = config.get('reference_modes', ['self', 'pair'])
+assert len(rows) == len(modes) * summary['requested']
 assert len({(r['identity_id'], r['mode']) for r in rows}) == len(rows)
 assert {r['identity_id'] for r in rows} == set(config['identities'])
 
@@ -44,26 +45,29 @@ for row in rows:
 lines = ['# MI-FGSM self-reference vs A-reference', '',
          f"Fixed development identities: {summary['requested']}; eps={config['eps']}; steps={config['steps']}; alpha={config['alpha']}; momentum={config['momentum']}.",
          f"Mask: {config.get('mask')}; options: {config.get('mask_options')}",
+         f"Input diversity: {config.get('di', {'enabled': False})}",
+         f"Translation-invariant gradient: {config.get('ti', {'enabled': False})}",
          '', 'FaceNet evaluation only; no victim gradients. Experimental results, not formal benchmark authority.', '',
          '| Objective | ArcFace ASR | FaceNet crossing / all 20 | FaceNet ASR / clean-valid pairs | ArcFace mean cosine drop | FaceNet mean cosine drop (clean-valid) |',
          '| --- | ---: | ---: | ---: | ---: | ---: |']
-for mode in ('self', 'pair'):
+for mode in modes:
     src, vic = summary[mode]['source'], summary[mode]['victim']
     lines.append(f"| {mode} | {src['successes']}/{src['eligible']} ({src['asr']:.1%}) | {vic['successes']}/{summary['requested']} ({vic['successes']/summary['requested']:.1%}) | {vic['successes']}/{vic['eligible']} ({vic['asr']:.1%}) | {src['mean_cosine_drop']:.6f} | {vic['mean_cosine_drop']:.6f} |")
 by_mode = {mode: {r['identity_id']: r for r in rows if r['mode'] == mode} for mode in ('self', 'pair')}
 for model in ('source', 'victim'):
     gained, lost = [], []
-    for identity in config['identities']:
+    for identity in (config['identities'] if len(modes) == 2 else []):
         old = by_mode['self'][identity][f'{model}_boundary_crossed'] == 'True'
         new = by_mode['pair'][identity][f'{model}_boundary_crossed'] == 'True'
         if new and not old:
             gained.append(identity)
         if old and not new:
             lost.append(identity)
-    lines += ['', f"{model} fail→success: {', '.join(gained) or 'none'}",
-              f"{model} success→fail: {', '.join(lost) or 'none'}"]
+    if len(modes) == 2:
+        lines += ['', f"{model} fail→success: {', '.join(gained) or 'none'}",
+                  f"{model} success→fail: {', '.join(lost) or 'none'}"]
     excluded = [f"{r['identity_id']} (clean cosine={float(r[f'{model}_clean_cosine']):.6f})"
-                for r in rows if r['mode'] == 'self' and r[f'{model}_clean_valid'] != 'True']
+                for r in rows if r['mode'] == modes[0] and r[f'{model}_clean_valid'] != 'True']
     lines.append(f"{model} clean-invalid: {', '.join(excluded) or 'none'}")
 pair_rows = [r for r in rows if r['mode'] == 'pair']
 decreased = sum(float(r['final_objective_cosine']) < float(r['initial_objective_cosine']) for r in pair_rows)
@@ -71,7 +75,7 @@ mean_initial = sum(float(r['initial_objective_cosine']) for r in pair_rows) / le
 mean_final = sum(float(r['final_objective_cosine']) for r in pair_rows) / len(pair_rows)
 lines += ['', f"A-reference objective decreased on {decreased}/{len(pair_rows)} identities; mean {mean_initial:.6f} → {mean_final:.6f} (tensor objective before PNG serialization)."]
 lines += ['', f"Verified {len(rows)} decoded PNGs: tensor epsilon and serialized epsilon+quantization checks passed.",
-          '', 'SSIM is evaluated separately by compare_mask_report.py; see MASK_COMPARISON.md when present. LPIPS/DISTS are not evaluated; do not infer imperceptibility from this run.',
+          '', 'SSIM is evaluated separately from persisted PNGs; see DI_COMPARISON.md or MASK_COMPARISON.md when present. LPIPS/DISTS are not evaluated; do not infer imperceptibility from this run.',
           '', 'Runtime differs from historical Yeah results; compare the two objectives within this run.',
           'InsightFace 0.7.3 built from checksum-verified official sdist without the unused C++ mesh renderer; recognition/alignment Python code and ONNX weights are unchanged.',
           'ONNX conversion passes an in-memory ModelProto to avoid a Windows temporary-file locking problem.']

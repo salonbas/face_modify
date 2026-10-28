@@ -1,0 +1,70 @@
+{
+  "runs": {
+    "DI": "C:\\senior_project\\face_modify\\Yuan\\results\\reference_di_20261014_153851_517219",
+    "DI+Mask": "C:\\senior_project\\face_modify\\Yuan\\results\\reference_di_mask_20261014_155754_945242",
+    "DI+TI": "C:\\senior_project\\face_modify\\Yuan\\results\\reference_di_ti_20261026_235225_545727",
+    "DI+TI+Mask": "C:\\senior_project\\face_modify\\Yuan\\results\\reference_di_ti_mask_20261026_235415_117069"
+  },
+  "aggregate": {
+    "DI": {
+      "n": 20,
+      "source": {
+        "eligible": 20,
+        "successes": 20,
+        "asr": 1.0
+      },
+      "victim": {
+        "eligible": 19,
+        "successes": 14,
+        "asr": 0.7368421052631579
+      },
+      "ssim_rgb": 0.9336920715838213,
+      "rgb_mae": 2.2672050666666665
+    },
+    "DI+Mask": {
+      "n": 20,
+      "source": {
+        "eligible": 20,
+        "successes": 20,
+        "asr": 1.0
+      },
+      "victim": {
+        "eligible": 19,
+        "successes": 12,
+        "asr": 0.631578947368421
+      },
+      "ssim_rgb": 0.9740802097060252,
+      "rgb_mae": 0.9842194666666666
+    },
+    "DI+TI": {
+      "n": 20,
+      "source": {
+        "eligible": 20,
+        "successes": 20,
+        "asr": 1.0
+      },
+      "victim": {
+        "eligible": 19,
+        "successes": 16,
+        "asr": 0.8421052631578947
+      },
+      "ssim_rgb": 0.9339507049009235,
+      "rgb_mae": 2.434873066666667
+    },
+    "DI+TI+Mask": {
+      "n": 20,
+      "source": {
+        "eligible": 20,
+        "successes": 20,
+        "asr": 1.0
+      },
+      "victim": {
+        "eligible": 19,
+        "successes": 12,
+        "asr": 0.631578947368421
+      },
+      "ssim_rgb": 0.9749675970773826,
+      "rgb_mae": 1.0135997333333333
+    }
+  }
+}

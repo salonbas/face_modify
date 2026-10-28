@@ -123,3 +123,105 @@ LPIPS、DISTS 未評估，不能將較高 SSIM 等同於人眼不可察覺。
 ```powershell
 ./Yuan/.venv/Scripts/python.exe Yuan/scripts/compare_mask_report.py --baseline Yuan/results/reference_20261013_145019_577894 --masked Yuan/results/reference_mask_20261013_154854_692028
 ```
+
+## MI-FGSM + DI
+
+DI 使用固定尺寸 ArcFace 變體：對 B_adv 的可微分對齊 crop 做 RGB 正規化後，
+以 p=0.7 隨機縮小到原尺寸的 90%–100%，隨機 padding 回 112×112。
+padding 的正規化值為 0（RGB=127.5）；A/reference 不做隨機變換。
+每步先從 DI loss 回傳到整張 B 的梯度，再套用可選 mask、L1 normalization、
+momentum、sign update 與 epsilon 投影。成功率仍由未變換的 decoded PNG 評估。
+這是 [DI 論文](https://arxiv.org/abs/1803.06978) 的 fixed-input-size adaptation，
+不是原論文 ImageNet 設定的逐字重現。
+
+```powershell
+./Yuan/.venv/Scripts/python.exe Yuan/scripts/compare_reference.py --di --threads 4
+./Yuan/.venv/Scripts/python.exe Yuan/scripts/compare_reference.py --di --mask --threads 4
+```
+
+可指定 `--di-probability` 與 `--di-min-scale`；`--seed` 同時固定獨立 CPU DI RNG。
+self/pair、mask/unmasked 共用相同 seed 與 DI 抽樣設定。
+預設不加 `--di` 時保留原攻擊行為且不消耗 DI RNG。
+config.json 保存 DI 參數，results.csv 保存實際變換的步數及原始／最終未變換的 objective cosine。
+21 項測試涵蓋 disabled identity、RNG reproducibility、gradient flow、A 的獨立對齊、
+DI+mask 外像素不變與 epsilon budget。
+
+### 2026-10-14 DI 完整結果
+
+無 mask：`results/reference_di_20261014_153851_517219/`。
+有 mask：`results/reference_di_mask_20261014_155754_945242/`。
+八組完整報告在後者的 `DI_COMPARISON.md`；數值在 `di_comparison.json`、
+`di_ssim_metrics.csv`。兩個 DI run 均為 20/20 completed、0 failures。
+
+以下四組都使用 A-reference：
+
+| Method | ArcFace /20 | FaceNet /20 | FaceNet /clean-valid 19 | SSIM RGB |
+| --- | ---: | ---: | ---: | ---: |
+| MI-FGSM | 20/20 (100%) | 13/20 (65%) | 13/19 (68.4%) | 0.934300 |
+| MI-FGSM + DI | 20/20 (100%) | 14/20 (70%) | 14/19 (73.7%) | 0.933692 |
+| MI-FGSM + Mask | 20/20 (100%) | 9/20 (45%) | 9/19 (47.4%) | 0.974454 |
+| MI-FGSM + DI + Mask | 20/20 (100%) | 12/20 (60%) | 12/19 (63.2%) | 0.974080 |
+
+DI 無 mask 新增 Jennifer Rodriguez 成功；DI+Mask 新增 Meryl Streep、Paul Bremer、
+Jennifer Rodriguez；兩種 A-reference 比較均無 success→fail。
+原 self-reference 的 FaceNet /20 則為無 mask 40%→50%、有 mask 30%→40%；
+其逐人得失與白箱數值詳見完整報告。
+
+21 項測試通過。從全部 160 張保存 PNG 重算 SSIM，並核對 tensor epsilon、
+serialized epsilon+quantization、所有 mask 外 delta=0、clean cosine 與 frozen split 一致。
+DI seed=0 在每組 200 步中實際使用 126 次非 identity 縮放/pad。
+這是固定 20 人、單一 seed／DI 參數設定的比較，不是最佳化後的普遍成功率；
+LPIPS/DISTS 未評估。SSIM 比較顯示加 DI 後略降，不能宣稱 DI 同時改善影像品質。
+
+重建八組報告（不重跑攻擊）：
+
+```powershell
+./Yuan/.venv/Scripts/python.exe Yuan/scripts/compare_di_report.py --baseline Yuan/results/reference_20261013_145019_577894 --baseline-mask Yuan/results/reference_mask_20261013_154854_692028 --di Yuan/results/reference_di_20261014_153851_517219 --di-mask Yuan/results/reference_di_mask_20261014_155754_945242
+```
+
+## MI-FGSM + DI + TI（2026-10-26）
+
+TI 參考 [CVPR 2019 TI 論文](https://arxiv.org/abs/1904.02884)，在原圖空間的
+raw gradient 上套用正規化 Gaussian depthwise convolution；RGB 各通道獨立。
+固定首輪設定為 kernel=5×5、sigma=1 原圖像素；邊界採 replicate padding，
+這些是本次明確記錄的 implementation choices。
+
+順序：**DI loss backward → TI 平滑 → mask → L1 normalization → momentum → sign → epsilon projection**。
+TI 不直接模糊原圖。mask 放在 TI 之後，因此平滑後仍不允許 mask 外更新。
+不加 `--ti` 時不平滑梯度；kernel-size=1 是 exact identity control。
+
+```powershell
+./Yuan/.venv/Scripts/python.exe Yuan/scripts/compare_reference.py --di --ti --pair-only --threads 4
+./Yuan/.venv/Scripts/python.exe Yuan/scripts/compare_reference.py --di --ti --mask --pair-only --threads 4
+```
+
+可調 `--ti-kernel-size`（正奇數）、`--ti-sigma`（正且有限）。
+`--pair-only` 只跑目前主用的 A-reference；不加則保留 self/pair 兩組行為。
+TI 也可單獨以 `--ti` 使用，不必開啟 DI。
+本輪未依 FaceNet 分數調參，使用相同 frozen 20 人、eps=0.04、200 steps、
+alpha=0.0002、momentum=1、DI p=0.7、DI scale=0.9–1、seed=0。
+
+| Method（全為 A-reference） | ArcFace /20 | FaceNet /20 | FaceNet /clean-valid 19 | SSIM RGB | RGB MAE |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| MI-FGSM + DI | 20/20 (100%) | 14/20 (70%) | 14/19 (73.7%) | 0.933692 | 2.267205 |
+| MI-FGSM + DI + TI | 20/20 (100%) | 16/20 (80%) | 16/19 (84.2%) | 0.933951 | 2.434873 |
+| MI-FGSM + DI + Mask | 20/20 (100%) | 12/20 (60%) | 12/19 (63.2%) | 0.974080 | 0.984219 |
+| MI-FGSM + DI + TI + Mask | 20/20 (100%) | 12/20 (60%) | 12/19 (63.2%) | 0.974968 | 1.013600 |
+
+TI 無 mask 新增 Michelle Collins、Jorge Rodolfo Canicoba Corral 成功，無成功轉失敗。
+有 mask 的成功身分集合不變。SSIM 雖小幅增加，RGB MAE 亦增加，不能宣稱整體畫質改善。
+Richard Myers 原始 FaceNet pair 不通過門檻，分別列出全20與有效19人的比例。
+
+本輪兩個 run 各 20/20 完成、0 failures。36 項測試通過；80 張保存 PNG 的
+tensor / serialized epsilon 檢查、mask 外 delta=0、clean cosine、DI 抽樣次數與
+mask 一致性檢查均通過。LPIPS/DISTS 未評估，結果限於固定樣本與單一 seed/參數。
+
+無 mask：`results/reference_di_ti_20261026_235225_545727/`。
+有 mask：`results/reference_di_ti_mask_20261026_235415_117069/`。
+完整比較在後者 `TI_COMPARISON.md`、`ti_comparison.json`、`ti_ssim_metrics.csv`。
+
+重建比較（不重跑 attack）：
+
+```powershell
+./Yuan/.venv/Scripts/python.exe Yuan/scripts/compare_ti_report.py --di Yuan/results/reference_di_20261014_153851_517219 --di-mask Yuan/results/reference_di_mask_20261014_155754_945242 --ti Yuan/results/reference_di_ti_20261026_235225_545727 --ti-mask Yuan/results/reference_di_ti_mask_20261026_235415_117069
+```

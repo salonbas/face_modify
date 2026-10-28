@@ -1,0 +1,146 @@
+{
+  "runs": {
+    "MI": "C:\\senior_project\\face_modify\\Yuan\\results\\reference_20261013_145019_577894",
+    "MI+Mask": "C:\\senior_project\\face_modify\\Yuan\\results\\reference_mask_20261013_154854_692028",
+    "MI+DI": "C:\\senior_project\\face_modify\\Yuan\\results\\reference_di_20261014_153851_517219",
+    "MI+DI+Mask": "C:\\senior_project\\face_modify\\Yuan\\results\\reference_di_mask_20261014_155754_945242"
+  },
+  "aggregate": {
+    "self:MI": {
+      "n": 20,
+      "source": {
+        "eligible": 20,
+        "successes": 20,
+        "asr": 1.0,
+        "mean_cosine_drop": 0.7340397988206451
+      },
+      "victim": {
+        "eligible": 19,
+        "successes": 8,
+        "asr": 0.42105263157894735,
+        "mean_cosine_drop": 0.2984276440425421
+      },
+      "ssim_rgb": 0.9347425744619239,
+      "rgb_mae": 2.1708743999999998
+    },
+    "pair:MI": {
+      "n": 20,
+      "source": {
+        "eligible": 20,
+        "successes": 20,
+        "asr": 1.0,
+        "mean_cosine_drop": 1.1147244612357734
+      },
+      "victim": {
+        "eligible": 19,
+        "successes": 13,
+        "asr": 0.6842105263157895,
+        "mean_cosine_drop": 0.3985063773568402
+      },
+      "ssim_rgb": 0.9343002802486431,
+      "rgb_mae": 2.178232266666667
+    },
+    "self:MI+Mask": {
+      "n": 20,
+      "source": {
+        "eligible": 20,
+        "successes": 8,
+        "asr": 0.4,
+        "mean_cosine_drop": 0.5294804742950224
+      },
+      "victim": {
+        "eligible": 19,
+        "successes": 6,
+        "asr": 0.3157894736842105,
+        "mean_cosine_drop": 0.25624098244071053
+      },
+      "ssim_rgb": 0.9746163913536059,
+      "rgb_mae": 0.9345706666666667
+    },
+    "pair:MI+Mask": {
+      "n": 20,
+      "source": {
+        "eligible": 20,
+        "successes": 20,
+        "asr": 1.0,
+        "mean_cosine_drop": 0.8345294452992809
+      },
+      "victim": {
+        "eligible": 19,
+        "successes": 9,
+        "asr": 0.47368421052631576,
+        "mean_cosine_drop": 0.3279864121069038
+      },
+      "ssim_rgb": 0.9744541764562096,
+      "rgb_mae": 0.9450413333333332
+    },
+    "self:MI+DI": {
+      "n": 20,
+      "source": {
+        "eligible": 20,
+        "successes": 20,
+        "asr": 1.0,
+        "mean_cosine_drop": 0.723860474504134
+      },
+      "victim": {
+        "eligible": 19,
+        "successes": 10,
+        "asr": 0.5263157894736842,
+        "mean_cosine_drop": 0.36600218209582797
+      },
+      "ssim_rgb": 0.933405022061331,
+      "rgb_mae": 2.2584304000000004
+    },
+    "pair:MI+DI": {
+      "n": 20,
+      "source": {
+        "eligible": 20,
+        "successes": 20,
+        "asr": 1.0,
+        "mean_cosine_drop": 1.086586284701361
+      },
+      "victim": {
+        "eligible": 19,
+        "successes": 14,
+        "asr": 0.7368421052631579,
+        "mean_cosine_drop": 0.4484205599896542
+      },
+      "ssim_rgb": 0.9336920715838213,
+      "rgb_mae": 2.2672050666666665
+    },
+    "self:MI+DI+Mask": {
+      "n": 20,
+      "source": {
+        "eligible": 20,
+        "successes": 9,
+        "asr": 0.45,
+        "mean_cosine_drop": 0.5287636550504868
+      },
+      "victim": {
+        "eligible": 19,
+        "successes": 8,
+        "asr": 0.42105263157894735,
+        "mean_cosine_drop": 0.2853965976603673
+      },
+      "ssim_rgb": 0.9741817800653918,
+      "rgb_mae": 0.9728413333333334
+    },
+    "pair:MI+DI+Mask": {
+      "n": 20,
+      "source": {
+        "eligible": 20,
+        "successes": 20,
+        "asr": 1.0,
+        "mean_cosine_drop": 0.8239476393669987
+      },
+      "victim": {
+        "eligible": 19,
+        "successes": 12,
+        "asr": 0.631578947368421,
+        "mean_cosine_drop": 0.389512254093858
+      },
+      "ssim_rgb": 0.9740802097060252,
+      "rgb_mae": 0.9842194666666666
+    }
+  }
+}

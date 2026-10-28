@@ -13,7 +13,9 @@ from advface.attacks import mi_fgsm
 
 
 @pytest.mark.parametrize("masked", [False, True])
-def test_pair_reference_uses_a_landmarks_and_preserves_budget(monkeypatch, masked):
+@pytest.mark.parametrize("di_probability", [0.0, 1.0])
+@pytest.mark.parametrize("ti_kernel_size", [1, 5])
+def test_pair_reference_uses_a_landmarks_and_preserves_budget(monkeypatch, masked, di_probability, ti_kernel_size):
     b = np.full((112, 112, 3), 100, dtype=np.uint8)
     a = np.full_like(b, 180)
     b_points = np.full((5, 2), 10, dtype=np.float32)
@@ -47,10 +49,23 @@ def test_pair_reference_uses_a_landmarks_and_preserves_budget(monkeypatch, maske
     if masked:
         mask = np.zeros(b.shape[:2], dtype=np.float32)
         mask[28:84, 28:84] = 1
+    smoothed = []
+    original_smoother = mi_fgsm.translation_invariant_gradient
+    def checked_smoother(gradient, **kwargs):
+        if masked:
+            # TI receives the raw full-image gradient; mask is applied after TI.
+            outside = torch.from_numpy(mask == 0)
+            assert gradient[0, :, outside].abs().sum() > 0
+        smoothed.append(True)
+        return original_smoother(gradient, **kwargs)
+    monkeypatch.setattr(mi_fgsm, "translation_invariant_gradient", checked_smoother)
     modified, metadata = mi_fgsm.run_mi_fgsm(b, 0.04, App(), steps=2,
-        device="cpu", reference_image=a, return_metadata=True, precomputed_mask=mask)
+        device="cpu", reference_image=a, return_metadata=True, precomputed_mask=mask,
+        di_probability=di_probability, di_seed=0, ti_kernel_size=ti_kernel_size)
+    assert len(smoothed) == (2 if ti_kernel_size > 1 else 0)
     assert calls == ["A independently aligned"]
     assert metadata["reference_mode"] == "pair"
+    assert metadata["ti_kernel_size"] == ti_kernel_size
     assert metadata["initial_gradient_l1"] > 0
     assert metadata["final_objective_cosine"] < metadata["initial_objective_cosine"]
     assert metadata["linf_tensor"] <= 0.04 + 1e-6

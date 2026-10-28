@@ -11,6 +11,7 @@ import hashlib
 import importlib.util
 import json
 import os
+import math
 import sys
 from datetime import datetime
 from pathlib import Path
@@ -97,8 +98,20 @@ def main():
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--check-only", action="store_true")
     parser.add_argument("--mask", action="store_true", help="landmark-superpixel gradient mask, shared by self/pair")
+    parser.add_argument("--di", action="store_true", help="random shrink/pad after alignment, fixed reference")
+    parser.add_argument("--di-probability", type=float, default=0.7)
+    parser.add_argument("--di-min-scale", type=float, default=0.9)
+    parser.add_argument("--ti", action="store_true", help="Gaussian TI on full-image gradient before mask")
+    parser.add_argument("--ti-kernel-size", type=int, default=5)
+    parser.add_argument("--ti-sigma", type=float, default=1.0)
+    parser.add_argument("--pair-only", action="store_true", help="run A-reference only; default compares self and pair")
     parser.add_argument("--threads", type=int, default=4, help="CPU threads for torch and ONNX Runtime")
     args = parser.parse_args()
+    modes = ("pair",) if args.pair_only else ("self", "pair")
+    if args.ti_kernel_size < 1 or args.ti_kernel_size % 2 != 1 or not math.isfinite(args.ti_sigma) or args.ti_sigma <= 0:
+        parser.error("TI requires positive odd kernel-size and finite sigma > 0")
+    if not 0 <= args.di_probability <= 1 or not 0 < args.di_min_scale <= 1:
+        parser.error("DI: probability in [0,1], min-scale in (0,1]")
     if args.steps <= 0 or not 0 < args.eps <= 1 or args.limit < 0 or args.threads <= 0:
         parser.error("steps > 0, 0 < eps <= 1, limit >= 0 required")
     data_root = args.data_root.resolve()
@@ -130,7 +143,8 @@ def main():
     from advface.models.facenet import FaceNetEmbedder
     from advface.models.insightface_app import create_face_app, get_embedding_from_bgr
 
-    output = ROOT / "results" / (("reference_mask_" if args.mask else "reference_") + datetime.now().strftime("%Y%m%d_%H%M%S_%f"))
+    prefix = "reference_" + ("di_" if args.di else "") + ("ti_" if args.ti else "") + ("mask_" if args.mask else "")
+    output = ROOT / "results" / (prefix + datetime.now().strftime("%Y%m%d_%H%M%S_%f"))
     output.mkdir(parents=True, exist_ok=False)
     source_thresholds, source_artifact = load_thresholds(data_root / "results/calibration/arcface_lfw_v1")
     victim_thresholds, victim_artifact = load_thresholds(data_root / "results/calibration/facenet_lfw_v1")
@@ -141,6 +155,15 @@ def main():
               "seed": args.seed, "mask": "landmark_superpixel_mask" if args.mask else None,
               "mask_options": {"n_segments": 100, "compactness": 10.0, "sigma": 0.0} if args.mask else None,
               "tv_weight": 0.0, "random_start": False, "threads": args.threads,
+              "reference_modes": list(modes),
+              "ti": {"enabled": args.ti, "kernel_size": args.ti_kernel_size if args.ti else 1,
+                     "sigma_pixels": args.ti_sigma, "padding": "replicate",
+                     "domain": "full-image gradient", "channels": "independent depthwise",
+                     "order": "DI backward -> TI -> mask -> L1 normalization -> momentum -> sign -> projection"},
+              "di": {"enabled": args.di, "probability": args.di_probability if args.di else 0.0,
+                     "min_scale": args.di_min_scale, "seed": args.seed,
+                     "location": "normalized aligned B crop only; A/reference unchanged",
+                     "padding": "neutral RGB 127.5", "variant": "shrink+random pad to fixed 112x112"},
               "runtime": {"python": sys.version, "torch": torch.__version__,
                           "numpy": np.__version__, "opencv": cv2.__version__,
                           "cuda_available": torch.cuda.is_available(),
@@ -180,14 +203,16 @@ def main():
                 np.save(output / f"{index:03d}_landmarks.npy", landmarks)
             sa, sb = [get_embedding_from_bgr(app, image, label) for image, label in ((a, "A"), (b, "B"))]
             va, vb = [victim.get_embedding(image, label) for image, label in ((a, "A"), (b, "B"))]
-            for mode in ("self", "pair"):
+            for mode in modes:
                 print(f"Starting {index + 1}/{len(pairs)} {pair['identity_id']} {mode}", flush=True)
                 torch.manual_seed(args.seed)
                 np.random.seed(args.seed)
                 adv, metadata = run_mi_fgsm(b, args.eps, app, steps=args.steps,
                     alpha=args.eps / args.steps, momentum=1.0, device=device,
                     reference_image=a if mode == "pair" else None, return_metadata=True,
-                    precomputed_mask=final_mask)
+                    precomputed_mask=final_mask, di_probability=args.di_probability if args.di else 0.0,
+                    di_min_scale=args.di_min_scale, di_seed=args.seed,
+                    ti_kernel_size=args.ti_kernel_size if args.ti else 1, ti_sigma=args.ti_sigma)
                 if metadata["linf_tensor"] > args.eps + 1e-6:
                     raise ValueError("tensor epsilon exceeded")
                 path = output / f"{index:03d}_{mode}.png"
@@ -203,6 +228,9 @@ def main():
                        "rgb_mae": float(np.abs(decoded.astype(float) - b.astype(float)).mean())}
                 row.update({key: metadata[key] for key in (
                     "initial_objective_cosine", "final_objective_cosine", "initial_gradient_l1")})
+                row["di_applied_steps"] = metadata["di_applied_steps"]
+                row["ti_kernel_size"] = metadata["ti_kernel_size"]
+                row["ti_sigma"] = metadata["ti_sigma"]
                 if final_mask is not None:
                     outside = np.abs(decoded.astype(np.int16) - b.astype(np.int16))[final_mask == 0]
                     outside_max = int(outside.max()) if outside.size else 0
@@ -230,11 +258,11 @@ def main():
                 writer.writeheader()
                 writer.writerows(rows)
         summary = {"experimental": True, "formal": False, "requested": len(pairs),
-                   "completed_pairs": len(rows) // 2, "failures": failures,
+                   "completed_pairs": len(rows) // len(modes), "failures": failures,
                    "self": aggregate(rows, "self"), "pair": aggregate(rows, "pair"),
                    "perceptual_metrics": "RGB MAE only; SSIM/LPIPS/DISTS not evaluated"}
         (output / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
-        print(f"{index + 1}/{len(pairs)} {pair['identity_id']}: {len(pair_rows) == 2}", flush=True)
+        print(f"{index + 1}/{len(pairs)} {pair['identity_id']}: {len(pair_rows) == len(modes)}", flush=True)
     print(f"Results: {output}")
     return 1 if failures else 0
 

@@ -1,0 +1,14 @@
+{
+  "upstream": "PyPI insightface 0.7.3 sdist (SHA-256 verified)",
+  "changes": [
+    "omit C++ mesh renderer extension from build",
+    "omit eager MaskRenderer import in insightface.app"
+  ],
+  "unchanged": [
+    "FaceAnalysis",
+    "ONNX models",
+    "face_align",
+    "model weights"
+  ],
+  "scope": "Yuan local experimental runtime only"
+}

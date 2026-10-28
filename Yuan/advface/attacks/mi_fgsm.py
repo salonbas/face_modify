@@ -28,6 +28,66 @@ def momentum_update(momentum, gradient, decay: float):
     return decay * momentum + normalize_gradient_l1(gradient)
 
 
+def gaussian_ti_kernel(kernel_size, sigma, *, channels, device, dtype):
+    """Normalized channel-independent Gaussian in original-image pixels."""
+    import math
+    import torch
+    if not isinstance(kernel_size, int) or kernel_size < 1 or kernel_size % 2 != 1:
+        raise ValueError("TI kernel_size must be a positive odd integer")
+    if not math.isfinite(sigma) or sigma <= 0:
+        raise ValueError("TI sigma must be finite and positive")
+    coordinates = torch.arange(kernel_size, device=device, dtype=dtype) - kernel_size // 2
+    weights = torch.exp(-0.5 * (coordinates / sigma).square())
+    weights = weights / weights.sum()
+    kernel = torch.outer(weights, weights)
+    return kernel[None, None].expand(channels, 1, -1, -1).contiguous()
+
+
+def translation_invariant_gradient(gradient, *, kernel_size=5, sigma=1.0, kernel=None):
+    """TI convolution of raw NCHW gradients, before mask/normalization/sign.
+
+    Depthwise convolution prevents RGB mixing. Replicate boundary padding is
+    an explicit implementation choice; the kernel is cached by the attack.
+    """
+    import torch.nn.functional as F
+    if kernel is None:
+        kernel = gaussian_ti_kernel(kernel_size, sigma, channels=gradient.shape[1],
+                                    device=gradient.device, dtype=gradient.dtype)
+    size = kernel.shape[-1]
+    if size == 1:
+        return gradient
+    padded = F.pad(gradient, (size // 2,) * 4, mode="replicate")
+    return F.conv2d(padded, kernel, groups=gradient.shape[1])
+
+
+def diverse_input(value, *, probability=0.7, min_scale=0.9, generator=None):
+    """Differentiable shrink + random pad on normalized aligned faces.
+
+    Fixed-size ArcFace adaptation of DI: preserve aspect ratio, pad with zero
+    (neutral RGB 127.5), keep the reference unchanged. RNG stays on CPU.
+    """
+    import math
+    import torch
+    import torch.nn.functional as F
+    if not 0 <= probability <= 1 or not 0 < min_scale <= 1:
+        raise ValueError("DI requires 0<=probability<=1 and 0<min_scale<=1")
+    if probability == 0 or min_scale == 1:
+        return value, False
+    if torch.rand((), generator=generator).item() >= probability:
+        return value, False
+    height, width = value.shape[-2:]
+    if height != width:
+        raise ValueError("DI expects square aligned faces")
+    size = int(torch.randint(math.ceil(height * min_scale), height + 1, (), generator=generator).item())
+    if size == height:
+        return value, False
+    margin = height - size
+    top = int(torch.randint(0, margin + 1, (), generator=generator).item())
+    left = int(torch.randint(0, margin + 1, (), generator=generator).item())
+    resized = F.interpolate(value, size=(size, size), mode="bilinear", align_corners=False)
+    return F.pad(resized, (left, margin - left, top, margin - top), value=0), True
+
+
 def run_mi_fgsm(
     img_bgr: np.ndarray,
     eps: float,
@@ -43,6 +103,11 @@ def run_mi_fgsm(
     diagnostics: bool = False,
     precomputed_mask: np.ndarray | None = None,
     reference_image: np.ndarray | None = None,
+    di_probability: float = 0.0,
+    di_min_scale: float = 0.9,
+    di_seed: int = 0,
+    ti_kernel_size: int = 1,
+    ti_sigma: float = 1.0,
 ) -> np.ndarray | tuple[np.ndarray, dict[str, float | str]]:
     """Generate an untargeted full-image L∞-bounded MI-FGSM example.
 
@@ -69,10 +134,22 @@ def run_mi_fgsm(
     theta = torch.from_numpy(_cv2M_to_torch_theta(matrix, height, width)).to(device)
     grid = F.affine_grid(theta, (1, 3, ALIGNED_FACE_SIZE, ALIGNED_FACE_SIZE), align_corners=True)
     model = load_arcface_torch(device)
+    ti_kernel = gaussian_ti_kernel(ti_kernel_size, ti_sigma, channels=3,
+                                  device=device, dtype=x0.dtype)
+    if not 0 <= di_probability <= 1 or not 0 < di_min_scale <= 1:
+        raise ValueError("invalid DI probability/min_scale")
+    di_generator = torch.Generator(device="cpu").manual_seed(di_seed)
+    di_applied_steps = 0
 
-    def embedding(x):
+    def embedding(x, *, diversify=False):
+        nonlocal di_applied_steps
         crop = F.grid_sample(x, grid, mode="bilinear", align_corners=True, padding_mode="border")
-        return F.normalize(model((crop - ARCFACE_INPUT_MEAN) / ARCFACE_INPUT_SCALE), dim=1)
+        normalized = (crop - ARCFACE_INPUT_MEAN) / ARCFACE_INPUT_SCALE
+        if diversify and di_probability > 0:
+            normalized, applied = diverse_input(normalized, probability=di_probability,
+                min_scale=di_min_scale, generator=di_generator)
+            di_applied_steps += int(applied)
+        return F.normalize(model(normalized), dim=1)
 
     with torch.no_grad():
         if reference_image is None:
@@ -113,6 +190,9 @@ def run_mi_fgsm(
     previous_raw = previous_momentum = previous_update = None
     pending_record = None
     initial_objective_cosine = initial_gradient_l1 = None
+    if di_probability > 0:
+        with torch.no_grad():
+            initial_objective_cosine = float((embedding(x0) * reference).sum().item())
 
     def _cos(a, b):
         denom = a.norm() * b.norm()
@@ -120,13 +200,14 @@ def run_mi_fgsm(
 
     for step in range(steps):
         delta.requires_grad_(True)
-        cosine = (embedding(clip_pixel_range(x0 + delta)) * reference).sum()
+        cosine = (embedding(clip_pixel_range(x0 + delta), diversify=True) * reference).sum()
         if diagnostics and pending_record is not None:
             pending_record["arcface_cosine"] = cosine.detach()
         objective = cosine + float(tv_weight) * total_variation(delta)
         gradient = torch.autograd.grad(objective, delta)[0]
         if step == 0:
-            initial_objective_cosine = float(cosine.detach().item())
+            if initial_objective_cosine is None:
+                initial_objective_cosine = float(cosine.detach().item())
             initial_gradient_l1 = float(gradient.detach().abs().sum().item())
         with torch.no_grad():
             raw_gradient = gradient
@@ -142,6 +223,8 @@ def run_mi_fgsm(
                     inside_l1 = inside_abs.sum()
                     elements_inside, elements_outside = mask_t.sum() * raw_gradient.shape[1], (1.0 - mask_t).sum() * raw_gradient.shape[1]
                     record.update({"inside_l1_ratio": inside_l1 / raw_l1.clamp_min(1e-12), "inside_l2_ratio": torch.sqrt((raw_gradient.square() * mask_t).sum()) / raw_l2.clamp_min(1e-12), "inside_grad_abs_sum": inside_l1, "outside_grad_abs_sum": raw_l1 - inside_l1, "mask_coverage": mask_t.mean(), "inside_grad_mean_abs": inside_l1 / elements_inside.clamp_min(1), "outside_grad_mean_abs": (raw_l1 - inside_l1) / elements_outside.clamp_min(1)})
+            if ti_kernel_size > 1:
+                gradient = translation_invariant_gradient(gradient, kernel=ti_kernel)
             if mask_t is not None:
                 gradient = gradient * mask_t
             prior_momentum = accumulated
@@ -186,6 +269,14 @@ def run_mi_fgsm(
         "initial_objective_cosine": initial_objective_cosine,
         "final_objective_cosine": final_objective_cosine,
         "initial_gradient_l1": initial_gradient_l1,
+        "di_probability": di_probability,
+        "di_min_scale": di_min_scale,
+        "di_seed": di_seed,
+        "di_applied_steps": di_applied_steps,
+        "ti_kernel_size": ti_kernel_size,
+        "ti_sigma": ti_sigma,
+        "ti_padding": "replicate",
+        "gradient_order": "DI backward -> TI -> mask -> L1 normalize -> momentum -> sign -> projection",
         "linf_tensor": linf_tensor,
         "linf_serialized": linf_serialized,
         "linf_serialization_note": "serialized uint8 value may differ due to 8-bit quantization",

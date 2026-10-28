@@ -1,0 +1,38 @@
+{
+  "experimental": true,
+  "formal": false,
+  "requested": 20,
+  "completed_pairs": 20,
+  "failures": [],
+  "self": {
+    "n": 20,
+    "source": {
+      "eligible": 20,
+      "successes": 9,
+      "asr": 0.45,
+      "mean_cosine_drop": 0.5287636550504868
+    },
+    "victim": {
+      "eligible": 19,
+      "successes": 8,
+      "asr": 0.42105263157894735,
+      "mean_cosine_drop": 0.2853965976603673
+    }
+  },
+  "pair": {
+    "n": 20,
+    "source": {
+      "eligible": 20,
+      "successes": 20,
+      "asr": 1.0,
+      "mean_cosine_drop": 0.8239476393669987
+    },
+    "victim": {
+      "eligible": 19,
+      "successes": 12,
+      "asr": 0.631578947368421,
+      "mean_cosine_drop": 0.389512254093858
+    }
+  },
+  "perceptual_metrics": "RGB MAE only; SSIM/LPIPS/DISTS not evaluated"
+}
