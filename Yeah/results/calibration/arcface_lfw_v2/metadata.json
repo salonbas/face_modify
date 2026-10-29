@@ -1,0 +1,27 @@
+{
+  "attack_split": "data/datasets/lfw/evaluation_splits/v2",
+  "identity_image_overlap_with_attack": 0,
+  "model": "arcface",
+  "pair_counts": {
+    "dev_test": {
+      "defined": 994,
+      "genuine": 492,
+      "impostor": 497,
+      "valid": 989
+    },
+    "dev_train": {
+      "defined": 2194,
+      "genuine": 1093,
+      "impostor": 1093,
+      "valid": 2186
+    }
+  },
+  "protocol": "LFW calibration v2: official dev train/test pair definitions filtered to exclude all 328 attack identities",
+  "score_reuse": "Existing v1 cosine scores retained for unchanged pairs; no new embedding inference",
+  "source_model_config": "results/calibration/arcface_lfw_v1/config.json",
+  "source_pair_scores": "results/calibration/arcface_lfw_v1/pair_scores.csv",
+  "source_pair_scores_sha256": "cfd452c3ed58a570ce65fe7def4d7833dff01ee3b746ebeeb8d488e39f93ba3a",
+  "target_far": 0.01,
+  "test_usage": "evaluation only",
+  "threshold_selected_on": "valid dev_train scores only"
+}

@@ -1,0 +1,18 @@
+{
+  "actual_linf_serialized": 0.043137254901960784,
+  "actual_linf_tensor": 0.039999991772221584,
+  "adversarial_image": "results/transfer/lfw_momentum_mask_v2/mu_0_5/adversarial_probes/Michelle_Collins_B_adv.png",
+  "alpha": 0.0002,
+  "attack": "mi_fgsm",
+  "configured_epsilon": 0.04,
+  "constraint": "landmark_superpixel_mask",
+  "identity_id": "Michelle_Collins",
+  "mask_outside_delta_max": 0,
+  "momentum": 0.5,
+  "probe_image": "data/datasets/lfw/images/Michelle_Collins/Michelle_Collins_0002.jpg",
+  "reference_image": "data/datasets/lfw/images/Michelle_Collins/Michelle_Collins_0001.jpg",
+  "runtime_seconds": 24.287477567000224,
+  "steps": 200,
+  "tv_weight": 0.0,
+  "valid": true
+}

@@ -1,0 +1,52 @@
+{
+  "arcface": {
+    "sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+    "source": "https://github.com/deepinsight/insightface/releases/tag/model-zoo",
+    "backbone": "ResNet50",
+    "training_dataset": "WebFace600K",
+    "embedding_dimension": 512,
+    "preprocessing": "InsightFace buffalo_l five-point norm_crop 112x112; recognition ONNX mean=127.5,std=127.5",
+    "use_restriction": "InsightFace open pretrained model: noncommercial research use"
+  },
+  "facenet": {
+    "sha256": "281cebca8662831adb987a874bdcb36e73f5b1c6dc5ee5878f305e985625d99b",
+    "source": "facenet-pytorch 20180402-114759-vggface2.pt",
+    "backbone": "InceptionResnetV1",
+    "training_dataset": "VGGFace2",
+    "embedding_dimension": 512,
+    "preprocessing": "facenet-pytorch MTCNN 160x160, post_process=true, RGB",
+    "use_restriction": "Original project model terms retained; no redistribution of weights"
+  },
+  "adaface": {
+    "sha256": "234da6ce931f821e0a8e920063dc2091d8122ea46285c159d2f25d3f762fecb3",
+    "source_commit": "c60eaa786a42c03444f3df7096dbaf9d57ae010d",
+    "model_source_sha256": "b4db4eb0174a385fd29e5f616391b50d443f455990c8b88dcab1f8021af8ba4c",
+    "source": "https://drive.google.com/file/d/1eUaSHG4pGlIZK7hBkqjyp2fc2epKoBvI/view?usp=sharing",
+    "backbone": "IR-50",
+    "training_dataset": "MS1MV2",
+    "embedding_dimension": 512,
+    "preprocessing": "AdaFace MTCNN alignment, 112x112 BGR, mean=0.5, std=0.5",
+    "use_restriction": "Author code MIT; separate pretrained-weight redistribution grant not verified"
+  },
+  "magface": {
+    "sha256": "cfeba792dada6f1f30d1e118aff077d493dd95dd76c77c30f57f90fd0164ad58",
+    "source_commit": "99bae614ac2643b9694bf18e0c5645272ff6acfa",
+    "model_source_sha256": "9b9670b2190f78782be119a21375e78a81b5444a193ff67d09ca2d48a6b0bc4b",
+    "source": "https://drive.google.com/file/d/1Bd87admxOZvbIOAyTkGEntsEz3fyMt7H/view?usp=sharing",
+    "backbone": "iResNet100",
+    "training_dataset": "MS1MV2",
+    "embedding_dimension": 512,
+    "preprocessing": "Author five-point alignment to 112x112; checkpoint-specific normalization to validate",
+    "use_restriction": "Author code Apache-2.0; separate pretrained-weight redistribution grant not verified"
+  },
+  "mobilefacenet": {
+    "sha256": "9cc6e4a75f0e2bf0b1aed94578f144d15175f357bdc05e815e5c4a02b319eb4f",
+    "archive_sha256": "57d31b56b6ffa911c8a73cfc1707c73cab76efe7f13b675a05223bf42de47c72",
+    "source": "https://github.com/deepinsight/insightface/releases/download/model-zoo/buffalo_sc.zip",
+    "backbone": "MobileFaceNet",
+    "training_dataset": "WebFace600K",
+    "embedding_dimension": 512,
+    "preprocessing": "InsightFace norm_crop 112x112 BGR; blobFromImages swapRB=true, mean=127.5, std=127.5",
+    "use_restriction": "InsightFace open pretrained model: noncommercial research use"
+  }
+}

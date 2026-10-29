@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import json
 import shutil
 import sys
 import tempfile
@@ -22,9 +23,15 @@ ROOT = Path(__file__).resolve().parents[1]
 LFW_IMAGES = ROOT / "data/datasets/lfw/images"
 BUFFALO_DIR = ROOT / "models/insightface/buffalo_l"
 FACENET_PATH = ROOT / "models/facenet/20180402-114759-vggface2.pt"
+MOBILE_PATH = ROOT / "models/insightface/buffalo_sc/w600k_mbf.onnx"
+ADAFACE_PATH = ROOT / "models/adaface/adaface_ir50_ms1mv2.ckpt"
+MAGFACE_PATH = ROOT / "models/magface/magface_iresnet100_ms1mv2.pth"
 LFW_COUNT = 13_233
+LFW_HASHES = ROOT / "data/datasets/lfw/images_sha256.txt"
 BUFFALO_URL = "https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip"
 FACENET_URL = "https://github.com/timesler/facenet-pytorch/releases/download/v2.2.9/20180402-114759-vggface2.pt"
+MOBILE_URL = "https://github.com/deepinsight/insightface/releases/download/model-zoo/buffalo_sc.zip"
+MANIFEST = json.loads((ROOT / "models/checkpoint_manifest.json").read_text())
 CHECKSUMS = {
     "w600k_r50.onnx": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
     "det_10g.onnx": "5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91",
@@ -55,6 +62,28 @@ def verify(path: Path) -> None:
         raise RuntimeError(f"checksum mismatch for {path}: {actual} != {expected}")
 
 
+def verify_manifest(path: Path, model: str) -> None:
+    if not path.is_file():
+        raise FileNotFoundError(f"missing {model}: {path}")
+    actual = sha256(path)
+    expected = MANIFEST[model]["sha256"]
+    if actual != expected:
+        raise RuntimeError(f"checksum mismatch for {model}: {actual} != {expected}")
+
+
+def verify_lfw() -> None:
+    expected = {}
+    for line in LFW_HASHES.read_text(encoding="utf-8").splitlines():
+        digest, relative = line.split("  ", 1)
+        expected[relative] = digest
+    actual_paths = {p.relative_to(LFW_IMAGES).as_posix() for p in LFW_IMAGES.rglob("*.jpg")}
+    if len(expected) != LFW_COUNT or actual_paths != set(expected):
+        raise RuntimeError("LFW file list differs from frozen checksum manifest")
+    for relative, digest in expected.items():
+        if sha256(LFW_IMAGES / relative) != digest:
+            raise RuntimeError(f"LFW checksum mismatch: {relative}")
+
+
 def install_lfw() -> None:
     if LFW_IMAGES.is_dir() and sum(1 for p in LFW_IMAGES.rglob("*.jpg")) == LFW_COUNT:
         print(f"LFW already complete: {LFW_IMAGES}")
@@ -83,34 +112,66 @@ def install_models() -> None:
     with tempfile.TemporaryDirectory(prefix="advface-assets-") as raw_tmp:
         tmp = Path(raw_tmp)
         archive = tmp / "buffalo_l.zip"
-        download(BUFFALO_URL, archive)
-        with zipfile.ZipFile(archive) as package:
-            members = {Path(name).name: name for name in package.namelist() if name.endswith(".onnx")}
-            missing = set(CHECKSUMS) - {FACENET_PATH.name} - set(members)
-            if missing:
-                raise RuntimeError(f"buffalo_l archive missing: {sorted(missing)}")
-            BUFFALO_DIR.mkdir(parents=True, exist_ok=True)
-            for name, member in members.items():
-                if name in CHECKSUMS:
-                    with package.open(member) as source, (BUFFALO_DIR / name).open("wb") as dest:
-                        shutil.copyfileobj(source, dest)
-                    verify(BUFFALO_DIR / name)
-        FACENET_PATH.parent.mkdir(parents=True, exist_ok=True)
-        download(FACENET_URL, FACENET_PATH)
+        if not all((BUFFALO_DIR / name).is_file() for name in CHECKSUMS if name != FACENET_PATH.name):
+            download(BUFFALO_URL, archive)
+            with zipfile.ZipFile(archive) as package:
+                members = {Path(name).name: name for name in package.namelist() if name.endswith(".onnx")}
+                missing = set(CHECKSUMS) - {FACENET_PATH.name} - set(members)
+                if missing:
+                    raise RuntimeError(f"buffalo_l archive missing: {sorted(missing)}")
+                BUFFALO_DIR.mkdir(parents=True, exist_ok=True)
+                for name, member in members.items():
+                    if name in CHECKSUMS:
+                        with package.open(member) as source, (BUFFALO_DIR / name).open("wb") as dest:
+                            shutil.copyfileobj(source, dest)
+        for name in CHECKSUMS:
+            if name != FACENET_PATH.name:
+                verify(BUFFALO_DIR / name)
+        if not FACENET_PATH.is_file():
+            FACENET_PATH.parent.mkdir(parents=True, exist_ok=True)
+            download(FACENET_URL, FACENET_PATH)
         verify(FACENET_PATH)
+        if not MOBILE_PATH.is_file():
+            mobile_archive = tmp / "buffalo_sc.zip"
+            download(MOBILE_URL, mobile_archive)
+            expected_archive = MANIFEST["mobilefacenet"]["archive_sha256"]
+            if sha256(mobile_archive) != expected_archive:
+                raise RuntimeError("buffalo_sc archive checksum mismatch")
+            with zipfile.ZipFile(mobile_archive) as package:
+                matches = [name for name in package.namelist() if Path(name).name == MOBILE_PATH.name]
+                if len(matches) != 1:
+                    raise RuntimeError("buffalo_sc archive must contain one w600k_mbf.onnx")
+                MOBILE_PATH.parent.mkdir(parents=True, exist_ok=True)
+                with package.open(matches[0]) as source, MOBILE_PATH.open("wb") as dest:
+                    shutil.copyfileobj(source, dest)
+        verify_manifest(MOBILE_PATH, "mobilefacenet")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--accept-upstream-research-terms", action="store_true")
     parser.add_argument("--models-only", action="store_true")
+    parser.add_argument("--verify-only", action="store_true", help="check local assets without downloading")
     args = parser.parse_args()
-    if not args.accept_upstream_research_terms:
+    if not args.accept_upstream_research_terms and not args.verify_only:
         parser.error("pass --accept-upstream-research-terms after reviewing docs/REPRODUCIBILITY.md")
+    if not args.verify_only:
+        if not args.models_only:
+            install_lfw()
+        install_models()
+    if not args.models_only and (not LFW_IMAGES.is_dir() or sum(1 for p in LFW_IMAGES.rglob("*.jpg")) != LFW_COUNT):
+        raise RuntimeError("LFW is absent or incomplete")
     if not args.models_only:
-        install_lfw()
-    install_models()
-    print("Installed assets. Run: python scripts/check_research_environment.py")
+        verify_lfw()
+    for name in CHECKSUMS:
+        verify(FACENET_PATH if name == FACENET_PATH.name else BUFFALO_DIR / name)
+    for model, path in (("mobilefacenet", MOBILE_PATH), ("adaface", ADAFACE_PATH), ("magface", MAGFACE_PATH)):
+        verify_manifest(path, model)
+    for model, relative in (("adaface", "models/third_party/adaface/net.py"), ("magface", "models/third_party/magface/iresnet.py")):
+        path = ROOT / relative
+        if not path.is_file() or sha256(path) != MANIFEST[model]["model_source_sha256"]:
+            raise RuntimeError(f"missing or checksum-mismatched {model} author source: {path}")
+    print("All five model weights verified. Run: python scripts/check_research_environment.py")
     return 0
 
 

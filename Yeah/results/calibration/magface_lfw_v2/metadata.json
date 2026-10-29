@@ -1,0 +1,40 @@
+{
+  "model": "magface",
+  "checkpoint_sha256": "cfeba792dada6f1f30d1e118aff077d493dd95dd76c77c30f57f90fd0164ad58",
+  "preprocessing_version": "magface-insightface-fivepoint-bgr-112-v1",
+  "source": "https://drive.google.com/file/d/1Bd87admxOZvbIOAyTkGEntsEz3fyMt7H/view?usp=sharing",
+  "selection": "FAR=1e-2 on isolated dev_train impostor pairs only",
+  "test_usage": "evaluation only",
+  "attack_identity_overlap": 0,
+  "pair_counts": {
+    "dev_train": {
+      "defined": 2194,
+      "valid": 2184,
+      "genuine": 1091,
+      "impostor": 1093
+    },
+    "dev_test": {
+      "defined": 994,
+      "valid": 989,
+      "genuine": 492,
+      "impostor": 497
+    }
+  },
+  "embedding_failures": {
+    "Eddy_Merckx_0002": "ValueError: MagFace alignment failed: Eddy_Merckx_0002",
+    "Hugh_Grant_0007": "ValueError: MagFace alignment failed: Hugh_Grant_0007",
+    "Morgan_Freeman_0002": "ValueError: MagFace alignment failed: Morgan_Freeman_0002",
+    "Roseanne_Barr_0002": "ValueError: MagFace alignment failed: Roseanne_Barr_0002",
+    "Angelica_Romero_0001": "ValueError: MagFace alignment failed: Angelica_Romero_0001",
+    "Jeff_Feldman_0001": "ValueError: MagFace alignment failed: Jeff_Feldman_0001",
+    "David_Wells_0007": "ValueError: MagFace alignment failed: David_Wells_0007",
+    "Scott_Verplank_0001": "ValueError: MagFace alignment failed: Scott_Verplank_0001",
+    "Grady_Little_0001": "ValueError: MagFace alignment failed: Grady_Little_0001",
+    "Nabil_Shaath_0002": "ValueError: MagFace alignment failed: Nabil_Shaath_0002",
+    "Lisa_Raymond_0002": "ValueError: MagFace alignment failed: Lisa_Raymond_0002",
+    "Luis_Horna_0002": "ValueError: MagFace alignment failed: Luis_Horna_0002",
+    "Jim_Parque_0001": "ValueError: MagFace alignment failed: Jim_Parque_0001"
+  },
+  "unique_images_processed": 4970,
+  "runtime_seconds": 751.568711201
+}

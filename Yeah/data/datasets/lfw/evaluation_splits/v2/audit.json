@@ -1,0 +1,111 @@
+{
+  "arcface_v2": {
+    "counts": {
+      "dev_test": {
+        "defined": 994,
+        "genuine": 492,
+        "impostor": 497,
+        "valid": 989
+      },
+      "dev_train": {
+        "defined": 2194,
+        "genuine": 1093,
+        "impostor": 1093,
+        "valid": 2186
+      }
+    },
+    "threshold": 0.14072093367576602
+  },
+  "development_count": 100,
+  "development_from_old": {
+    "dev": 20,
+    "reserve": 79,
+    "test": 1
+  },
+  "facenet_v2": {
+    "counts": {
+      "dev_test": {
+        "defined": 994,
+        "genuine": 494,
+        "impostor": 500,
+        "valid": 994
+      },
+      "dev_train": {
+        "defined": 2194,
+        "genuine": 1095,
+        "impostor": 1099,
+        "valid": 2194
+      }
+    },
+    "threshold": 0.4088586568832398
+  },
+  "old_calibration_ab_image_overlap": {
+    "dev": [],
+    "reserve": [
+      "Doug_Collins_0001",
+      "Doug_Collins_0002",
+      "Geno_Auriemma_0001",
+      "Leszek_Miller_0002",
+      "Michael_Kostelnik_0001",
+      "Michael_Kostelnik_0002",
+      "Orrin_Hatch_0001",
+      "Orrin_Hatch_0002",
+      "Padraig_Harrington_0001",
+      "Patrick_Stewart_0001",
+      "Patrick_Stewart_0002",
+      "Stan_Heath_0001",
+      "Stan_Heath_0002"
+    ],
+    "test": [
+      "Nadia_Petrova_0001"
+    ]
+  },
+  "old_calibration_identity_overlap": {
+    "dev": [
+      "Richard_Myers"
+    ],
+    "reserve": [
+      "Doug_Collins",
+      "Geno_Auriemma",
+      "Leszek_Miller",
+      "Michael_Kostelnik",
+      "Orrin_Hatch",
+      "Padraig_Harrington",
+      "Patrick_Stewart",
+      "Stan_Heath",
+      "Thabo_Mbeki"
+    ],
+    "test": [
+      "Nadia_Petrova"
+    ]
+  },
+  "old_split_counts": {
+    "dev": 20,
+    "reserve": 208,
+    "test": 100
+  },
+  "oos_count": 228,
+  "oos_from_old": {
+    "dev": 0,
+    "reserve": 129,
+    "test": 99
+  },
+  "oos_use": "No attack evaluation, method tuning, victim selection, or eligibility screening before protocol freeze",
+  "pairing": "Preserved exact A/B IDs from frozen v1 CSVs",
+  "pilot_20_subset_development": true,
+  "protocol": "LFW attack/calibration v2",
+  "seed": 20261029,
+  "selection": "old dev 20 plus all 11 v1 calibration-overlap identities; fill to 100 from sorted remaining old reserve IDs shuffled with Python Random(seed)",
+  "source_sha256": {
+    "data/datasets/lfw/evaluation_splits/attack_dev.csv": "7f32cb497abc1969b09710b8d482cdee3065c8f1881eb723bfca134704690d10",
+    "data/datasets/lfw/evaluation_splits/attack_reserve.csv": "0e6e762599fdac48e95304f83eed91a67c4b0090ef43bec839d21f75610bec33",
+    "data/datasets/lfw/evaluation_splits/attack_test.csv": "5d1367ff97eb165dacfc31a850e999354df1077354f7e5da3fafd83f8cffbb14",
+    "data/datasets/lfw/pairs/dev_test.csv": "2fc4059a52dfad35916f4ed1505d3a1620d8275d91f976abc31071bed9f14c42",
+    "data/datasets/lfw/pairs/dev_train.csv": "1dbe72bffcfc588c6cda1ddb5a3cfbe43487599bf742954cbede7a110b8123b1"
+  },
+  "v1_calibration_oos_identity_overlap": 0,
+  "v2_calibration_attack_identity_overlap": 0,
+  "v2_calibration_attack_image_overlap": 0,
+  "v2_dev_oos_ab_image_overlap": 0,
+  "v2_dev_oos_identity_overlap": 0
+}

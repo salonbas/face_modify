@@ -1,0 +1,18 @@
+{
+  "actual_linf_serialized": 0.043137254901960784,
+  "actual_linf_tensor": 0.039999988032322305,
+  "adversarial_image": "results/transfer/lfw_momentum_mask_v2/mu_0_0/adversarial_probes/Meryl_Streep_B_adv.png",
+  "alpha": 0.0002,
+  "attack": "mi_fgsm",
+  "configured_epsilon": 0.04,
+  "constraint": "landmark_superpixel_mask",
+  "identity_id": "Meryl_Streep",
+  "mask_outside_delta_max": 0,
+  "momentum": 0.0,
+  "probe_image": "data/datasets/lfw/images/Meryl_Streep/Meryl_Streep_0002.jpg",
+  "reference_image": "data/datasets/lfw/images/Meryl_Streep/Meryl_Streep_0001.jpg",
+  "runtime_seconds": 22.41833157300016,
+  "steps": 200,
+  "tv_weight": 0.0,
+  "valid": true
+}

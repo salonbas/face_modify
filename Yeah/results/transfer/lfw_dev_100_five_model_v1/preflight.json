@@ -1,0 +1,78 @@
+{
+  "complete_benchmark_estimate_minutes": null,
+  "decision": "HARD_STOP",
+  "development_manifest": {
+    "identities": 100,
+    "path": "data/datasets/lfw/evaluation_splits/v2/development.csv",
+    "sha256": "c3adce046fb1a8996bc048253895d906f50f40f80b89207e22551e2f08ce6e91"
+  },
+  "full_run_authorized_by_gate": false,
+  "hardware_at_preflight": {
+    "cuda_available": false,
+    "gpu": null,
+    "logical_cpus": 8,
+    "processor": "x86_64",
+    "torch_cpu_threads": 4,
+    "torch_version": "2.12.0+cu130"
+  },
+  "historical_attack_component": {
+    "measurement_scope": "attack.apply runtime_seconds only; excludes initialization, detection outside apply, new victims, quality metrics, and serialization",
+    "n_paired_identities": 20,
+    "per_identity_mean_seconds": 109.13731925254997,
+    "per_identity_min_seconds": 98.9792247000014,
+    "per_identity_p95_seconds": 117.93211364500075,
+    "projected_100_best_observed_minutes": 164.96537450000233,
+    "projected_100_mean_minutes": 181.8955320875833,
+    "projected_100_p95_minutes": 196.55352274166793
+  },
+  "method_timings": {
+    "MI-FGSM": {
+      "max_attack_seconds": 31.47696667299988,
+      "mean_attack_seconds": 27.173491570500026,
+      "median_attack_seconds": 28.4001855409997,
+      "min_attack_seconds": 20.752310281000064,
+      "n": 20
+    },
+    "MI-FGSM+Mask": {
+      "max_attack_seconds": 38.0703782419987,
+      "mean_attack_seconds": 29.9094569747499,
+      "median_attack_seconds": 30.25926311999956,
+      "min_attack_seconds": 24.539715119000903,
+      "n": 20
+    },
+    "PGD": {
+      "max_attack_seconds": 27.138513918999706,
+      "mean_attack_seconds": 25.062299866349985,
+      "median_attack_seconds": 25.344158442499975,
+      "min_attack_seconds": 22.345622002999335,
+      "n": 20
+    },
+    "PGD+Mask": {
+      "max_attack_seconds": 29.5775127729994,
+      "mean_attack_seconds": 26.992070840950056,
+      "median_attack_seconds": 26.417916389500533,
+      "min_attack_seconds": 25.132736101000773,
+      "n": 20
+    }
+  },
+  "missing_stage_3_measurements": [
+    "new victim inference",
+    "model initialization",
+    "mask generation separated",
+    "SSIM/LPIPS/DISTS separated",
+    "I/O and serialization",
+    "peak memory",
+    "end-to-end wall time"
+  ],
+  "model_checkpoint_status": {
+    "AdaFace": false,
+    "MagFace": false,
+    "MobileFaceNet": false
+  },
+  "protocol": "LFW v2 Development 100; five-model benchmark preflight v1",
+  "reason": "Historical attack generation alone exceeds the 60-minute total budget; new victim checkpoints and end-to-end timing are unavailable.",
+  "source": {
+    "path": "results/transfer/lfw_attack_dev_20_four_method_v3/per_identity_results.csv",
+    "sha256": "b6fa54a41862e2c5def05ddc5d62ff56f42e1a3a9e01e5d72b5e8f8bc3f33a55"
+  }
+}

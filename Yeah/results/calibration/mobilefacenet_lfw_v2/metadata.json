@@ -1,0 +1,40 @@
+{
+  "model": "mobilefacenet_buffalo_sc",
+  "checkpoint_sha256": "9cc6e4a75f0e2bf0b1aed94578f144d15175f357bdc05e815e5c4a02b319eb4f",
+  "preprocessing_version": "insightface-buffalo-sc-norm-crop-112-v1",
+  "source": "official InsightFace buffalo_sc.zip, WebFace600K MobileFaceNet",
+  "selection": "FAR=1e-2 on isolated dev_train impostor pairs only",
+  "test_usage": "evaluation only",
+  "attack_identity_overlap": 0,
+  "pair_counts": {
+    "dev_train": {
+      "defined": 2194,
+      "valid": 2184,
+      "genuine": 1091,
+      "impostor": 1093
+    },
+    "dev_test": {
+      "defined": 994,
+      "valid": 989,
+      "genuine": 492,
+      "impostor": 497
+    }
+  },
+  "embedding_failures": {
+    "Eddy_Merckx_0002": "ValueError: no face detected in Eddy_Merckx_0002",
+    "Hugh_Grant_0007": "ValueError: no face detected in Hugh_Grant_0007",
+    "Morgan_Freeman_0002": "ValueError: no face detected in Morgan_Freeman_0002",
+    "Roseanne_Barr_0002": "ValueError: no face detected in Roseanne_Barr_0002",
+    "Angelica_Romero_0001": "ValueError: no face detected in Angelica_Romero_0001",
+    "Jeff_Feldman_0001": "ValueError: no face detected in Jeff_Feldman_0001",
+    "David_Wells_0007": "ValueError: no face detected in David_Wells_0007",
+    "Scott_Verplank_0001": "ValueError: no face detected in Scott_Verplank_0001",
+    "Grady_Little_0001": "ValueError: no face detected in Grady_Little_0001",
+    "Nabil_Shaath_0002": "ValueError: no face detected in Nabil_Shaath_0002",
+    "Lisa_Raymond_0002": "ValueError: no face detected in Lisa_Raymond_0002",
+    "Luis_Horna_0002": "ValueError: no face detected in Luis_Horna_0002",
+    "Jim_Parque_0001": "ValueError: no face detected in Jim_Parque_0001"
+  },
+  "unique_images_processed": 4970,
+  "runtime_seconds": 143.09789451899996
+}

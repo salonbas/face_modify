@@ -6,6 +6,8 @@ from typing import Optional
 
 from advface.models.arcface_torch import load_arcface_torch
 from advface.models.facenet import FaceNetEmbedder
+from advface.models.mobilefacenet import MobileFaceNetEmbedder
+from advface.models.author_victims import AdaFaceEmbedder, MagFaceEmbedder
 from advface.models.insightface_app import (
     InsightFaceEmbedder,
     create_face_app,
@@ -27,6 +29,12 @@ def load_embedder(
         return InsightFaceEmbedder(det_size=det_size)
     if key in ("facenet", "facenet_vggface2"):
         return FaceNetEmbedder(device=device)
+    if key in ("mobilefacenet", "mobilefacenet_buffalo_sc", "buffalo_sc"):
+        return MobileFaceNetEmbedder(det_size=det_size or (640, 640))
+    if key in ("adaface", "adaface_ir50_ms1mv2"):
+        return AdaFaceEmbedder()
+    if key in ("magface", "magface_iresnet100_ms1mv2"):
+        return MagFaceEmbedder()
     raise ValueError(f"未知 embedding 模型：{name}（支援：insightface_buffalo_l, facenet_vggface2）")
 
 
@@ -37,6 +45,9 @@ __all__ = [
     "get_embedding_from_path",
     "InsightFaceEmbedder",
     "FaceNetEmbedder",
+    "MobileFaceNetEmbedder",
+    "AdaFaceEmbedder",
+    "MagFaceEmbedder",
     "load_arcface_torch",
     "load_embedder",
 ]

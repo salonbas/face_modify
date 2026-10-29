@@ -11,6 +11,7 @@ __pycache__/
 .mypy_cache/
 .ipynb_checkpoints/
 .cache/
+.asset-downloads/
 
 # Experiment artifacts
 # Keep runtime output out by default, then explicitly version the formal
@@ -42,6 +43,14 @@ results/calibration/**/failures.csv
 !results/transfer/
 results/transfer/*
 !results/transfer/lfw_attack_dev_20_four_method_v3/
+!results/transfer/lfw_dev_100_five_model_v1/
+results/transfer/lfw_dev_100_five_model_v1/*
+!results/transfer/lfw_dev_100_five_model_v1/preflight.json
+!results/transfer/lfw_momentum_mask_v2/
+!results/transfer/lfw_momentum_mask_v2/**/
+!results/transfer/lfw_momentum_mask_v2/**/*.json
+!results/transfer/lfw_momentum_mask_v2/**/*.csv
+results/transfer/lfw_momentum_mask_v2/**/*.png
 results/transfer/lfw_attack_dev_20_four_method_v3/**/*.png
 results/transfer/lfw_attack_dev_20_four_method_v3/**/*.jpg
 results/transfer/lfw_attack_dev_20_four_method_v3/**/*.jpeg
@@ -71,6 +80,7 @@ data/benchmark/_download/
 data/datasets/lfw/*
 !data/datasets/lfw/README.md
 !data/datasets/lfw/manifest.csv
+!data/datasets/lfw/images_sha256.txt
 !data/datasets/lfw/pairs/
 !data/datasets/lfw/pairs/**
 !data/datasets/lfw/evaluation_splits/
@@ -81,7 +91,10 @@ data/datasets/lfw/*
 # setup script installs only the fixed files needed by the experiment.
 models/**/*.onnx
 models/**/*.pth
+models/**/*.ckpt
 models/**/*.pt
+models/insightface/models/
+models/third_party/
 .cache/torch/
 .cache/huggingface/
 .cache/pip/

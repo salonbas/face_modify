@@ -50,6 +50,9 @@ transferability** 與 **imperceptibility**：在 ArcFace surrogate 上產生擾�
 | 5-identity PGD vs landmark-mask ablation v2 | `results/transfer/lfw_attack_dev_mask_ablation_v2/{pgd_full,pgd_landmark_superpixel_mask}/` | 固定原 v1 五人、200 steps、`tv_weight=0` 的完整 PGD 與 PGD+Mask paired comparison；mask ordering 是 overlay 驗證的 implementation assumption。 |
 | 20-identity formal four-method v3 | `results/transfer/lfw_attack_dev_20_four_method_v3/{summary.json,unified_summary.csv,per_identity_results.csv}` | frozen `attack_dev.csv` 的 PGD、MI-FGSM、PGD+Mask、MI-FGSM+Mask 各 20 identities；`formal: true`、20/20 valid、serialized B_adv / ε-plus-quantization / mask-outside checks passed。後續 mechanism analysis 只能讀取此 artifact，不得重生 B_adv。 |
 | Gradient trajectory instrumentation | `results/diagnostics/lfw_gradient_trajectory_v1/` | **diagnostic / mechanism analysis，不是新的 benchmark authority。** 可選 `diagnostics=True` 僅保存 detached statistics、trajectory 與 mask artifact；正式 benchmark 預設為關閉且行為不變。 |
+| Two-case momentum ablation v2 | `results/transfer/lfw_momentum_mask_v2/comparison.csv` | Michelle/Meryl 的機制對照；μ=0/0.5 是新結果，μ=1 與 PGD+Mask 引用正式 v3；不可當 20 人 ASR。 |
+| LFW development/OOS split v2 | `data/datasets/lfw/evaluation_splits/v2/{development.csv,oos.csv,audit.json}` | 100/228 identity-pair split；舊 20 是 pilot 子集，OOS 尚未攻擊。 |
+| Calibration v2 | `results/calibration/{arcface,facenet}_lfw_v2/{thresholds.json,metadata.json,pair_scores.csv}` | 排除全部 328 attack identities 後，於保留的官方 train pairs 選 FAR=1e-2 threshold；僅供 v2 protocol。 |
 
 **PGD provenance 必讀：** PGD 的 ArcFace source metrics 來自 robustness run，
 但 perceptual 評估的 `B_adv` 是 transfer run 以相同 configuration 後續重生的
@@ -220,3 +223,100 @@ general transfer-rate estimate。
   Threshold changes or dataset changes must be versioned and compared fairly;
   the current thresholds and pilot are not an independent basis for a strict
   100-person expansion.
+
+## 2026-10-29 momentum ablation and LFW v2 protocol
+
+The environment check now passes with all 13,233 LFW JPEGs and the required
+ArcFace, detector, landmark, and FaceNet weights. The weights were already in
+local caches and are linked into the checkout's ignored model paths. The
+two-person ablation is separate from formal v3 under
+`results/transfer/lfw_momentum_mask_v2/`; `comparison.csv` records the new
+μ=0/0.5 results alongside the unchanged μ=1 and PGD+Mask formal rows.
+Both runs use the frozen A/B and landmark mask, ε=0.04, 200 steps,
+α=0.0002, ArcFace self-reference cosine minimization, and unchanged
+preprocessing. Success below uses historical v1 thresholds: ArcFace
+0.1407209337 and FaceNet 0.4047890902. Serialized L∞ is 0.0431372549
+for all eight rows, the expected 8-bit quantization allowance above tensor
+ε=0.04; no mask-outside pixel changed.
+
+| Identity | Method / μ | ArcFace cosine | ArcFace success | FaceNet cosine | FaceNet success | LPIPS |
+| --- | ---: | ---: | :---: | ---: | :---: | ---: |
+| Michelle Collins | MI+Mask / 0 | -0.064170 | yes | 0.683930 | no | 0.007717 |
+| Michelle Collins | MI+Mask / 0.5 | -0.076948 | yes | 0.687360 | no | 0.007711 |
+| Michelle Collins | MI+Mask / 1 | 0.167739 | no | 0.701602 | no | 0.016885 |
+| Michelle Collins | PGD+Mask | -0.064170 | yes | 0.683930 | no | 0.007717 |
+| Meryl Streep | MI+Mask / 0 | 0.127616 | yes | 0.681609 | no | 0.012157 |
+| Meryl Streep | MI+Mask / 0.5 | 0.137839 | yes | 0.649985 | no | 0.011436 |
+| Meryl Streep | MI+Mask / 1 | 0.282256 | no | 0.662173 | no | 0.017638 |
+| Meryl Streep | PGD+Mask | 0.127616 | yes | 0.681609 | no | 0.012157 |
+
+The source update is masked gradient → positive L1 normalization →
+`m_t = μm_(t-1) + normalized_gradient` → negative sign → L∞ projection;
+PGD+Mask uses the masked raw gradient's negative sign and same projection.
+At μ=0 they are mathematically equivalent. Both μ=0 serialized PNGs are
+pixel-identical to formal PGD+Mask PNGs and their evaluated metrics match.
+The first μ=0.5 200-step smoke (Michelle) took 24.3 s for attack generation,
+consistent with the roughly 22–24 s later runs, before completing Meryl.
+Reducing μ from 1 to 0.5 restores ArcFace success in both selected cases;
+μ=0 also succeeds. The μ=0→0.5 cosine response is not strictly monotonic
+for Michelle, and nonzero μ=0.5 itself is successful. The controlled
+intervention supports **high accumulated momentum as a cause of these two
+failures**, not a universal claim that any nonzero momentum is harmful.
+Selection on discordant cases cannot explain the overall 35% MI+Mask ASR
+or estimate the effect over all 20 identities. FaceNet remains above its
+threshold for all eight rows.
+
+The versioned split in `data/datasets/lfw/evaluation_splits/v2/` keeps the
+historical 20-person pilot as a subset of development 100. It adds the one
+old-test calibration-overlap identity (Nadia Petrova), nine old-reserve
+calibration-overlap identities, and 70 more old-reserve identities chosen
+with seed 20261029. Thus v2 development = old dev 20 + old test 1 + old
+reserve 79; OOS 228 = old test 99 + old reserve 129. The old split and
+formal v3 artifacts remain intact. The 11 v1-calibration-overlap identities
+are all in development; no such identity is claimed untouched OOS.
+`audit.json` verifies zero v2 development/OOS identity or A/B image
+intersection, zero v1 calibration/OOS identity overlap, and zero v2
+calibration/attack identity or image overlap. Pairing preserves the exact
+old A/B IDs. This is a frozen **pair-eligible identity split**, not a claim
+that all 100 clean A/B pairs pass both models; no OOS model scoring or
+attack evaluation was run. Development is for method and victim decisions;
+OOS is reserved for final evaluation only. The 20 pilot identities and all
+100 v2 development identities are ineligible to be described as untouched
+OOS. The 11 overlapping identities cannot be called untouched relative to
+historical v1 calibration.
+
+Strict identity isolation while retaining Richard Myers in the pilot rules
+out using the v1 calibration definition unchanged. The independent
+`results/calibration/{arcface,facenet}_lfw_v2/` artifacts filter all 328
+attack identities from the official LFW dev_train/dev_test pair definitions
+and reuse the unchanged valid v1 cosine scores for the remaining pairs.
+Threshold selection uses only dev_train, with dev_test for evaluation:
+2,194 train pair definitions and 994 test definitions; valid counts are
+2,186/989 for ArcFace and 2,194/994 for FaceNet. The FAR=1e-2 ArcFace
+threshold remains 0.1407209337 by coincidence; FaceNet changes from
+0.4047890902 to 0.4088586569. Pair CSVs, score CSVs, metadata, source
+hashes, and threshold JSONs are separate from v1. The ablation table above
+keeps historical v1 thresholds to compare to formal v3; new v2 evaluations
+must use v2 thresholds and label that protocol explicitly. Historical v3
+results must not be silently relabeled with v2 thresholds.
+
+## Five-model Development 100 readiness (2026-10-29)
+
+The five specified model files now load, and their independent Calibration v2
+thresholds exist. Development 100 clean A/B scoring retained all 100 identities
+with per-model eligibility flags; 83 are jointly eligible. Two Development
+identities passed a single-method 200-step PGD+Mask end-to-end smoke, with
+five-model cosine and serialized perceptual metrics. No Development 100 attack
+or OOS scoring was performed. Existing v3 results remain the formal
+four-method authority for the historical 20-person pilot only.
+
+The readiness decision is **NOT READY / HARD STOP**. The historical four-method
+attack-only mean projects to 181.9 minutes; this turn's two masked-method
+measurements alone project to 77.2 minutes for 100 identities. Both exceed the
+60-minute absolute wall-clock limit before all five-model evaluation costs.
+The full formal executor is intentionally disabled pending an independently
+validated ≤45-minute end-to-end estimate and resume/safety testing. The
+`scripts/run_lfw_five_model_benchmark.py --preflight` gate reports blockers and
+exits 2; `--execute` also exits 2 without creating formal artifacts. Details,
+per-model calibration and clean eligibility, hardware, timing, and the two
+smoke records are in `docs/LFW_FIVE_MODEL_PREFLIGHT.md`.

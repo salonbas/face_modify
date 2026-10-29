@@ -1,0 +1,9 @@
+identity,method,momentum,arcface_cosine,arcface_success_v1,facenet_cosine,facenet_success_v1,lpips,serialized_linf,source
+Michelle_Collins,MI-FGSM+Mask,0.0,-0.06417007744312286,True,0.6839303374290466,False,0.007716796826571226,0.043137254901960784,results/transfer/lfw_momentum_mask_v2/mu_0_0/evaluation_records/Michelle_Collins.json
+Michelle_Collins,MI-FGSM+Mask,0.5,-0.0769481435418129,True,0.687359631061554,False,0.007711341138929129,0.043137254901960784,results/transfer/lfw_momentum_mask_v2/mu_0_5/evaluation_records/Michelle_Collins.json
+Michelle_Collins,MI-FGSM+Mask,1,0.16773904860019684,False,0.7016016244888306,False,0.01688477396965027,0.043137254901960784,results/transfer/lfw_attack_dev_20_four_method_v3/per_identity_results.csv
+Michelle_Collins,PGD+Mask,PGD,-0.06417007744312286,True,0.6839303374290466,False,0.007716796826571226,0.043137254901960784,results/transfer/lfw_attack_dev_20_four_method_v3/per_identity_results.csv
+Meryl_Streep,MI-FGSM+Mask,0.0,0.12761609256267548,True,0.6816092133522034,False,0.012157350778579712,0.043137254901960784,results/transfer/lfw_momentum_mask_v2/mu_0_0/evaluation_records/Meryl_Streep.json
+Meryl_Streep,MI-FGSM+Mask,0.5,0.1378389298915863,True,0.6499852538108826,False,0.011435708031058311,0.043137254901960784,results/transfer/lfw_momentum_mask_v2/mu_0_5/evaluation_records/Meryl_Streep.json
+Meryl_Streep,MI-FGSM+Mask,1,0.28225573897361755,False,0.6621728539466858,False,0.01763806864619255,0.043137254901960784,results/transfer/lfw_attack_dev_20_four_method_v3/per_identity_results.csv
+Meryl_Streep,PGD+Mask,PGD,0.12761609256267548,True,0.6816092133522034,False,0.012157350778579712,0.043137254901960784,results/transfer/lfw_attack_dev_20_four_method_v3/per_identity_results.csv

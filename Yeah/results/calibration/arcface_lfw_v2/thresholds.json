@@ -1,0 +1,40 @@
+{
+  "far_1e-2": {
+    "allowed_false_accepts": 10,
+    "dev_far": 0.009149130832570906,
+    "development": {
+      "accuracy": 0.984903934126258,
+      "far": 0.009149130832570906,
+      "fn": 23,
+      "fnr": 0.021043000914913082,
+      "fp": 10,
+      "fpr": 0.009149130832570906,
+      "frr": 0.021043000914913082,
+      "tar": 0.9789569990850869,
+      "threshold": 0.14072093367576602,
+      "tn": 1083,
+      "tp": 1070,
+      "tpr": 0.9789569990850869
+    },
+    "far_resolution": 0.0009149130832570906,
+    "held_out_test": {
+      "accuracy": 0.9787664307381193,
+      "far": 0.014084507042253521,
+      "fn": 14,
+      "fnr": 0.028455284552845527,
+      "fp": 7,
+      "fpr": 0.014084507042253521,
+      "frr": 0.028455284552845527,
+      "tar": 0.9715447154471545,
+      "threshold": 0.14072093367576602,
+      "tn": 490,
+      "tp": 478,
+      "tpr": 0.9715447154471545
+    },
+    "impostor_count": 1093,
+    "selection_method": "conservative empirical order statistic: threshold just above the (floor(alpha*N)+1)-th highest impostor score",
+    "support_status": "CALIBRATED",
+    "target_far": 0.01,
+    "threshold": 0.14072093367576602
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "attack_split": "data/datasets/lfw/evaluation_splits/v2",
+  "identity_image_overlap_with_attack": 0,
+  "model": "facenet",
+  "pair_counts": {
+    "dev_test": {
+      "defined": 994,
+      "genuine": 494,
+      "impostor": 500,
+      "valid": 994
+    },
+    "dev_train": {
+      "defined": 2194,
+      "genuine": 1095,
+      "impostor": 1099,
+      "valid": 2194
+    }
+  },
+  "protocol": "LFW calibration v2: official dev train/test pair definitions filtered to exclude all 328 attack identities",
+  "score_reuse": "Existing v1 cosine scores retained for unchanged pairs; no new embedding inference",
+  "source_model_config": "results/calibration/facenet_lfw_v1/config.json",
+  "source_pair_scores": "results/calibration/facenet_lfw_v1/pair_scores.csv",
+  "source_pair_scores_sha256": "3adf728ddba9dfdd15bf8bdc71d531843c70067b708b3190bb9c98de0bc827ac",
+  "target_far": 0.01,
+  "test_usage": "evaluation only",
+  "threshold_selected_on": "valid dev_train scores only"
+}

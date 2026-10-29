@@ -1,0 +1,49 @@
+{
+  "model": "adaface",
+  "checkpoint_sha256": "234da6ce931f821e0a8e920063dc2091d8122ea46285c159d2f25d3f762fecb3",
+  "preprocessing_version": "adaface-author-mtcnn-bgr-112-v1",
+  "source": "https://drive.google.com/file/d/1eUaSHG4pGlIZK7hBkqjyp2fc2epKoBvI/view?usp=sharing",
+  "selection": "FAR=1e-2 on isolated dev_train impostor pairs only",
+  "test_usage": "evaluation only",
+  "attack_identity_overlap": 0,
+  "pair_counts": {
+    "dev_train": {
+      "defined": 2194,
+      "valid": 2178,
+      "genuine": 1086,
+      "impostor": 1092
+    },
+    "dev_test": {
+      "defined": 994,
+      "valid": 986,
+      "genuine": 489,
+      "impostor": 497
+    }
+  },
+  "embedding_failures": {
+    "Ernie_Els_0001": "ValueError: AdaFace alignment failed: Ernie_Els_0001",
+    "Frances_Fisher_0002": "ValueError: AdaFace alignment failed: Frances_Fisher_0002",
+    "Kurt_Busch_0001": "ValueError: AdaFace alignment failed: Kurt_Busch_0001",
+    "Marilyn_Monroe_0001": "ValueError: AdaFace alignment failed: Marilyn_Monroe_0001",
+    "Marilyn_Monroe_0002": "ValueError: AdaFace alignment failed: Marilyn_Monroe_0002",
+    "Philippe_Noiret_0002": "ValueError: AdaFace alignment failed: Philippe_Noiret_0002",
+    "Richard_Branson_0001": "ValueError: AdaFace alignment failed: Richard_Branson_0001",
+    "Richard_Virenque_0003": "ValueError: AdaFace alignment failed: Richard_Virenque_0003",
+    "Roseanne_Barr_0001": "ValueError: AdaFace alignment failed: Roseanne_Barr_0001",
+    "Matt_Roney_0001": "ValueError: AdaFace alignment failed: Matt_Roney_0001",
+    "John_Spencer_0002": "ValueError: AdaFace alignment failed: John_Spencer_0002",
+    "Princess_Aiko_0001": "ValueError: AdaFace alignment failed: Princess_Aiko_0001",
+    "Christina_Aguilera_0004": "ValueError: AdaFace alignment failed: Christina_Aguilera_0004",
+    "Hernan_Diaz_0001": "ValueError: AdaFace alignment failed: Hernan_Diaz_0001",
+    "Gonzalo_Barrientos_0001": "ValueError: AdaFace alignment failed: Gonzalo_Barrientos_0001",
+    "Daisy_Fuentes_0003": "ValueError: AdaFace alignment failed: Daisy_Fuentes_0003",
+    "John_Stallworth_0002": "ValueError: AdaFace alignment failed: John_Stallworth_0002",
+    "Luis_Horna_0002": "ValueError: AdaFace alignment failed: Luis_Horna_0002",
+    "Tyler_Hamilton_0002": "ValueError: AdaFace alignment failed: Tyler_Hamilton_0002",
+    "Warren_Buffett_0001": "ValueError: AdaFace alignment failed: Warren_Buffett_0001",
+    "Brooke_Adams_0001": "ValueError: AdaFace alignment failed: Brooke_Adams_0001",
+    "Ivan_Lee_0001": "ValueError: AdaFace alignment failed: Ivan_Lee_0001"
+  },
+  "unique_images_processed": 4970,
+  "runtime_seconds": 535.1326467239996
+}
