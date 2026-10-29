@@ -46,6 +46,16 @@ def checkpoint_state(relative_path: str, model: str) -> tuple[bool, str]:
     return digest == expected, f"{path} SHA-256 {digest}" + ("" if digest == expected else f" != {expected}")
 
 
+def checksum_state(relative_path: str, expected: str) -> tuple[bool, str]:
+    path = PROJECT_ROOT / relative_path
+    present, detail = asset_state(path)
+    if not present:
+        return present, detail
+    with path.open("rb") as handle:
+        digest = hashlib.file_digest(handle, "sha256").hexdigest()
+    return digest == expected, f"{path} SHA-256 {digest}" + ("" if digest == expected else f" != {expected}")
+
+
 def source_state(relative_path: str, model: str) -> tuple[bool, str]:
     path = PROJECT_ROOT / relative_path
     present, detail = asset_state(path)
@@ -97,6 +107,7 @@ def main() -> int:
         ("FaceNet VGGFace2 weight", checkpoint_state("models/facenet/20180402-114759-vggface2.pt", "facenet")),
         ("AdaFace weight", checkpoint_state("models/adaface/adaface_ir50_ms1mv2.ckpt", "adaface")),
         ("MobileFaceNet weight", checkpoint_state("models/insightface/buffalo_sc/w600k_mbf.onnx", "mobilefacenet")),
+        ("MobileFaceNet detector", checksum_state("models/insightface/buffalo_sc/det_500m.onnx", MANIFEST["mobilefacenet"]["detector_sha256"])),
         ("MagFace weight", checkpoint_state("models/magface/magface_iresnet100_ms1mv2.pth", "magface")),
         ("AdaFace source", source_state("models/third_party/adaface/net.py", "adaface")),
         ("MagFace source", source_state("models/third_party/magface/iresnet.py", "magface")),

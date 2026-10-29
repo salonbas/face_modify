@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import shutil
 import sys
 import tarfile
@@ -25,6 +26,7 @@ LFW_IMAGES = ROOT / "data/datasets/lfw/images"
 BUFFALO_DIR = ROOT / "models/insightface/buffalo_l"
 FACENET_PATH = ROOT / "models/facenet/20180402-114759-vggface2.pt"
 MOBILE_PATH = ROOT / "models/insightface/buffalo_sc/w600k_mbf.onnx"
+MOBILE_DETECTOR_PATH = ROOT / "models/insightface/buffalo_sc/det_500m.onnx"
 ADAFACE_PATH = ROOT / "models/adaface/adaface_ir50_ms1mv2.ckpt"
 MAGFACE_PATH = ROOT / "models/magface/magface_iresnet100_ms1mv2.pth"
 LFW_COUNT = 13_233
@@ -154,24 +156,42 @@ def install_models() -> None:
         for name in CHECKSUMS:
             if name != FACENET_PATH.name:
                 verify(BUFFALO_DIR / name)
+        # InsightFace FaceAnalysis resolves root/models/<package>. Keep the
+        # canonical checked files above, and create same-volume links for its
+        # runtime layout. A prior local install may already have these files.
+        runtime_dir = BUFFALO_DIR.parent / "models" / "buffalo_l"
+        runtime_dir.mkdir(parents=True, exist_ok=True)
+        for name in CHECKSUMS:
+            if name == FACENET_PATH.name:
+                continue
+            destination = runtime_dir / name
+            if not destination.exists():
+                try:
+                    os.link(BUFFALO_DIR / name, destination)
+                except OSError:
+                    shutil.copy2(BUFFALO_DIR / name, destination)
+            verify(destination)
         if not FACENET_PATH.is_file():
             FACENET_PATH.parent.mkdir(parents=True, exist_ok=True)
             download(FACENET_URL, FACENET_PATH)
         verify(FACENET_PATH)
-        if not MOBILE_PATH.is_file():
+        if not MOBILE_PATH.is_file() or not MOBILE_DETECTOR_PATH.is_file():
             mobile_archive = tmp / "buffalo_sc.zip"
             download(MOBILE_URL, mobile_archive)
             expected_archive = MANIFEST["mobilefacenet"]["archive_sha256"]
             if sha256(mobile_archive) != expected_archive:
                 raise RuntimeError("buffalo_sc archive checksum mismatch")
             with zipfile.ZipFile(mobile_archive) as package:
-                matches = [name for name in package.namelist() if Path(name).name == MOBILE_PATH.name]
-                if len(matches) != 1:
-                    raise RuntimeError("buffalo_sc archive must contain one w600k_mbf.onnx")
-                MOBILE_PATH.parent.mkdir(parents=True, exist_ok=True)
-                with package.open(matches[0]) as source, MOBILE_PATH.open("wb") as dest:
-                    shutil.copyfileobj(source, dest)
+                for destination in (MOBILE_PATH, MOBILE_DETECTOR_PATH):
+                    matches = [name for name in package.namelist() if Path(name).name == destination.name]
+                    if len(matches) != 1:
+                        raise RuntimeError(f"buffalo_sc archive must contain one {destination.name}")
+                    destination.parent.mkdir(parents=True, exist_ok=True)
+                    with package.open(matches[0]) as source, destination.open("wb") as dest:
+                        shutil.copyfileobj(source, dest)
         verify_manifest(MOBILE_PATH, "mobilefacenet")
+        if sha256(MOBILE_DETECTOR_PATH) != MANIFEST["mobilefacenet"]["detector_sha256"]:
+            raise RuntimeError("buffalo_sc detector checksum mismatch")
 
 
 def main() -> int:
@@ -194,6 +214,8 @@ def main() -> int:
         verify(FACENET_PATH if name == FACENET_PATH.name else BUFFALO_DIR / name)
     for model, path in (("mobilefacenet", MOBILE_PATH), ("adaface", ADAFACE_PATH), ("magface", MAGFACE_PATH)):
         verify_manifest(path, model)
+    if not MOBILE_DETECTOR_PATH.is_file() or sha256(MOBILE_DETECTOR_PATH) != MANIFEST["mobilefacenet"]["detector_sha256"]:
+        raise RuntimeError("missing or checksum-mismatched buffalo_sc detector")
     for model, relative in (("adaface", "models/third_party/adaface/net.py"), ("magface", "models/third_party/magface/iresnet.py")):
         path = ROOT / relative
         if not path.is_file() or sha256(path) != MANIFEST[model]["model_source_sha256"]:

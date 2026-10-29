@@ -117,18 +117,22 @@ and verifies model SHA-256 values. It installs or checks these Git-ignored files
 | buffalo_l ArcFace recognition | `models/insightface/buffalo_l/w600k_r50.onnx` | restricted: non-commercial research only |
 | buffalo_l detector and landmarks | `models/insightface/buffalo_l/{det_10g,1k3d68,2d106det,genderage}.onnx` | restricted: same package terms |
 | FaceNet VGGFace2 | `models/facenet/20180402-114759-vggface2.pt` | unclear: code is MIT, but no separate weight redistribution grant was found |
-| MobileFaceNet | `models/insightface/buffalo_sc/w600k_mbf.onnx` | InsightFace noncommercial research terms; automatic download |
+| MobileFaceNet and detector | `models/insightface/buffalo_sc/{w600k_mbf,det_500m}.onnx` | InsightFace noncommercial research terms; automatic download |
 | AdaFace R50 | `models/adaface/adaface_ir50_ms1mv2.ckpt` | author Google Drive; manual acquisition and separate weight terms need review |
 | MagFace iResNet100 | `models/magface/magface_iresnet100_ms1mv2.pth` | author Google Drive; manual acquisition and separate weight terms need review |
 
-The runtime prefers those repo-local locations. Existing workspaces retain a
+The setup script also creates checked same-volume links under
+`models/insightface/models/buffalo_l/`, the layout required by the InsightFace
+FaceAnalysis loader. The runtime prefers those repo-local locations. Existing workspaces retain a
 fallback to `~/.insightface` and the former `.cache/torch` FaceNet path.
 
 ## Clean-clone status
 
-A clean clone of committed `origin/main` does not include the current uncommitted
-v2 calibration/split and five-model code. Even after those are committed, the
-manual author-weight acquisition, unrecorded perceptual-model cache hashes and
-untracked attack PNGs prevent claiming full bitwise reproduction. See
-`docs/ARTIFACT_INVENTORY.md` and the latest clean-clone test evidence before
-claiming a pass.
+The v2 calibration/split, five-model code and checkpoint manifest are now in
+`origin/main`. A clean clone can install dependencies and fetch LFW plus the
+ArcFace, FaceNet and MobileFaceNet assets automatically. The AdaFace and MagFace
+weights still require the manual author-link procedure above. Until both are
+installed and a fresh 200-step five-model smoke passes in the clone, the status
+is **NOT YET REPRODUCIBLE**. Unrecorded perceptual-model cache hashes and
+untracked attack PNGs also prevent claiming bitwise historical reproduction.
+See `docs/ARTIFACT_INVENTORY.md` and `docs/CLEAN_CLONE_AUDIT.md` for evidence.
