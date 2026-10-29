@@ -320,3 +320,28 @@ validated ≤45-minute end-to-end estimate and resume/safety testing. The
 exits 2; `--execute` also exits 2 without creating formal artifacts. Details,
 per-model calibration and clean eligibility, hardware, timing, and the two
 smoke records are in `docs/LFW_FIVE_MODEL_PREFLIGHT.md`.
+
+## 2026-10-29 Research hardening audit
+
+**Five-model Development 100: NOT READY.** The formal entry point remains
+`python scripts/run_lfw_five_model_benchmark.py --preflight`; `--execute` is
+blocked. Its contract is epsilon 0.04, alpha 0.0002, 200 steps, momentum 1,
+with four methods. On this Mac only ArcFace is installed. The other four
+checkpoints, pinned AdaFace/MagFace sources, and Development 100 clean
+eligibility are missing. WSL end-to-end timing, safe formal execution/resume,
+and weight usage review are outstanding. No Development 100 benchmark was run.
+
+Static split audit: Development has 100 unique identities, OOS 228 unique
+identities, with zero identity/image overlap. Calibration train/test identities
+have zero overlap with all 328 attack identities. The Development manifest SHA
+matches `configs/lfw_dev_100_v2.json`. The five frozen FAR=1e-2 thresholds are
+ArcFace 0.14072093367576602, FaceNet 0.4088586568832398, AdaFace
+0.14697599411010745, MobileFaceNet 0.1633139401674271, MagFace
+0.18449912965297702. These are v2 values and must not be substituted into v3.
+
+The new `advface/attack_artifact.py` provides atomic per-file writes, PNG
+checksum and provenance validation. It is a component, **not yet connected to
+the formal runner**. The legacy 20-person v3 two-phase runner's record-plus-file
+resume check remains unsafe for expensive future experiments and should only be
+used to read historical evidence. This audit does not certify five-model metric
+or preprocessing equivalence because four local model assets are absent.

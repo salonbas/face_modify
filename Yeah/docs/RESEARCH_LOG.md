@@ -17,3 +17,5 @@ eligibility retained its full denominator (83 jointly eligible). Two-person
 PGD+Mask end-to-end smoke and 66 tests passed. The fail-closed CLI refuses
 formal execute because attack-only runtime exceeds 60 minutes and the safe
 full executor is unfinished. Status: NOT READY; no 100-person attack started.
+
+- 2026-10-29: Hardening audit: split isolation passed; Mac preflight crash fixed; atomic/checksummed artifact component and regression tests added. Formal five-model executor remains blocked pending WSL assets, integration, profile and end-to-end validation.

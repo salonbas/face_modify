@@ -109,12 +109,19 @@ def preflight() -> dict:
         except (OSError, KeyError, TypeError, ValueError) as exc:
             problems.append(f"invalid {name} calibration: {exc}")
     meminfo = Path("/proc/meminfo")
-    available = (next((int(line.split()[1]) * 1024 for line in meminfo.read_text().splitlines()
-                       if line.startswith("MemAvailable:")), 0) if meminfo.is_file()
-                 else os.sysconf("SC_PAGE_SIZE") * os.sysconf("SC_AVPHYS_PAGES"))
+    if meminfo.is_file():
+        available = next((int(line.split()[1]) * 1024 for line in meminfo.read_text().splitlines()
+                          if line.startswith("MemAvailable:")), 0)
+    else:
+        # macOS does not expose SC_AVPHYS_PAGES. Unknown capacity is a
+        # preflight problem, never an uncaught exception or a pass.
+        try:
+            available = os.sysconf("SC_PAGE_SIZE") * os.sysconf("SC_AVPHYS_PAGES")
+        except (ValueError, OSError):
+            available = 0
     evidence["available_memory_bytes"] = available
     if available < 4 * 1024**3:
-        problems.append("less than 4 GiB available memory")
+        problems.append("less than 4 GiB available memory or memory could not be measured")
     output = ROOT / "results/transfer/lfw_dev_100_five_model_v1/formal"
     evidence["formal_output"] = str(output.relative_to(ROOT))
     if output.exists() and any(output.iterdir()):
@@ -143,7 +150,7 @@ def preflight() -> dict:
             problems.append(f"invalid clean eligibility artifact: {exc}")
     # A measured complete five-model estimate is required; history is only an
     # attack-only lower bound and cannot authorize execution.
-    problems.append("no validated five-model end-to-end estimate at or below 45 minutes")
+    problems.append("no validated five-model end-to-end estimate on the WSL CPU")
     problems.append("formal five-model execute/resume implementation has not passed safety validation")
     return {"decision": "NOT READY", "problems": problems, "evidence": evidence}
 

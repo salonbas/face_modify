@@ -136,3 +136,21 @@ installed and a fresh 200-step five-model smoke passes in the clone, the status
 is **NOT YET REPRODUCIBLE**. Unrecorded perceptual-model cache hashes and
 untracked attack PNGs also prevent claiming bitwise historical reproduction.
 See `docs/ARTIFACT_INVENTORY.md` and `docs/CLEAN_CLONE_AUDIT.md` for evidence.
+
+## Attack artifact transfer and current readiness
+
+For future WSL formal runs, keep PNGs and their JSON metadata together in a
+private backed-up directory outside Git. Copy both to the other computer with
+`rsync -av --checksum SOURCE/ DEST/` (or an equivalently verified private
+transfer), then run `advface.attack_artifact.validate` against the expected
+identity, A/B hashes, ArcFace checkpoint hash, attack config hash and
+preprocessing version before reuse. A bare PNG is never sufficient. Back up
+before changing machines; Git intentionally contains neither raw LFW images
+nor complete large attack output.
+
+The artifact helper currently records Python, PyTorch, dependency versions and
+Git commit, but the five-model formal runner has not integrated it. Its
+`--execute` remains blocked. Evaluation summaries must be recomputed when
+thresholds or victim models change; the fixed B_adv can be retained when its
+attack provenance validates. The existing v3 artifacts predate this metadata
+contract and are historical evidence, not automatically reusable formal inputs.
