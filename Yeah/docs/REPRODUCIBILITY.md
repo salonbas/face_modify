@@ -33,7 +33,12 @@ python3 scripts/setup_research_assets.py --accept-upstream-research-terms
 ```
 
 The script downloads LFW, InsightFace `buffalo_l` and `buffalo_sc`, and FaceNet
-from the URLs in the script. It checks recorded SHA-256 values. The AdaFace and
+from the URLs in the script. For LFW it tries scikit-learn's Figshare URL first;
+if Figshare returns 403, it uses the public Hugging Face LFW mirror. Both must
+match scikit-learn's published archive SHA-256
+`b47c8422c8cded889dc5a13418c4bc2abbda121092b3533a83306f90d900100a`,
+then the repository verifies all 13,233 JPEGs individually. It checks recorded
+model SHA-256 values. The AdaFace and
 MagFace checkpoint URLs are in `models/checkpoint_manifest.json` and currently
 lead to author Google Drive pages. Open each `source` URL in a browser, review
 the author's terms, complete any required login or download confirmation, and

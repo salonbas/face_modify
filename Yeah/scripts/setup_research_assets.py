@@ -13,6 +13,7 @@ import hashlib
 import json
 import shutil
 import sys
+import tarfile
 import tempfile
 import urllib.request
 import zipfile
@@ -28,6 +29,11 @@ ADAFACE_PATH = ROOT / "models/adaface/adaface_ir50_ms1mv2.ckpt"
 MAGFACE_PATH = ROOT / "models/magface/magface_iresnet100_ms1mv2.pth"
 LFW_COUNT = 13_233
 LFW_HASHES = ROOT / "data/datasets/lfw/images_sha256.txt"
+LFW_ARCHIVE_SHA256 = "b47c8422c8cded889dc5a13418c4bc2abbda121092b3533a83306f90d900100a"
+LFW_URLS = (
+    "https://ndownloader.figshare.com/files/5976015",
+    "https://huggingface.co/datasets/DerrickUnleashed/LFW/resolve/main/lfwfunneled.tgz",
+)
 BUFFALO_URL = "https://github.com/deepinsight/insightface/releases/download/v0.7/buffalo_l.zip"
 FACENET_URL = "https://github.com/timesler/facenet-pytorch/releases/download/v2.2.9/20180402-114759-vggface2.pt"
 MOBILE_URL = "https://github.com/deepinsight/insightface/releases/download/model-zoo/buffalo_sc.zip"
@@ -88,24 +94,45 @@ def install_lfw() -> None:
     if LFW_IMAGES.is_dir() and sum(1 for p in LFW_IMAGES.rglob("*.jpg")) == LFW_COUNT:
         print(f"LFW already complete: {LFW_IMAGES}")
         return
-    # sklearn owns the official LFW fetch URL and archive layout.  Its cache is
-    # deliberately rooted inside this checkout, then exposed at the canonical
-    # experiment path without referring to any user-global cache.
-    from sklearn.datasets import fetch_lfw_people
-
-    data_home = ROOT / ".asset-downloads"
-    fetch_lfw_people(data_home=data_home, funneled=True, download_if_missing=True)
-    source = data_home / "lfw_home/lfw_funneled"
-    if not source.is_dir() or sum(1 for p in source.rglob("*.jpg")) != LFW_COUNT:
-        raise RuntimeError(f"upstream LFW download incomplete: {source}")
-    LFW_IMAGES.parent.mkdir(parents=True, exist_ok=True)
-    if LFW_IMAGES.exists() or LFW_IMAGES.is_symlink():
-        if LFW_IMAGES.is_dir() and not LFW_IMAGES.is_symlink():
-            shutil.rmtree(LFW_IMAGES)
+    # The mirror contains byte-for-byte the archive whose SHA-256 is published
+    # in scikit-learn's _lfw.py. Its 13,233 JPEGs are also checked individually.
+    with tempfile.TemporaryDirectory(prefix="advface-lfw-") as raw_tmp:
+        tmp = Path(raw_tmp)
+        archive = tmp / "lfw-funneled.tgz"
+        failures = []
+        for url in LFW_URLS:
+            try:
+                download(url, archive)
+                if sha256(archive) != LFW_ARCHIVE_SHA256:
+                    raise RuntimeError("LFW archive SHA-256 mismatch")
+                break
+            except Exception as exc:
+                failures.append(f"{url}: {exc}")
+                archive.unlink(missing_ok=True)
         else:
-            LFW_IMAGES.unlink()
-    shutil.move(str(source), str(LFW_IMAGES))
-    shutil.rmtree(data_home, ignore_errors=True)
+            raise RuntimeError("LFW download failed from all recorded sources:\n" + "\n".join(failures))
+        source = tmp / "lfw_funneled"
+        source.mkdir()
+        with tarfile.open(archive, "r:gz") as package:
+            for member in package:
+                parts = Path(member.name).parts
+                if not member.isfile() or len(parts) != 3 or parts[0] != "lfw_funneled" or not parts[-1].endswith(".jpg"):
+                    continue
+                if any(part in {".", ".."} for part in parts):
+                    raise RuntimeError(f"unsafe LFW archive entry: {member.name}")
+                destination = source / parts[1] / parts[2]
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                with package.extractfile(member) as input_file, destination.open("wb") as output_file:
+                    shutil.copyfileobj(input_file, output_file)
+        if sum(1 for p in source.rglob("*.jpg")) != LFW_COUNT:
+            raise RuntimeError("LFW archive has an unexpected JPEG count")
+        LFW_IMAGES.parent.mkdir(parents=True, exist_ok=True)
+        if LFW_IMAGES.exists() or LFW_IMAGES.is_symlink():
+            if LFW_IMAGES.is_dir() and not LFW_IMAGES.is_symlink():
+                shutil.rmtree(LFW_IMAGES)
+            else:
+                LFW_IMAGES.unlink()
+        shutil.move(str(source), str(LFW_IMAGES))
 
 
 def install_models() -> None:
