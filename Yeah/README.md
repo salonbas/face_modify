@@ -59,16 +59,16 @@ FaceNet 與 MobileFaceNet，並驗證 SHA-256。AdaFace／MagFace 作者權重�
 | --- | --- |
 | 安裝資產及檢查 | `setup_research_assets.py`、`check_research_environment.py` |
 | v2 五模型校準 | `calibrate_lfw_v2_victims.py`；正式門檻已固定，勿隨意重跑 |
-| v3 frozen 20 生成與評估 | `run_lfw_two_phase_v4.py --attack pgd_full\|mi_fgsm --phase generate\|evaluate\|regression` |
+| v3 frozen 20 生成與評估 | `run_face_verification_benchmark.py --config configs/lfw_dev_20_v3.json --attack pgd_full\|mi_fgsm --phase generate\|evaluate\|regression` |
 | v3 結果彙總與機制分析 | `aggregate_lfw_four_method_v3.py`、`analyze_lfw_four_method_mechanisms.py` |
-| 五模型 Development 100 | `run_lfw_five_model_benchmark.py --preflight`；目前 gate 為 hard stop |
+| 五模型 Development 100 | `run_face_verification_benchmark.py --config configs/lfw_dev_100_v2.json --preflight`；目前 gate 為 hard stop |
 | 1 人端到端 smoke | `smoke_lfw_five_model_pgd_mask.py --max-identities 1` |
 
 跑 smoke 前先確認 [split audit](data/datasets/lfw/evaluation_splits/v2/audit.json)
 和五模型 v2 門檻；smoke 只讀 Development 前一人，不能當成 100-person
 正式結果。歷史 v1 五人、v2 20 人、v3 frozen 20、Momentum ablation 與
 五模型 v2 Development/OOS 使用不同 cohort 或門檻，不能合併統計。
-所有 35 個入口的角色、保留理由與相容路徑見
+原有 35 個入口與新 config 驅動入口的角色、保留理由與相容路徑見
 [腳本索引](docs/SCRIPT_INVENTORY.md)。
 
 Perceptual Evaluation v2 只從已持久化的正式 artifact 重建評估，不會重跑 attack：

@@ -1,9 +1,10 @@
 # Script and architecture audit
 
-Audited 2026-10-29. Paths are relative to the repository root. `F` = formal or frozen protocol, `D` = diagnostic / smoke, `H` = historical or general exploratory, `S` = setup / specification. A formal label does not imply the five-model 100-person benchmark ran. Entry point is `python scripts/<name>.py` unless noted. Inputs and outputs below are the principal artifacts; use each CLI's `--help` for optional flags. No scripts were moved or deleted during this audit.
+Updated 2026-10-29. The original 35 scripts remain for historical commands; one config-driven benchmark entry was added, giving 36 script entrypoints (34 Python and 2 shell). Paths are relative to the repository root. `F` = formal or frozen protocol, `D` = diagnostic / smoke, `H` = historical or general exploratory, `S` = setup / specification. A formal label does not imply the five-model 100-person benchmark ran. Entry point is `python scripts/<name>.py` unless noted. Inputs and outputs below are the principal artifacts; use each CLI's `--help` for optional flags. No historical script was moved or deleted.
 
 | Script | Role; main input → output | Upstream caller / downstream dependency | Current formal use |
 | --- | --- | --- | --- |
+| `run_face_verification_benchmark.py` | F facade; `configs/lfw_dev_20_v3.json` or `configs/lfw_dev_100_v2.json` → frozen runner | Researchers → v3 two-phase runner or v2 fail-closed gate | Preferred named benchmark CLI; validates cohort hash and protocol settings |
 | `setup_research_assets.py` | S; upstream LFW and model archives, manifest → ignored local assets | Manual setup → environment check, all model CLIs | Required setup; author weights manual |
 | `install_research_dependencies.sh` | S; pinned requirements → isolated venv packages | Manual setup → all Python CLIs | Required setup |
 | `setup_five_model_sources.sh` | S; pinned author Git commits → ignored AdaFace/MagFace source modules | Manual setup → author victim loaders | Required for v2 smoke |

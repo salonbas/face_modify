@@ -1,18 +1,27 @@
-# Clean clone validation log — 2026-10-29
+# GitHub clean-clone validation — 2026-10-29
 
-Verdict: **FAIL / partially reproducible**. This was a real local Git clone into a new `/tmp/yeah-clean-clone-9nkSX9/repo` directory from commit `bdf50b10bf9e6c5166d26268c9b089e1002672f3`, with a separately created Python 3.12 venv. It was not a copy of the installed project tree. The clone was of the repository root (`face_modify_yeah`), with research code under `Yeah/`. The `/tmp` test directory was transient; this log records observed commands and exit states, not a preserved environment.
+**Verdict: NOT YET REPRODUCIBLE.** The final test cloned pushed `origin/main` commit `23abf6b039e4c5fd8fa505733f1518e78a8d3b51` from `git@github.com:salonbas/face_modify.git` into `/tmp/yeah-github-validated-20261029`. It created a new Python 3.12 venv at `/tmp/yeah-github-validated-venv`. The clone had no LFW image tree or AdaFace/MagFace checkpoints before setup. No original repository model, image, or private cache path was used for research assets. The temporary test directories are not preserved evidence; this file records the commands and outcomes.
 
-| Step | Actual command / observation | Result |
+| Step | Command / evidence | Result |
 | --- | --- | --- |
-| Clone | `git clone --local --no-hardlinks /home/ssilthorin/projects/face_modify_yeah /tmp/yeah-clean-clone-9nkSX9/repo` | PASS |
-| New environment | `python3.12 -m venv /tmp/yeah-clean-clone-9nkSX9/venv`; pip 24.0 initially | PASS |
-| Install from committed requirements | `venv/bin/python -m pip install -r repo/Yeah/requirements.txt` | FAIL: `facenet-pytorch==2.6.0` requires NumPy <2, while direct pin is NumPy 2.4.4 |
-| Revised installer candidate | Ran working-tree `scripts/install_research_dependencies.sh` against the isolated venv with `requirements-constraints.txt` | PASS for installation and import (`numpy 2.4.4`, `torch 2.12.0+cu130`); this script is not in the tested clone commit, so it is **not** a clean-clone PASS |
-| Committed environment checker | `venv/bin/python repo/Yeah/scripts/check_research_environment.py` before any asset setup | FAIL as expected: no LFW JPEGs, ArcFace, detector, landmark or FaceNet weight. V1 calibrations and v3 summary existed |
-| Committed setup script | `venv/bin/python repo/Yeah/scripts/setup_research_assets.py --verify-only` | FAIL: option absent in committed version; current working-tree version adds it |
-| Five-model assets and v2 split | Current `models/checkpoint_manifest.json`, author source/weights, v2 splits and v2 calibration are uncommitted or ignored | FAIL: absent from clean clone |
-| End-to-end smoke in clone | Could not run without assets and v2 artifacts | NOT RUN |
+| Clone | `git clone git@github.com:salonbas/face_modify.git /tmp/yeah-github-validated-20261029`; `git rev-parse HEAD` = `23abf6b...` | PASS |
+| Install | `python3.12 -m venv /tmp/yeah-github-validated-venv`; `bash scripts/install_research_dependencies.sh /tmp/yeah-github-validated-venv/bin/python` from clone `Yeah/` | PASS; NumPy 1.26.4, PyTorch 2.2.2+cpu, `pip check`: no broken requirements; FaceNet and other required imports pass |
+| Author source | `bash scripts/setup_five_model_sources.sh` | PASS; AdaFace/MagFace source commits fetched and pinned source file hashes verified by setup/checker |
+| Automatic assets | `python scripts/setup_research_assets.py --accept-upstream-research-terms` | PARTIAL by design: LFW, buffalo_l, FaceNet, buffalo_sc downloaded; then exit 1 with clear missing AdaFace checkpoint. Figshare returned HTTP 403; checksum-identical Hugging Face mirror supplied LFW. |
+| Asset verification | Direct calls to `verify_lfw`, buffalo_l and FaceNet `verify`, MobileFaceNet recognizer/detector hash checks, and InsightFace runtime-layout checks | PASS for 13,233 LFW JPEGs, all auto-downloaded model files and their recorded SHA-256 values |
+| Model loading | `load_embedder` for `arcface`, `facenet`, `mobilefacenet` inside clone | PASS; AdaFace/MagFace loader cannot be exercised there without their author weights |
+| Environment check | `python scripts/check_research_environment.py` | FAIL only for missing AdaFace and MagFace weights; v1/v2 calibration, Development 100, OOS 228, formal v3 summary, LFW, other weights and sources pass |
+| Specs and Git artifacts | `python scripts/generate_research_specs.py --check`; compare SHA-256 of manifest, v2 splits/audit, five threshold JSONs and v3 config between original and clone | PASS; exact bytes match |
+| Entrypoints | `--help` for setup, v2 calibration, v3 two-phase runner, five-model benchmark gate, one-person smoke and Momentum ablation | PASS (6) |
+| Tests | `python -m pytest -q` in clone | 65 passed, 1 skipped because the required author weights are absent |
+| Five-model 200-step smoke | Requires both author weights; no OOS attack or 100-person run was attempted | NOT RUN; cannot claim five-model end-to-end or output-tolerance PASS |
 
-Current working tree checks are separate evidence: `setup_research_assets.py --verify-only` passed all five checkpoint hashes and 13,233 per-image LFW SHA-256 values; `check_research_environment.py` passed; `smoke_lfw_five_model_pgd_mask.py --max-identities 1` resumed one existing identity and passed; full pytest passed 66 tests. These checks used locally preinstalled assets and must not be presented as clean-clone success.
+The original worktree's fresh dependency venv separately passed 66 tests, all five checkpoint hashes and model loaders, and an existing one-person smoke record was readable. That smoke resumed a local PNG and did not regenerate 200 attack steps; it is not clean-clone proof. Formal v3 results were not modified. The frozen v3 config, v2 splits and threshold JSONs are byte-identical across the worktree and GitHub clone, but numerical reproduction of a new five-model attack remains unverified.
 
-Further blockers after committing source and small artifacts: AdaFace and MagFace author weights are hosted on Google Drive with no recorded independent publisher SHA-256, and acquisition may require manual interaction or terms acceptance. Perceptual-network weights and some serialized adversarial PNGs are only in ignored local caches/artifact directories. Exact formal result regeneration therefore remains unverified. No 100-person benchmark or OOS attack was run in this audit.
+## Remaining work
+
+1. Open the AdaFace and MagFace author Google Drive links in `models/checkpoint_manifest.json`, review their terms, download the exact checkpoints to the documented paths, and run `python scripts/setup_research_assets.py --verify-only`. No author-published independent weight SHA-256 was found; the manifest records hashes of the frozen local copies.
+2. Run `python scripts/check_research_environment.py` and `python scripts/smoke_lfw_five_model_pgd_mask.py --max-identities 1` in a clean clone with those manually acquired weights, with a fresh output directory. Verify 200 steps, five model scores, SSIM/LPIPS/DISTS/L∞, threshold crossing and numerical tolerances against the recorded smoke. Do not read or attack OOS.
+3. Back up the ignored formal PNG bytes privately before any cleanup. `docs/FORMAL_PNG_SHA256.txt` proves integrity but cannot recover the images. Record perceptual-network cache hashes if bitwise metric reproduction is required.
+
+The five-model 100-person benchmark remains behind its fail-closed timing/executor gate. Its two-person engineering smoke and Momentum ablation are separate from formal v3 evidence.

@@ -1,0 +1,13 @@
+{
+  "protocol": "lfw_dev_20_four_method_v3",
+  "runner": "run_lfw_two_phase_v4.py",
+  "split": "data/datasets/lfw/evaluation_splits/attack_dev.csv",
+  "split_sha256": "7f32cb497abc1969b09710b8d482cdee3065c8f1881eb723bfca134704690d10",
+  "thresholds": {
+    "arcface": "results/calibration/arcface_lfw_v1/thresholds.json",
+    "facenet": "results/calibration/facenet_lfw_v1/thresholds.json"
+  },
+  "methods": ["pgd_full", "mi_fgsm"],
+  "steps": 200,
+  "epsilon": 0.04
+}

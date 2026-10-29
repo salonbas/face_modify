@@ -1,0 +1,16 @@
+{
+  "protocol": "lfw_dev_100_five_model_v2",
+  "runner": "run_lfw_five_model_benchmark.py",
+  "split": "data/datasets/lfw/evaluation_splits/v2/development.csv",
+  "split_sha256": "c3adce046fb1a8996bc048253895d906f50f40f80b89207e22551e2f08ce6e91",
+  "thresholds": {
+    "arcface": "results/calibration/arcface_lfw_v2/thresholds.json",
+    "facenet": "results/calibration/facenet_lfw_v2/thresholds.json",
+    "adaface": "results/calibration/adaface_lfw_v2/thresholds.json",
+    "mobilefacenet": "results/calibration/mobilefacenet_lfw_v2/thresholds.json",
+    "magface": "results/calibration/magface_lfw_v2/thresholds.json"
+  },
+  "steps": 200,
+  "epsilon": 0.04,
+  "status": "preflight_only"
+}
