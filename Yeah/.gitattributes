@@ -1,4 +1,6 @@
 # Frozen research CSV bytes are part of their SHA-256 provenance.
+data/datasets/lfw/evaluation_splits/attack_*.csv -text whitespace=cr-at-eol
+data/datasets/lfw/pairs/dev_*.csv -text whitespace=cr-at-eol
 data/datasets/lfw/evaluation_splits/v2/**/*.csv -text whitespace=cr-at-eol
 results/calibration/*_lfw_v2/*.csv -text whitespace=cr-at-eol
 results/transfer/lfw_momentum_mask_v2/**/*.csv -text whitespace=cr-at-eol
