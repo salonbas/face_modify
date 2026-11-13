@@ -48,6 +48,12 @@ if needed):
 1. AdaFace → `models/adaface/adaface_ir50_ms1mv2.ckpt`.
 2. MagFace → `models/magface/magface_iresnet100_ms1mv2.pth`.
 
+If the MagFace author download is named `magface_epoch_00025.pth`, keep that
+original file and create the loader path with
+`ln -s magface_epoch_00025.pth models/magface/magface_iresnet100_ms1mv2.pth`
+from `Yeah/`. The symlink must resolve to the exact manifest SHA-256; a
+different checkpoint must not be substituted.
+
 Run `sha256sum` on both files and compare the output with the corresponding
 `sha256` entries in `models/checkpoint_manifest.json`. A mismatch means the
 checkpoint is a different version; stop rather than recalibrating silently.

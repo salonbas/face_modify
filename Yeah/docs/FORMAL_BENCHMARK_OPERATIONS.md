@@ -3,9 +3,9 @@
 Run on WSL2 Ubuntu with CPU PyTorch. `configs/lfw_dev_100_v2.json` freezes the
 Development 100 split and 200-step epsilon 0.04 attack. The formal entry is
 `scripts/run_lfw_five_model_benchmark.py`. Run `--preflight` first; `--execute`
-currently refuses to start. Do not run the full benchmark until a validated
-resume/evaluation executor, one-person WSL profile, bounded ETA, all five
-checkpoint hashes, clean eligibility, and the explicit user go-ahead exist.
+refuses to start unless every preflight gate passes, including dependency
+compatibility. Do not run the full benchmark until a real one-person executor,
+checksum, resume and saved-result verification test passes on the intended host.
 
 A safe future run must use the artifact contract in
 `advface/attack_artifact.py`: write B_adv and complete metadata, validate both,

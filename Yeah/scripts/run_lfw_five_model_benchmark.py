@@ -165,6 +165,11 @@ def preflight() -> dict:
             __import__(module)
         except (ImportError, OSError) as exc:
             problems.append(f"dependency unavailable: {module}: {exc}")
+    dependency_check = subprocess.run([sys.executable, "-m", "pip", "check"],
+                                      capture_output=True, text=True, check=False)
+    evidence["pip_check"] = dependency_check.stdout.strip() or dependency_check.stderr.strip()
+    if dependency_check.returncode:
+        problems.append("installed dependency versions conflict; see evidence.pip_check")
     return {"decision": "READY" if not problems else "NOT READY", "problems": problems, "evidence": evidence}
 
 
