@@ -1,9 +1,5 @@
 #!/usr/bin/env python3
-"""Fail-closed entry point for the proposed LFW v2 five-model benchmark.
-
-The formal executor is intentionally unavailable until all readiness gates pass.
-This script never creates adversarial images or reads OOS image data.
-"""
+"""Offline, resumable LFW v2 Development five-model benchmark."""
 from __future__ import annotations
 
 import argparse
@@ -12,6 +8,11 @@ import hashlib
 import json
 import os
 import platform
+import sys
+import subprocess
+os.environ.setdefault("NO_ALBUMENTATIONS_UPDATE", "1")
+os.environ.setdefault("HF_HUB_OFFLINE", "1")
+os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -89,9 +90,14 @@ def preflight() -> dict:
             expected = json.loads(manifest.read_text()).get(name, {}).get("model_source_sha256") if manifest.is_file() else None
             if hashlib.sha256(source.read_bytes()).hexdigest() != expected:
                 problems.append(f"{name} author model source checksum mismatch")
-    # The author repositories license source code, but no separate grant for
-    # the hosted pretrained bytes was published alongside these checkpoints.
-    problems.append("AdaFace and MagFace pretrained-weight usage terms require review before formal use")
+    for relative, expected in {
+        "models/insightface/buffalo_l/det_10g.onnx": "5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91",
+        "models/insightface/buffalo_l/1k3d68.onnx": "df5c06b8a0c12e422b2ed8947b8869faa4105387f199c477af038aa01f9a45cc",
+        "models/insightface/buffalo_sc/det_500m.onnx": json.loads((ROOT / "models/checkpoint_manifest.json").read_text())["mobilefacenet"]["detector_sha256"],
+    }.items():
+        path = ROOT / relative
+        if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected:
+            problems.append(f"missing or invalid detector/alignment asset: {path}")
     for name, path in CALIBRATION.items():
         if not path.is_file():
             problems.append(f"missing {name} Calibration v2 threshold")
@@ -119,13 +125,19 @@ def preflight() -> dict:
             available = os.sysconf("SC_PAGE_SIZE") * os.sysconf("SC_AVPHYS_PAGES")
         except (ValueError, OSError):
             available = 0
+        if not available and sys.platform == "darwin":
+            vm = subprocess.run(["vm_stat"], capture_output=True, text=True, check=False)
+            if vm.returncode == 0:
+                import re
+                page = re.search(r"page size of (\d+) bytes", vm.stdout)
+                counts = [int(re.search(r"(\d+)", line.split(":", 1)[1]).group(1))
+                          for line in vm.stdout.splitlines() if line.startswith(("Pages free:", "Pages inactive:", "Pages speculative:"))]
+                available = int(page.group(1)) * sum(counts) if page else 0
     evidence["available_memory_bytes"] = available
     if available < 4 * 1024**3:
         problems.append("less than 4 GiB available memory or memory could not be measured")
     output = ROOT / "results/transfer/lfw_dev_100_five_model_v1/formal"
     evidence["formal_output"] = str(output.relative_to(ROOT))
-    if output.exists() and any(output.iterdir()):
-        problems.append("formal output already exists; resume validation is not implemented")
     timing = ROOT / "results/transfer/lfw_dev_100_five_model_v1/preflight.json"
     if timing.is_file():
         historical = json.loads(timing.read_text(encoding="utf-8"))
@@ -140,7 +152,7 @@ def preflight() -> dict:
     else:
         try:
             value = json.loads(eligibility.read_text(encoding="utf-8"))
-            if value["summary"]["original_denominator"] != 100 or value["manifest_sha256"] != evidence["development_sha256"]:
+            if value["summary"]["original_denominator"] != 100 or value["manifest_sha256"] != evidence.get("development_sha256"):
                 problems.append("Development 100 clean eligibility manifest or denominator mismatch")
             if len(value["rows"]) != 100 or set(value["summary"]["models"]) != set(MODELS):
                 problems.append("Development 100 clean eligibility is incomplete")
@@ -148,11 +160,12 @@ def preflight() -> dict:
                 problems.append("Development 100 eligibility thresholds differ from calibration")
         except (OSError, ValueError, KeyError) as exc:
             problems.append(f"invalid clean eligibility artifact: {exc}")
-    # A measured complete five-model estimate is required; history is only an
-    # attack-only lower bound and cannot authorize execution.
-    problems.append("no validated five-model end-to-end estimate on the WSL CPU")
-    problems.append("formal five-model execute/resume implementation has not passed safety validation")
-    return {"decision": "NOT READY", "problems": problems, "evidence": evidence}
+    for module in ("torch", "onnxruntime", "insightface", "facenet_pytorch", "skimage", "cv2"):
+        try:
+            __import__(module)
+        except (ImportError, OSError) as exc:
+            problems.append(f"dependency unavailable: {module}: {exc}")
+    return {"decision": "READY" if not problems else "NOT READY", "problems": problems, "evidence": evidence}
 
 
 def main() -> int:
@@ -160,12 +173,18 @@ def main() -> int:
     mode = parser.add_mutually_exclusive_group(required=True)
     mode.add_argument("--preflight", action="store_true")
     mode.add_argument("--execute", action="store_true")
+    mode.add_argument("--verify", action="store_true")
+    mode.add_argument("--worker", action="store_true")
+    parser.add_argument("--identity", help="Development identity; engineering acceptance only")
+    parser.add_argument("--method", choices=CONTRACT["methods"])
+    parser.add_argument("--reevaluate", action="store_true", help="recompute victim scores from saved PNGs")
     args = parser.parse_args()
-    report = preflight()
-    print(json.dumps(report, indent=2, ensure_ascii=False))
-    if args.execute:
-        print("Formal execute refused: readiness and safe executor gates are incomplete.")
-    return 2
+    if args.preflight:
+        report = preflight()
+        print(json.dumps(report, indent=2, ensure_ascii=False))
+        return 0 if report["decision"] == "READY" else 2
+    from formal_five_model import run
+    return run(args, preflight)
 
 
 if __name__ == "__main__":

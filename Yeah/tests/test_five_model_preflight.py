@@ -18,11 +18,10 @@ def load_script():
     return module
 
 
-def test_preflight_fails_closed_without_complete_timing_and_executor():
+def test_preflight_fails_closed_without_required_assets():
     report = load_script().preflight()
     assert report["decision"] == "NOT READY"
-    assert any("end-to-end estimate" in p for p in report["problems"])
-    assert any("execute/resume" in p for p in report["problems"])
+    assert any("checkpoint" in p or "eligibility" in p for p in report["problems"])
     assert report["evidence"]["attack_contract"]["steps"] == 200
     assert report["evidence"]["attack_contract"]["alpha"] == 0.0002
 

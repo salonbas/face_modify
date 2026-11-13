@@ -12,5 +12,5 @@
   },
   "steps": 200,
   "epsilon": 0.04,
-  "status": "preflight_only"
+  "status": "offline_resumable_executor"
 }
