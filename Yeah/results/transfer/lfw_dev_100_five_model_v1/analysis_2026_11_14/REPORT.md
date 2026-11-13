@@ -1,6 +1,6 @@
 # Development 100 五模型正式成果驗證與分析
 
-驗證日期：2026-11-14。原始資料：`formal/`；本報告未執行攻擊或重新評估模型。逐筆 Python 靜態核對發現 0 個不一致。
+驗證日期：2026-11-14。原始資料：`formal/`；本報告未執行攻擊或重新評估模型。逐筆 Python 靜態核對發現 0 個不一致。補充分析對現存 PNG 與原圖作獨立像素比較，並重建遮罩；不改動正式成果。
 
 正式 400 個方法×身分紀錄完整：372 張 PNG、28 筆 ArcFace clean detection skip；每方法 93 張、7 筆 skip。每筆均有五模型欄位；372 筆對抗影像評估、28 筆 clean skip 記錄。AdaFace 每方法另有 1 筆 adversarial detection error，該筆不列入可評估 ASR 分母。
 
@@ -56,17 +56,48 @@
 攻擊核心累積 2.88 小時，佔結果檔首末時間戳跨度 5.68 小時的 50.7%；其餘包含模型初始化、五模型推論、影像品質、寫檔、啟停與空檔，現有紀錄無法可靠拆分。
 結果檔首末時間戳（台北）2026-11-13 13:43:08 至 2026-11-13 19:24:05，跨度 5.68 小時。此為含中斷與間隔的 wall-clock 跨度，非純運算時間。
 
+## 擾動預算與遮罩驗證
+
+設定的 ε=0.04 是量化前浮點像素的 L∞ 預算，即 10.2/255。PGD 與 MI-FGSM 在每步更新後將 `delta` 投影至 ±10.2 像素，最後裁切至 [0,255]，再以 `astype(uint8)` 截去小數並編碼 PNG。截尾對負擾動可能將整數原像素與輸出拉開 11 階；PNG 本身是無損儲存。故 11/255=0.043137 是**序列化後實際 L∞**，不可寫作量化前 ε。既有規範明訂量化前 ε=0.04、序列化後容許至 ε+1/255=0.043922。372/372 張的 metadata `tensor_linf` ≤0.04（最大 0.039999992），重新解碼的最大通道差均為 11/255，且與 artifact 記錄一致；未發現預算違規。此為保存的 tensor 指標與程式投影邏輯稽核，未重新執行攻擊以獨立驗算每一步浮點狀態。
+
+依正式實作的 68 點 landmark、多邊形與 SLIC（`n_segments=100`, `compactness=10`, `sigma=0`）對 93 張可攻擊的乾淨 B 圖各建一次 Mask，四方法共比較 372 張 PNG。Coverage 是**允許修改**的空間比例；實際修改是任一 RGB 通道與原圖不同的像素比例，兩者不可互換。93 張圖均為 250×250，故逐人比例平均亦等於 pooled 比例。
+
+|方法|PNG 數|Mask Coverage（允許）|實際修改像素|Mask 外修改像素|
+|---|---:|---:|---:|---:|
+|PGD|93|12.64%（同組參照）|30.23%|1,049,086|
+|MI-FGSM|93|12.64%（同組參照）|30.25%|1,049,982|
+|PGD+Mask|93|12.64%|12.18%|0|
+|MI-FGSM+Mask|93|12.64%|12.19%|0|
+
+非 Mask 方法並不受右側覆蓋範圍約束，表中 Coverage 只是同一乾淨圖的參照。Mask 方法的所有 186 張 PNG 均無 Mask 外修改；允許區內亦有少量像素未修改。重建使用目前本機套件與模型，和正式 `run.json` 所列版本相同；逐張覆蓋及越界數據在 [`pixel_validation.csv`](pixel_validation.csv)，聚合在 [`pixel_summary.csv`](pixel_summary.csv)。
+
+## 同一 83 人的成對方法比較
+
+下表每格是「前者減後者」成功率百分點；括號內為 exact McNemar 雙尾 p。共同 83 人在五模型 clean cosine 均達原固定 threshold，四方法有可用對抗分數。20 格只是預先解釋四種方法的探索性比較，p 未作多重比較校正；完整成功數、方向相反的人數與固定種子 20,000 次 paired bootstrap 95% percentile CI 在 [`paired_comparisons.csv`](paired_comparisons.csv)。成對 bootstrap 每次重抽**人**並保留兩方法成對結果。小樣本離散資料的 bootstrap 區間與 exact p 可有邊界差異，顯著性解讀以 exact p 為準。
+
+|模型|MI-FGSM − PGD|PGD+Mask − PGD|MI-FGSM+Mask − MI-FGSM|MI-FGSM+Mask − PGD+Mask|
+|---|---:|---:|---:|---:|
+|ArcFace|−2.4 (p=.500)|−15.7 (p=.00024)|−47.0 (p<.00001)|−33.7 (p<.00001)|
+|FaceNet|+19.3 (p=.00086)|+3.6 (p=.549)|−8.4 (p=.065)|+7.2 (p=.146)|
+|AdaFace|+15.7 (p=.0044)|−26.5 (p<.00001)|−45.8 (p<.00001)|−3.6 (p=.250)|
+|MobileFaceNet|+13.3 (p=.00098)|−12.0 (p=.0063)|−26.5 (p<.00001)|−1.2 (p=1.000)|
+|MagFace|+12.0 (p=.031)|−21.7 (p=.00053)|−34.9 (p<.00001)|−1.2 (p=1.000)|
+
+在固定共同樣本上，無 Mask 的 MI-FGSM 對四個 transfer victim 的 ASR 高於 PGD，其中 MagFace 的 p=.031 在多重比較下尤其需保守解讀。FaceNet 的 PGD+Mask 高於 PGD 只有 3 人淨差（17/83 對 14/83；95% paired bootstrap CI −3.6 至 +12.0 百分點），沒有足夠證據宣稱提升。FaceNet 的 MI-FGSM 加 Mask 後下降 8.4 點，exact p=.065，也不應宣稱確定減弱。這些比較未改動原 ASR／Conditional ASR 的分母。
+
 ## 解讀與限制
 
 - ArcFace white-box PGD 93/93 成功；轉移較強的是 AdaFace 與 MagFace（PGD 41/86、36/93；MI-FGSM 56/86、48/93）。FaceNet 較低（PGD 15/89），但 MI-FGSM 提升至 31/89。
 - Mask 對四個非 ArcFace 模型的多數方法減少成功率，同時提高 SSIM、降低 LPIPS/DISTS；FaceNet PGD 的 18/89 略高於無 Mask 15/89，不能宣稱 Mask 在所有情況均減弱。
 - 正式樣本與 20 人 Pilot 的分割、閾值／模型設定和樣本數不同，Pilot 僅有 ArcFace 與 FaceNet；可比較方向，不能把百分比差異歸因於單一機制。Pilot ArcFace PGD/MI-FGSM/PGD+Mask/MI-FGSM+Mask = 100/90/80/35%；FaceNet = 20/40/20/30%。正式可評估 ASR 分別為 ArcFace 100/97.8/81.7/48.4%；FaceNet 16.1/33.3/19.4/25.8%。
-- Mask 真實覆蓋比例未寫入正式 metadata；現有結果可驗證 L∞ 與設定，若需逐張覆蓋比例須對已存圖重新建遮罩（不是攻擊），本次未做。原始執行器的 `check_image` 在產生時檢查 Mask 外像素不變。
+- Mask 的平均允許範圍為 12.64%，兩種 Mask 方法實際改動約 12.18–12.19%；它們的 SSIM 0.986／0.977 高於對應無 Mask 的 0.968／0.936，LPIPS 與 DISTS 亦較低。這是空間約束、像素變化及品質的共同觀察，不能單憑本實驗確定品質變化的唯一機制。相同 11/255 最大差不足以代表整體修改量。
+- MI-FGSM 無 Mask 的 transfer ASR 與 Cosine Drop 在四個非 ArcFace 模型普遍高於 PGD，但品質指標較差（SSIM 0.936 對 0.968；LPIPS 0.0839 對 0.0412；DISTS 0.0698 對 0.0494），每張核心時間亦較長（36.7 對 22.1 秒）。加入 Mask 後品質改善，transfer ASR 通常下降；FaceNet PGD 是小幅反例且不顯著。不同模型對同一 PNG 的反應差異只是 transferability 觀察，不能直接歸因於架構或梯度機制。
 - 原日誌有 Doug_Collins 的 PGD worker 人臉偵測錯誤，後續續跑成功；無未完成評估。CPU 使用率、RAM 峰值和各階段獨立時間未記錄，無法回溯。
 
 ## 重驗證資料
 
 - `audit.json` 保存正式參數、五模型 hash、Threshold、環境、時間與檔案大小；`formal_sha256.txt` 含 1150 個正式 JSON/PNG 檔的 SHA-256；兩份 CSV 保存 20 格分母與逐筆分數。
+- 補充表由 [`analyze_formal_supplement.py`](../../../../scripts/analyze_formal_supplement.py) 產生：在 `Yeah/` 目錄執行 `.venv/bin/python scripts/analyze_formal_supplement.py`。程式只讀取正式圖像、artifact 與原有逐筆分數，輸出三份分析 CSV；用固定 RNG seed 20261114 進行 paired bootstrap。已用 `shasum -a 256 -c analysis_2026_11_14/formal_sha256.txt` 從正式目錄核對 1150 個原始檔，全部吻合。
 - ASR = 有對抗 cosine 的成功筆數／可評估筆數；Conditional ASR = clean cosine ≥ 固定 threshold 且有對抗 cosine 的成功筆數／同條件筆數；共同樣本 = 五模型 clean eligible 的同一 83 人。Cosine 平均僅對有對抗分數的樣本，drop 為同筆 clean − adversarial 的平均。影像品質對 93 張 PNG 取平均。
 - 模型 hash 和閾值取自 `formal/run.json`；source hash、PNG hash、evaluation key 逐筆核對。正式 PNG 與模型權重需獨立備份。
 
