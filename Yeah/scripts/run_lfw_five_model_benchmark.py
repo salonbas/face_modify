@@ -10,9 +10,14 @@ import os
 import platform
 import sys
 import subprocess
+import warnings
 os.environ.setdefault("NO_ALBUMENTATIONS_UPDATE", "1")
 os.environ.setdefault("HF_HUB_OFFLINE", "1")
 os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
+warnings.filterwarnings("ignore", message=r"`rcond` parameter will change to the default of machine precision",
+                        category=FutureWarning, module=r"insightface\.utils\.transform")
+warnings.filterwarnings("ignore", message=r"`estimate` is deprecated since version 0\.26",
+                        category=FutureWarning, module=r"insightface\.utils\.face_align")
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
