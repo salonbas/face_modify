@@ -1,0 +1,23 @@
+{
+  "arcface_checkpoint_sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+  "attack_config_sha256": "01b6c4d29fd2289d473e8ddf5adbf77724c9edec58731ae6c4f515319793cf75",
+  "dependency_versions": {
+    "cv2": "4.10.0",
+    "numpy": "1.26.4"
+  },
+  "git_commit": "46e24c4b7f56d315cb4d0222f252a8456b40f468",
+  "identity_id": "Carl_Reiner",
+  "mask": "none",
+  "method": "PGD",
+  "output_png_sha256": "546ee38c24865d4fb42d5e7a14dc8fa7c25bd0a4d78ea245fa06835e2202f88a",
+  "preprocessing_version": "lfw_v2_arcface_full_image",
+  "probe_sha256": "8f959f1dd897e05c416c8ce818e10f08d1a6f44bbfa6a6e26e374752f26a0f79",
+  "python_version": "3.12.15",
+  "reference_sha256": "17410772c94af5b0a0d87f7d66d670c1707ca984e6a5dabfff34b26fb88626e3",
+  "runtime_seconds": 19.41331199999695,
+  "schema": 1,
+  "serialized_linf": 0.043137254901960784,
+  "status": "complete",
+  "tensor_linf": 0.039999988032322305,
+  "torch_version": "2.2.2"
+}

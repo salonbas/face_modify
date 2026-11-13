@@ -1,0 +1,23 @@
+{
+  "arcface_checkpoint_sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+  "attack_config_sha256": "0664698f602bc1a5b75bf1df7f604fd568a29667a477060b37000f96529602db",
+  "dependency_versions": {
+    "cv2": "4.10.0",
+    "numpy": "1.26.4"
+  },
+  "git_commit": "ceee768bb5df8e86a5e89be20c0baf48ade23848",
+  "identity_id": "Patrick_McEnroe",
+  "mask": "landmark_superpixel_mask",
+  "method": "MI-FGSM+Mask",
+  "output_png_sha256": "23beb90a9c041403980d443fbb1a3db9e5b7296e859c10f245e49d014b11bde2",
+  "preprocessing_version": "lfw_v2_arcface_full_image",
+  "probe_sha256": "2eff90c76b1893f4c6a1e560038d7a31b0d34c68bdb21d5118a70d4e55906f42",
+  "python_version": "3.12.15",
+  "reference_sha256": "a39937ebba2e95109e255366ac636e6c624a19d5e2eb896a8b32f1dd04b48973",
+  "runtime_seconds": 28.046928124997066,
+  "schema": 1,
+  "serialized_linf": 0.043137254901960784,
+  "status": "complete",
+  "tensor_linf": 0.039999991772221584,
+  "torch_version": "2.2.2"
+}

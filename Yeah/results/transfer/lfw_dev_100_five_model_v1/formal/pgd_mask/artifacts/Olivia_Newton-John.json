@@ -1,0 +1,23 @@
+{
+  "arcface_checkpoint_sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+  "attack_config_sha256": "ef19299a1e71bf7a6f641ef9d23769b9dc709243e59e79053158c299de0e6e40",
+  "dependency_versions": {
+    "cv2": "4.10.0",
+    "numpy": "1.26.4"
+  },
+  "git_commit": "ceee768bb5df8e86a5e89be20c0baf48ade23848",
+  "identity_id": "Olivia_Newton-John",
+  "mask": "landmark_superpixel_mask",
+  "method": "PGD+Mask",
+  "output_png_sha256": "8ed38dc9f7a3593770d00acb01000371c928aff64ca149baaf45764da6de08f6",
+  "preprocessing_version": "lfw_v2_arcface_full_image",
+  "probe_sha256": "2dbfe9104538130344f20366b59ff3af6a0f6d73b45ecb76d21fd28001c28dfe",
+  "python_version": "3.12.15",
+  "reference_sha256": "41bb379b75c91bcff3b1a647db1e71b37655866db9051fffaa3e61a69e162a6a",
+  "runtime_seconds": 22.667803666998225,
+  "schema": 1,
+  "serialized_linf": 0.043137254901960784,
+  "status": "complete",
+  "tensor_linf": 0.039999988032322305,
+  "torch_version": "2.2.2"
+}

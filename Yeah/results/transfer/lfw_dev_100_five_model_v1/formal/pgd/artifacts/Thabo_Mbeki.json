@@ -1,0 +1,23 @@
+{
+  "arcface_checkpoint_sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+  "attack_config_sha256": "01b6c4d29fd2289d473e8ddf5adbf77724c9edec58731ae6c4f515319793cf75",
+  "dependency_versions": {
+    "cv2": "4.10.0",
+    "numpy": "1.26.4"
+  },
+  "git_commit": "220e8bd302ffa8a7fc2ffb9966e6781177968150",
+  "identity_id": "Thabo_Mbeki",
+  "mask": "none",
+  "method": "PGD",
+  "output_png_sha256": "af0c6a3d3eac1f27731ee0263d0e771f5c0f6d9036990a079f2aa6a22942e848",
+  "preprocessing_version": "lfw_v2_arcface_full_image",
+  "probe_sha256": "8f2cbab49ec85dbf0217baa9df98f0e05b2940c26ad0e3238e1aa948c7a2d2f5",
+  "python_version": "3.12.15",
+  "reference_sha256": "989bb24788a2f06b4ad694e492089e2bb3b4ec58d6ff162c0555f0da34fee934",
+  "runtime_seconds": 25.14824345800298,
+  "schema": 1,
+  "serialized_linf": 0.043137254901960784,
+  "status": "complete",
+  "tensor_linf": 0.039999991772221584,
+  "torch_version": "2.2.2"
+}

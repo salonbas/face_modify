@@ -1,0 +1,23 @@
+{
+  "arcface_checkpoint_sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+  "attack_config_sha256": "01b6c4d29fd2289d473e8ddf5adbf77724c9edec58731ae6c4f515319793cf75",
+  "dependency_versions": {
+    "cv2": "4.10.0",
+    "numpy": "1.26.4"
+  },
+  "git_commit": "220e8bd302ffa8a7fc2ffb9966e6781177968150",
+  "identity_id": "Nora_Bendijo",
+  "mask": "none",
+  "method": "PGD",
+  "output_png_sha256": "fc21dbcfc4b56e23b1364c4f9071fde043cacf7328c96421c5df1228b6a4d3dd",
+  "preprocessing_version": "lfw_v2_arcface_full_image",
+  "probe_sha256": "eafb48d211266bab544536e7658f795d578d758d63c803b686a4bea52bb85759",
+  "python_version": "3.12.15",
+  "reference_sha256": "62241b4509c069f2ffd6bcb65dee9b025c3c714618b9e2d7e0b7df6a87ea235a",
+  "runtime_seconds": 24.17603316700115,
+  "schema": 1,
+  "serialized_linf": 0.043137254901960784,
+  "status": "complete",
+  "tensor_linf": 0.039999991772221584,
+  "torch_version": "2.2.2"
+}

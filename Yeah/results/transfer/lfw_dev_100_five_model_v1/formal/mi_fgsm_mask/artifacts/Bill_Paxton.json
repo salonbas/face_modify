@@ -1,0 +1,23 @@
+{
+  "arcface_checkpoint_sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+  "attack_config_sha256": "0664698f602bc1a5b75bf1df7f604fd568a29667a477060b37000f96529602db",
+  "dependency_versions": {
+    "cv2": "4.10.0",
+    "numpy": "1.26.4"
+  },
+  "git_commit": "ceee768bb5df8e86a5e89be20c0baf48ade23848",
+  "identity_id": "Bill_Paxton",
+  "mask": "landmark_superpixel_mask",
+  "method": "MI-FGSM+Mask",
+  "output_png_sha256": "5650a1f34edd1669c41d18e41626eecee3c2e6ebdd0476443cf9d47a2f09cdd8",
+  "preprocessing_version": "lfw_v2_arcface_full_image",
+  "probe_sha256": "b376096a28b438ccb4ca8b54f5a72b3bc2ed3f6069948d51122b249dc99bdf66",
+  "python_version": "3.12.15",
+  "reference_sha256": "dc92f228ac9dd6a08a002a2f5ecdc401c3a1fecbdba2f203c51a0bd51045b731",
+  "runtime_seconds": 25.90914029200212,
+  "schema": 1,
+  "serialized_linf": 0.043137254901960784,
+  "status": "complete",
+  "tensor_linf": 0.039999991772221584,
+  "torch_version": "2.2.2"
+}

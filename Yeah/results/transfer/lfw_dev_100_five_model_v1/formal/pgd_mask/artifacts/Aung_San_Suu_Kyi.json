@@ -1,0 +1,23 @@
+{
+  "arcface_checkpoint_sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+  "attack_config_sha256": "ef19299a1e71bf7a6f641ef9d23769b9dc709243e59e79053158c299de0e6e40",
+  "dependency_versions": {
+    "cv2": "4.10.0",
+    "numpy": "1.26.4"
+  },
+  "git_commit": "220e8bd302ffa8a7fc2ffb9966e6781177968150",
+  "identity_id": "Aung_San_Suu_Kyi",
+  "mask": "landmark_superpixel_mask",
+  "method": "PGD+Mask",
+  "output_png_sha256": "0d63ed40a45d992e3324bd2a86cfa2ee46cbd20f098762e26346ef8422f42666",
+  "preprocessing_version": "lfw_v2_arcface_full_image",
+  "probe_sha256": "146000e833b9a66fedf2e7906cfb4b571f4e35b1d4aa09a3fec64f465b04d1fb",
+  "python_version": "3.12.15",
+  "reference_sha256": "1cb0890f1cb7646a3117a5dab4fcb4998efb7c0a5aec7bfc29986d473624c060",
+  "runtime_seconds": 36.54306799999904,
+  "schema": 1,
+  "serialized_linf": 0.043137254901960784,
+  "status": "complete",
+  "tensor_linf": 0.039999991772221584,
+  "torch_version": "2.2.2"
+}

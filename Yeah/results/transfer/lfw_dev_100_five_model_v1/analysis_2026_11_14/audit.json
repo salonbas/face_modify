@@ -1,0 +1,140 @@
+{
+  "validation_errors": [],
+  "records": 400,
+  "generated_pngs": 372,
+  "skips": 28,
+  "model_evaluations": 2000,
+  "attack_seconds_sum": 10381.272016584968,
+  "attack_mean_per_png_seconds": 27.90664520587357,
+  "first_result_birth_local": "2026-11-13T13:43:08.498431+08:00",
+  "last_result_modify_local": "2026-11-13T19:24:05.986772+08:00",
+  "result_file_span_seconds": 20457.488341,
+  "run": {
+    "config": {
+      "alpha": 0.0002,
+      "epsilon": 0.04,
+      "mask": "landmark_superpixel_mask",
+      "momentum": 1.0,
+      "split": "development_v2",
+      "steps": 200,
+      "tv_weight": 0.0
+    },
+    "environment": {
+      "packages": {
+        "DISTS-pytorch": "0.1",
+        "facenet-pytorch": "2.6.0",
+        "insightface": "0.7.3",
+        "lpips": "0.1.4",
+        "numpy": "1.26.4",
+        "onnxruntime": "1.26.0",
+        "opencv-python": "4.10.0.84",
+        "scikit-image": "0.26.0",
+        "torch": "2.2.2",
+        "torchvision": "0.17.2"
+      },
+      "platform": "macOS-15.6.1-arm64-arm-64bit",
+      "python": "3.12.15"
+    },
+    "git_commit": "b0c1156b97f72e1598b0696a798bba9188948ad4",
+    "model_hashes": {
+      "adaface": "234da6ce931f821e0a8e920063dc2091d8122ea46285c159d2f25d3f762fecb3",
+      "arcface": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+      "facenet": "281cebca8662831adb987a874bdcb36e73f5b1c6dc5ee5878f305e985625d99b",
+      "magface": "cfeba792dada6f1f30d1e118aff077d493dd95dd76c77c30f57f90fd0164ad58",
+      "mobilefacenet": "9cc6e4a75f0e2bf0b1aed94578f144d15175f357bdc05e815e5c4a02b319eb4f"
+    },
+    "platform": "macOS-15.6.1-arm64-arm-64bit",
+    "python": "3.12.15",
+    "split_sha256": "c3adce046fb1a8996bc048253895d906f50f40f80b89207e22551e2f08ce6e91",
+    "thresholds": {
+      "adaface": 0.14697599411010745,
+      "arcface": 0.14072093367576602,
+      "facenet": 0.4088586568832398,
+      "magface": 0.18449912965297702,
+      "mobilefacenet": 0.1633139401674271
+    }
+  },
+  "method_timings": {
+    "PGD": {
+      "counts": {
+        "attacked": 93,
+        "png": 93,
+        "skipped": 7
+      },
+      "attack_seconds": 2058.269435168979,
+      "attack_mean": 22.131929410419126,
+      "attack_min": 17.4047231250006,
+      "attack_max": 37.198692874997505,
+      "eval_earliest": "2026-11-13T05:43:36.340051+00:00",
+      "eval_latest": "2026-11-13T07:16:37.052778+00:00",
+      "quality_means": {
+        "dists": 0.04937679600972001,
+        "lpips": 0.04121569161533668,
+        "serialized_linf": 0.043137254901960784,
+        "ssim": 0.968300421391764
+      }
+    },
+    "MI-FGSM": {
+      "counts": {
+        "attacked": 93,
+        "png": 93,
+        "skipped": 7
+      },
+      "attack_seconds": 3414.6162669230034,
+      "attack_mean": 36.71630394540864,
+      "attack_min": 17.65431629199884,
+      "attack_max": 55.123529833996145,
+      "eval_earliest": "2026-11-13T07:17:26.937178+00:00",
+      "eval_latest": "2026-11-13T08:40:42.093768+00:00",
+      "quality_means": {
+        "dists": 0.06977645171585903,
+        "lpips": 0.08390859602600016,
+        "serialized_linf": 0.043137254901960784,
+        "ssim": 0.9355503468103307
+      }
+    },
+    "PGD+Mask": {
+      "counts": {
+        "attacked": 93,
+        "png": 93,
+        "skipped": 7
+      },
+      "attack_seconds": 2458.129932620941,
+      "attack_mean": 26.431504651838075,
+      "attack_min": 18.568312834002427,
+      "attack_max": 39.16503720900073,
+      "eval_earliest": "2026-11-13T08:41:34.866234+00:00",
+      "eval_latest": "2026-11-13T10:23:23.119677+00:00",
+      "quality_means": {
+        "dists": 0.019025967326215518,
+        "lpips": 0.01426101387828909,
+        "serialized_linf": 0.043137254901960784,
+        "ssim": 0.9859389534560583
+      }
+    },
+    "MI-FGSM+Mask": {
+      "counts": {
+        "attacked": 93,
+        "png": 93,
+        "skipped": 7
+      },
+      "attack_seconds": 2450.2563818720446,
+      "attack_mean": 26.346842815828435,
+      "attack_min": 20.908797957999923,
+      "attack_max": 32.36491504099831,
+      "eval_earliest": "2026-11-13T10:23:56.341357+00:00",
+      "eval_latest": "2026-11-13T11:24:05.970903+00:00",
+      "quality_means": {
+        "dists": 0.025695012461754582,
+        "lpips": 0.02492815535014836,
+        "serialized_linf": 0.043137254901960784,
+        "ssim": 0.9767052121059869
+      }
+    }
+  },
+  "outputs": {
+    "png_bytes": 35729216,
+    "formal_bytes": 38497366,
+    "file_checksums": 1150
+  }
+}

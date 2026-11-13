@@ -1,0 +1,23 @@
+{
+  "arcface_checkpoint_sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+  "attack_config_sha256": "ef19299a1e71bf7a6f641ef9d23769b9dc709243e59e79053158c299de0e6e40",
+  "dependency_versions": {
+    "cv2": "4.10.0",
+    "numpy": "1.26.4"
+  },
+  "git_commit": "220e8bd302ffa8a7fc2ffb9966e6781177968150",
+  "identity_id": "Dino_de_Laurentis",
+  "mask": "landmark_superpixel_mask",
+  "method": "PGD+Mask",
+  "output_png_sha256": "edca6c72062adfcafe7515511b40a11c381097fb3c5a7181df6cd4f6dbb4f415",
+  "preprocessing_version": "lfw_v2_arcface_full_image",
+  "probe_sha256": "3c7b20b96b6c6bbe3300f73c053e7212a462a20af85cffaa970bc91fade5a759",
+  "python_version": "3.12.15",
+  "reference_sha256": "ed964e6ae2cbdec7cfd60f1309735366c1638094f8509b28d1f660f9dfb71cb9",
+  "runtime_seconds": 18.84224216700386,
+  "schema": 1,
+  "serialized_linf": 0.043137254901960784,
+  "status": "complete",
+  "tensor_linf": 0.039999988032322305,
+  "torch_version": "2.2.2"
+}

@@ -1,0 +1,23 @@
+{
+  "arcface_checkpoint_sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+  "attack_config_sha256": "0664698f602bc1a5b75bf1df7f604fd568a29667a477060b37000f96529602db",
+  "dependency_versions": {
+    "cv2": "4.10.0",
+    "numpy": "1.26.4"
+  },
+  "git_commit": "ceee768bb5df8e86a5e89be20c0baf48ade23848",
+  "identity_id": "Thabo_Mbeki",
+  "mask": "landmark_superpixel_mask",
+  "method": "MI-FGSM+Mask",
+  "output_png_sha256": "b8cbca269d7e2a7c3c8654c791375888143d85ce07d40c3c1c8f0a7e717bca92",
+  "preprocessing_version": "lfw_v2_arcface_full_image",
+  "probe_sha256": "8f2cbab49ec85dbf0217baa9df98f0e05b2940c26ad0e3238e1aa948c7a2d2f5",
+  "python_version": "3.12.15",
+  "reference_sha256": "989bb24788a2f06b4ad694e492089e2bb3b4ec58d6ff162c0555f0da34fee934",
+  "runtime_seconds": 28.008495791000314,
+  "schema": 1,
+  "serialized_linf": 0.043137254901960784,
+  "status": "complete",
+  "tensor_linf": 0.039999991772221584,
+  "torch_version": "2.2.2"
+}

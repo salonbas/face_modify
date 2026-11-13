@@ -1,0 +1,79 @@
+{
+  "environment": {
+    "packages": {
+      "DISTS-pytorch": "0.1",
+      "facenet-pytorch": "2.6.0",
+      "insightface": "0.7.3",
+      "lpips": "0.1.4",
+      "numpy": "1.26.4",
+      "onnxruntime": "1.26.0",
+      "opencv-python": "4.10.0.84",
+      "scikit-image": "0.26.0",
+      "torch": "2.2.2",
+      "torchvision": "0.17.2"
+    },
+    "platform": "macOS-15.6.1-arm64-arm-64bit",
+    "python": "3.12.15"
+  },
+  "evaluated_at_utc": "2026-11-13T09:24:52.819044+00:00",
+  "identity_id": "Mark_Wahlberg",
+  "key": {
+    "artifact_sha256": "66879f28b9ffe6f4daf37b1e637c597d15abaa3d561500f2892acc8f6a020f6b",
+    "image_sha256": "ae1200146af292c93b5ec30b117b6820d119f4f10a871034e579f777c143fd43",
+    "model_hashes": {
+      "adaface": "234da6ce931f821e0a8e920063dc2091d8122ea46285c159d2f25d3f762fecb3",
+      "arcface": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+      "facenet": "281cebca8662831adb987a874bdcb36e73f5b1c6dc5ee5878f305e985625d99b",
+      "magface": "cfeba792dada6f1f30d1e118aff077d493dd95dd76c77c30f57f90fd0164ad58",
+      "mobilefacenet": "9cc6e4a75f0e2bf0b1aed94578f144d15175f357bdc05e815e5c4a02b319eb4f"
+    },
+    "probe_sha256": "23dbfe7454e4968f32f52f6213ded6fff6dd16216d02a52d186abfc9d7ab9fb3",
+    "reference_sha256": "fdc2b4401ca2d08b2c3454003198396f232da8a0fef94fbb9cf8ce689628079b",
+    "thresholds": {
+      "adaface": 0.14697599411010745,
+      "arcface": 0.14072093367576602,
+      "facenet": 0.4088586568832398,
+      "magface": 0.18449912965297702,
+      "mobilefacenet": 0.1633139401674271
+    }
+  },
+  "method": "PGD+Mask",
+  "models": {
+    "adaface": {
+      "adv_cosine": 0.1962776482105255,
+      "clean_cosine": 0.3947228193283081,
+      "eligible": true,
+      "success": false
+    },
+    "arcface": {
+      "adv_cosine": 0.09600018709897995,
+      "clean_cosine": 0.5149841886777653,
+      "eligible": true,
+      "success": true
+    },
+    "facenet": {
+      "adv_cosine": 0.32854900700438106,
+      "clean_cosine": 0.5644468741949646,
+      "eligible": true,
+      "success": true
+    },
+    "magface": {
+      "adv_cosine": 0.30498904275123717,
+      "clean_cosine": 0.6203033308276851,
+      "eligible": true,
+      "success": false
+    },
+    "mobilefacenet": {
+      "adv_cosine": 0.17012333869934082,
+      "clean_cosine": 0.34895914793014526,
+      "eligible": true,
+      "success": false
+    }
+  },
+  "quality": {
+    "dists": 0.020830631256103516,
+    "lpips": 0.024769339710474014,
+    "serialized_linf": 0.043137254901960784,
+    "ssim": 0.9838483333587646
+  }
+}

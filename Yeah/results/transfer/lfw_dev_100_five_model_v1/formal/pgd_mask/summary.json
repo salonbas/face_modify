@@ -1,0 +1,71 @@
+{
+  "attacked": 93,
+  "complete": 100,
+  "expected": 100,
+  "is_complete": true,
+  "method": "PGD+Mask",
+  "metrics": {
+    "joint_eligible": 83,
+    "models": {
+      "adaface": {
+        "clean_eligible": 93,
+        "clean_errors": 1,
+        "clean_tar": 0.93,
+        "clean_valid": 99,
+        "conditional_asr": 0.22093023255813954,
+        "conditional_denominator": 86,
+        "paired_asr": 0.2289156626506024,
+        "paired_denominator": 83
+      },
+      "arcface": {
+        "clean_eligible": 93,
+        "clean_errors": 7,
+        "clean_tar": 0.93,
+        "clean_valid": 93,
+        "conditional_asr": 0.8172043010752689,
+        "conditional_denominator": 93,
+        "paired_asr": 0.8433734939759037,
+        "paired_denominator": 83
+      },
+      "facenet": {
+        "clean_eligible": 96,
+        "clean_errors": 0,
+        "clean_tar": 0.96,
+        "clean_valid": 100,
+        "conditional_asr": 0.20224719101123595,
+        "conditional_denominator": 89,
+        "paired_asr": 0.20481927710843373,
+        "paired_denominator": 83
+      },
+      "magface": {
+        "clean_eligible": 93,
+        "clean_errors": 7,
+        "clean_tar": 0.93,
+        "clean_valid": 93,
+        "conditional_asr": 0.1935483870967742,
+        "conditional_denominator": 93,
+        "paired_asr": 0.1927710843373494,
+        "paired_denominator": 83
+      },
+      "mobilefacenet": {
+        "clean_eligible": 93,
+        "clean_errors": 7,
+        "clean_tar": 0.93,
+        "clean_valid": 93,
+        "conditional_asr": 0.11827956989247312,
+        "conditional_denominator": 93,
+        "paired_asr": 0.12048192771084337,
+        "paired_denominator": 83
+      }
+    },
+    "original_denominator": 100
+  },
+  "metrics_scope": "full_cohort",
+  "quality_means": {
+    "dists": 0.019025967326215518,
+    "lpips": 0.01426101387828909,
+    "serialized_linf": 0.043137254901960784,
+    "ssim": 0.9859389534560583
+  },
+  "skipped": 7
+}

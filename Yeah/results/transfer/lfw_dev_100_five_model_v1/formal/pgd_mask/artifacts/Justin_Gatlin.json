@@ -1,0 +1,23 @@
+{
+  "arcface_checkpoint_sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+  "attack_config_sha256": "ef19299a1e71bf7a6f641ef9d23769b9dc709243e59e79053158c299de0e6e40",
+  "dependency_versions": {
+    "cv2": "4.10.0",
+    "numpy": "1.26.4"
+  },
+  "git_commit": "ceee768bb5df8e86a5e89be20c0baf48ade23848",
+  "identity_id": "Justin_Gatlin",
+  "mask": "landmark_superpixel_mask",
+  "method": "PGD+Mask",
+  "output_png_sha256": "11460a01ad5b5dfe809576f1059e8b7911988416400e2d5c88e1fe5624dfd773",
+  "preprocessing_version": "lfw_v2_arcface_full_image",
+  "probe_sha256": "9152adc024faf9937c56087210e6cd10c217df242dc0810b8981cb2f9010c1ef",
+  "python_version": "3.12.15",
+  "reference_sha256": "b6b82c11817e6aa0f233c4783c633d70c1b94dafce0eca2e5ed649a85d008659",
+  "runtime_seconds": 20.871048499997414,
+  "schema": 1,
+  "serialized_linf": 0.043137254901960784,
+  "status": "complete",
+  "tensor_linf": 0.039999991772221584,
+  "torch_version": "2.2.2"
+}

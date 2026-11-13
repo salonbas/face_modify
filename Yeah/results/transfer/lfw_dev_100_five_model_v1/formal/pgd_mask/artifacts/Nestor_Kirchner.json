@@ -1,0 +1,23 @@
+{
+  "arcface_checkpoint_sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+  "attack_config_sha256": "ef19299a1e71bf7a6f641ef9d23769b9dc709243e59e79053158c299de0e6e40",
+  "dependency_versions": {
+    "cv2": "4.10.0",
+    "numpy": "1.26.4"
+  },
+  "git_commit": "ceee768bb5df8e86a5e89be20c0baf48ade23848",
+  "identity_id": "Nestor_Kirchner",
+  "mask": "landmark_superpixel_mask",
+  "method": "PGD+Mask",
+  "output_png_sha256": "8841aa3dec2b335db8a65b03c9dc5613bda1ecc02098f4e8a442ba72ba3660ff",
+  "preprocessing_version": "lfw_v2_arcface_full_image",
+  "probe_sha256": "8ee38edb880282049147fb303d8b0f4f41002e4f9f830543750f5b9c174be3fd",
+  "python_version": "3.12.15",
+  "reference_sha256": "b5f852fd5e8d8f614eca05ce80c6e70e86b0c13c3776d8cf6094807a5d9fae11",
+  "runtime_seconds": 25.974154791998444,
+  "schema": 1,
+  "serialized_linf": 0.043137254901960784,
+  "status": "complete",
+  "tensor_linf": 0.039999991772221584,
+  "torch_version": "2.2.2"
+}

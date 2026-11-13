@@ -1,0 +1,23 @@
+{
+  "arcface_checkpoint_sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+  "attack_config_sha256": "0664698f602bc1a5b75bf1df7f604fd568a29667a477060b37000f96529602db",
+  "dependency_versions": {
+    "cv2": "4.10.0",
+    "numpy": "1.26.4"
+  },
+  "git_commit": "ceee768bb5df8e86a5e89be20c0baf48ade23848",
+  "identity_id": "Bo_Pelini",
+  "mask": "landmark_superpixel_mask",
+  "method": "MI-FGSM+Mask",
+  "output_png_sha256": "6ef6116a3b858c43ef643ebc1d2f4103ce537d634fb1a3bf1a744e6a609f1ce0",
+  "preprocessing_version": "lfw_v2_arcface_full_image",
+  "probe_sha256": "9516c92fe12e71f55cd9fa9071c43e11cd50009d4044cd1322358dac9af1bd97",
+  "python_version": "3.12.15",
+  "reference_sha256": "b35aa45b9c7537f7a78968b06e5125ae4c89bb07fb3df144f07aadc9b2c91c34",
+  "runtime_seconds": 23.86785816599877,
+  "schema": 1,
+  "serialized_linf": 0.043137254901960784,
+  "status": "complete",
+  "tensor_linf": 0.039999991772221584,
+  "torch_version": "2.2.2"
+}

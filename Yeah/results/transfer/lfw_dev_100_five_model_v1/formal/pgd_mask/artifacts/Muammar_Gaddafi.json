@@ -1,0 +1,23 @@
+{
+  "arcface_checkpoint_sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+  "attack_config_sha256": "ef19299a1e71bf7a6f641ef9d23769b9dc709243e59e79053158c299de0e6e40",
+  "dependency_versions": {
+    "cv2": "4.10.0",
+    "numpy": "1.26.4"
+  },
+  "git_commit": "ceee768bb5df8e86a5e89be20c0baf48ade23848",
+  "identity_id": "Muammar_Gaddafi",
+  "mask": "landmark_superpixel_mask",
+  "method": "PGD+Mask",
+  "output_png_sha256": "26173b00bf0a41dcc97ac9ac16d4b389f6f92a7c637782ea54ec6ba1877b6972",
+  "preprocessing_version": "lfw_v2_arcface_full_image",
+  "probe_sha256": "f1c12b55d0d435384cf0cecb2715f24e4e962bd94e3aed0f500b99c705547946",
+  "python_version": "3.12.15",
+  "reference_sha256": "ad48b7ba7fe6656fc3fd01be949b61ad3b9c0594f7660bbb239501959d3e3726",
+  "runtime_seconds": 24.340759374994377,
+  "schema": 1,
+  "serialized_linf": 0.043137254901960784,
+  "status": "complete",
+  "tensor_linf": 0.039999991772221584,
+  "torch_version": "2.2.2"
+}

@@ -1,0 +1,23 @@
+{
+  "arcface_checkpoint_sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+  "attack_config_sha256": "0664698f602bc1a5b75bf1df7f604fd568a29667a477060b37000f96529602db",
+  "dependency_versions": {
+    "cv2": "4.10.0",
+    "numpy": "1.26.4"
+  },
+  "git_commit": "ceee768bb5df8e86a5e89be20c0baf48ade23848",
+  "identity_id": "Leszek_Miller",
+  "mask": "landmark_superpixel_mask",
+  "method": "MI-FGSM+Mask",
+  "output_png_sha256": "2a683cd29d33262b9f109e0e18c7aef540ef123ef0ac6d406112f3da83563610",
+  "preprocessing_version": "lfw_v2_arcface_full_image",
+  "probe_sha256": "ccda714d7446378d0b3b3b6417554ccf4cbc78ddea46d1e354f14643f310d07a",
+  "python_version": "3.12.15",
+  "reference_sha256": "1e96d0338cc374b169b3fdb00f248c290916ef80dc1019a7f8772b0ed0137cb2",
+  "runtime_seconds": 24.900220084004104,
+  "schema": 1,
+  "serialized_linf": 0.043137254901960784,
+  "status": "complete",
+  "tensor_linf": 0.039999988032322305,
+  "torch_version": "2.2.2"
+}

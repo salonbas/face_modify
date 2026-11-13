@@ -1,0 +1,23 @@
+{
+  "arcface_checkpoint_sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+  "attack_config_sha256": "0664698f602bc1a5b75bf1df7f604fd568a29667a477060b37000f96529602db",
+  "dependency_versions": {
+    "cv2": "4.10.0",
+    "numpy": "1.26.4"
+  },
+  "git_commit": "ceee768bb5df8e86a5e89be20c0baf48ade23848",
+  "identity_id": "Cindy_Crawford",
+  "mask": "landmark_superpixel_mask",
+  "method": "MI-FGSM+Mask",
+  "output_png_sha256": "6345e2fc56ab6b173857aff1b2075f338f132504527e983ddcd1f4e3f2dfee5c",
+  "preprocessing_version": "lfw_v2_arcface_full_image",
+  "probe_sha256": "d2ac77ebc64c5806ec89527cd1052082b98a05a9e50dd4ba25ac2970b65ce4d5",
+  "python_version": "3.12.15",
+  "reference_sha256": "321ad5590582f19d273a419d4d3564cdfe324a99824f3a7aaf23a967e7ed95b9",
+  "runtime_seconds": 20.908797957999923,
+  "schema": 1,
+  "serialized_linf": 0.043137254901960784,
+  "status": "complete",
+  "tensor_linf": 0.039999991772221584,
+  "torch_version": "2.2.2"
+}

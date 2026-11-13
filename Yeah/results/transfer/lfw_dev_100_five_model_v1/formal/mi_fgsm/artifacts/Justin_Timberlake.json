@@ -1,0 +1,23 @@
+{
+  "arcface_checkpoint_sha256": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+  "attack_config_sha256": "8803257a7bc23788b16e3aa2fa020c8f2c4e763d8fa6da34db0c425d31233475",
+  "dependency_versions": {
+    "cv2": "4.10.0",
+    "numpy": "1.26.4"
+  },
+  "git_commit": "220e8bd302ffa8a7fc2ffb9966e6781177968150",
+  "identity_id": "Justin_Timberlake",
+  "mask": "none",
+  "method": "MI-FGSM",
+  "output_png_sha256": "d71a0f10bfa78559b9c36df063353f86d3dcef5b4fb71d523fb12c2d6d6b3a27",
+  "preprocessing_version": "lfw_v2_arcface_full_image",
+  "probe_sha256": "f4ac2cbfc24833807c132ddded4ccd6d166c078c6f798148f6328d6dbd4d79ef",
+  "python_version": "3.12.15",
+  "reference_sha256": "214c37c30bec43daa3204390e4bb2f2e13a6151e52303ca5866f59bb7f2d8f71",
+  "runtime_seconds": 37.371656582996366,
+  "schema": 1,
+  "serialized_linf": 0.043137254901960784,
+  "status": "complete",
+  "tensor_linf": 0.039999991772221584,
+  "torch_version": "2.2.2"
+}
