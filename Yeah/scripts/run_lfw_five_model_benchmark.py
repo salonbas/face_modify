@@ -49,6 +49,7 @@ def rows(path: Path) -> list[dict[str, str]]:
 def preflight() -> dict:
     problems: list[str] = []
     evidence: dict = {"attack_contract": CONTRACT, "models": {}, "calibration": {}}
+    dev_ids: set[str] = set()
     try:
         dev, oos = rows(SPLITS / "development.csv"), rows(SPLITS / "oos.csv")
         dev_ids = {r["identity_id"] for r in dev}
@@ -162,6 +163,8 @@ def preflight() -> dict:
                 problems.append("Development 100 clean eligibility manifest or denominator mismatch")
             if len(value["rows"]) != 100 or set(value["summary"]["models"]) != set(MODELS):
                 problems.append("Development 100 clean eligibility is incomplete")
+            if {r["identity_id"] for r in value["rows"]} != dev_ids:
+                problems.append("Development 100 clean eligibility identities differ from split")
             if value["thresholds"] != evidence["calibration"]:
                 problems.append("Development 100 eligibility thresholds differ from calibration")
             if value.get("checkpoint_sha256") != {name: item.get("sha256") for name, item in evidence["models"].items()}:

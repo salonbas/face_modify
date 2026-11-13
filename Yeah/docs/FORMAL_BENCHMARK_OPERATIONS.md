@@ -25,6 +25,10 @@ Re-run the same command to resume. Use `--verify` to check saved checksums and
 score provenance, or `--verify --reevaluate` to recompute all five victim
 scores and SSIM/LPIPS/DISTS from saved PNGs without generating attacks.
 The run prints completed/total and ETA, and writes `formal/run.log`.
+If ArcFace could not detect a face in the frozen clean A/B pair, the runner
+writes a per-method `status: skipped` record with the clean detection error,
+without creating an attack PNG. Summaries retain that identity in the original
+100-person denominator and exclude it from attack-success denominators.
 
 A safe future run must use the artifact contract in
 `advface/attack_artifact.py`: write B_adv and complete metadata, validate both,

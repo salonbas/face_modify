@@ -28,6 +28,7 @@ from advface.models import load_embedder
 
 OUT = ROOT / 'results/transfer/lfw_dev_100_five_model_v1/formal'
 SPLIT = ROOT / 'data/datasets/lfw/evaluation_splits/v2/development.csv'
+CLEAN_ELIGIBILITY = ROOT / 'results/transfer/lfw_dev_100_five_model_v1/clean_eligibility.json'
 METHODS = ('PGD', 'MI-FGSM', 'PGD+Mask', 'MI-FGSM+Mask')
 CONFIG = {'epsilon': .04, 'alpha': .0002, 'steps': 200, 'momentum': 1.0, 'tv_weight': 0.0,
           'mask': 'landmark_superpixel_mask', 'split': 'development_v2'}
@@ -59,6 +60,34 @@ def pairs(identity):
 def paths(method, ident):
     base = OUT / method.lower().replace('-', '_').replace('+', '_')
     return base / 'images' / f'{ident}.png', base / 'artifacts' / f'{ident}.json', base / 'evaluations' / f'{ident}.json'
+
+
+def record_clean_skip(row, method, clean, thresholds, model_hashes, *, verify=False):
+    ident = row['identity_id']
+    png, meta, target = paths(method, ident)
+    if png.exists() or meta.exists():
+        raise ValueError(f'clean-ineligible identity has an attack artifact: {ident}')
+    source = clean['models']['arcface']
+    if source['clean_cosine'] is not None or not source.get('error'):
+        raise ValueError(f'clean skip requires a recorded ArcFace detection error: {ident}')
+    key = {'clean_eligibility_sha256': sha256(CLEAN_ELIGIBILITY),
+           'reference_sha256': sha256(ROOT / row['reference_image']),
+           'probe_sha256': sha256(ROOT / row['probe_image']),
+           'thresholds': thresholds, 'model_hashes': model_hashes}
+    expected = {'identity_id': ident, 'method': method, 'status': 'skipped',
+                'reason': 'arcface_clean_detection_failed', 'key': key,
+                'models': clean['models'], 'quality': None}
+    if target.is_file():
+        existing = json.loads(target.read_text())
+        if any(existing.get(k) != v for k, v in expected.items()):
+            raise ValueError(f'stale or invalid clean-skip record: {target}')
+        return existing
+    if verify:
+        raise FileNotFoundError(f'missing clean-skip record: {target}')
+    record = dict(expected, environment=environment(),
+                  evaluated_at_utc=datetime.now(timezone.utc).isoformat())
+    write_json(target, record)
+    return record
 
 
 def provenance(row, method):
@@ -176,9 +205,11 @@ def summary(method, selected, thresholds):
             continue
         record = json.loads(target.read_text())
         records.append(record)
+    attacked = [r for r in records if r.get('status') != 'skipped']
     result = {'method': method, 'complete': len(records), 'expected': len(selected),
+              'attacked': len(attacked), 'skipped': len(records) - len(attacked),
               'metrics': summarize(records, thresholds) if records else None,
-              'quality_means': {k: float(np.mean([r['quality'][k] for r in records])) for k in ('serialized_linf', 'ssim', 'lpips', 'dists')} if records else None}
+              'quality_means': {k: float(np.mean([r['quality'][k] for r in attacked])) for k in ('serialized_linf', 'ssim', 'lpips', 'dists')} if attacked else None}
     write_json(OUT / method.lower().replace('-', '_').replace('+', '_') / 'summary.json', result)
     return result
 
@@ -193,6 +224,7 @@ def run(args, preflight):
     methods = [args.method] if args.method else METHODS
     thresholds = load_v2_thresholds(ROOT)
     model_hashes = {name: sha256(path) for name, path in __import__('run_lfw_five_model_benchmark').MODELS.items()}
+    eligibility = {r['identity_id']: r for r in json.loads(CLEAN_ELIGIBILITY.read_text())['rows']}
     if args.worker:
         if not args.identity or not args.method:
             raise ValueError('worker requires identity and method')
@@ -224,14 +256,19 @@ def run(args, preflight):
             ident = row['identity_id']
             current = f'{method}/{ident}'
             try:
-                if args.execute:
+                clean = eligibility[ident]
+                if clean['models']['arcface']['clean_cosine'] is None:
+                    record_clean_skip(row, method, clean, thresholds, model_hashes, verify=args.verify)
+                elif args.execute:
                     command = [sys.executable, str(ROOT / 'scripts/run_lfw_five_model_benchmark.py'), '--worker', '--identity', ident, '--method', method]
                     png, meta, _ = paths(method, ident)
                     if not png.exists() and not meta.exists():
                         subprocess.run(command, cwd=ROOT, check=True, env=dict(os.environ, HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1'))
                     else:
                         check_image(png, meta, provenance(row, method), load_bgr(ROOT / row['probe_image']), method)
-                if args.verify and not args.reevaluate:
+                if clean['models']['arcface']['clean_cosine'] is None:
+                    pass
+                elif args.verify and not args.reevaluate:
                     png, meta, target = paths(method, ident)
                     check_image(png, meta, provenance(row, method), load_bgr(ROOT / row['probe_image']), method)
                     saved = json.loads(target.read_text())
