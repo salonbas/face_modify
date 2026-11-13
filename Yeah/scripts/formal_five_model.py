@@ -197,7 +197,7 @@ def evaluate(row, method, thresholds, model_hashes, *, force=False):
     return result, True
 
 
-def summary(method, selected, thresholds):
+def summary(method, selected, thresholds, *, identity=None):
     records = []
     for row in selected:
         target = paths(method, row['identity_id'])[2]
@@ -207,10 +207,13 @@ def summary(method, selected, thresholds):
         records.append(record)
     attacked = [r for r in records if r.get('status') != 'skipped']
     result = {'method': method, 'complete': len(records), 'expected': len(selected),
+              'is_complete': len(records) == len(selected),
+              'metrics_scope': 'full_cohort' if len(records) == len(selected) else 'completed_records_only',
               'attacked': len(attacked), 'skipped': len(records) - len(attacked),
               'metrics': summarize(records, thresholds) if records else None,
               'quality_means': {k: float(np.mean([r['quality'][k] for r in attacked])) for k in ('serialized_linf', 'ssim', 'lpips', 'dists')} if attacked else None}
-    write_json(OUT / method.lower().replace('-', '_').replace('+', '_') / 'summary.json', result)
+    filename = f'summary_{identity}.json' if identity else 'summary.json'
+    write_json(OUT / method.lower().replace('-', '_').replace('+', '_') / filename, result)
     return result
 
 
@@ -250,11 +253,16 @@ def run(args, preflight):
         raise ValueError('no saved run to verify')
     total = len(selected) * len(methods)
     done, started = 0, time.monotonic()
+    pending_new = sum(not paths(method, row['identity_id'])[2].is_file()
+                      for method in methods for row in selected)
+    new_count, new_seconds = 0, 0.0
     log = OUT / 'run.log'
     for method in methods:
         for row in selected:
             ident = row['identity_id']
             current = f'{method}/{ident}'
+            row_started = time.monotonic()
+            missing_before = not paths(method, ident)[2].is_file()
             try:
                 clean = eligibility[ident]
                 if clean['models']['arcface']['clean_cosine'] is None:
@@ -280,15 +288,23 @@ def run(args, preflight):
                 else:
                     evaluate(row, method, thresholds, model_hashes, force=args.reevaluate)
                 done += 1
+                if missing_before:
+                    new_count += 1
+                    new_seconds += time.monotonic() - row_started
                 elapsed = time.monotonic() - started
-                message = f'[{done}/{total}] {current} elapsed={elapsed:.0f}s ETA={elapsed/done*(total-done):.0f}s'
+                remaining_new = pending_new - new_count
+                eta = ('0s' if remaining_new == 0 else
+                       f'{new_seconds/new_count*remaining_new:.0f}s' if new_count else 'pending')
+                message = f'[{done}/{total}] {current} elapsed={elapsed:.0f}s remaining_new={remaining_new} ETA={eta}'
                 print(message, flush=True)
                 with log.open('a') as stream: stream.write(message + '\n')
+                if not args.identity:
+                    summary(method, selected, thresholds)
             except (Exception, KeyboardInterrupt) as exc:
                 message = f'ERROR {current}: {type(exc).__name__}: {exc}'
                 print(message, file=sys.stderr, flush=True)
                 with log.open('a') as stream: stream.write(message + '\n')
                 raise
-        result = summary(method, selected, thresholds)
+        result = summary(method, selected, thresholds, identity=args.identity)
         print(json.dumps(result, ensure_ascii=False), flush=True)
     return 0

@@ -70,3 +70,10 @@ def test_clean_detection_failure_is_recorded_without_attack(tmp_path, monkeypatc
     assert summary["complete"] == 1 and summary["attacked"] == 0 and summary["skipped"] == 1
     assert summary["metrics"]["original_denominator"] == 1
     assert summary["metrics"]["models"]["arcface"]["conditional_denominator"] == 0
+    other = next(r for r in formal.pairs(None) if r["identity_id"] != "Doug_Collins")
+    partial = formal.summary("PGD", [row, other], thresholds)
+    assert partial["complete"] == 1 and partial["expected"] == 2
+    assert partial["is_complete"] is False and partial["metrics_scope"] == "completed_records_only"
+    formal.summary("PGD", [row], thresholds, identity="Doug_Collins")
+    assert (tmp_path / "pgd/summary_Doug_Collins.json").is_file()
+    assert json.loads((tmp_path / "pgd/summary.json").read_text())["expected"] == 2

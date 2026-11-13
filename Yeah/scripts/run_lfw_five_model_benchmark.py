@@ -18,6 +18,12 @@ warnings.filterwarnings("ignore", message=r"`rcond` parameter will change to the
                         category=FutureWarning, module=r"insightface\.utils\.transform")
 warnings.filterwarnings("ignore", message=r"`estimate` is deprecated since version 0\.26",
                         category=FutureWarning, module=r"insightface\.utils\.face_align")
+warnings.filterwarnings("ignore", message=r"`rcond` parameter will change to the default of machine precision",
+                        category=FutureWarning, module=r".*matlab_cp2tform")
+warnings.filterwarnings("ignore", message=r"The parameter 'pretrained' is deprecated since 0\.13",
+                        category=UserWarning, module=r"torchvision\.models\._utils")
+warnings.filterwarnings("ignore", message=r"Arguments other than a weight enum or `None` for 'weights' are deprecated",
+                        category=UserWarning, module=r"torchvision\.models\._utils")
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
