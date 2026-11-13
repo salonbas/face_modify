@@ -5,6 +5,7 @@ from __future__ import annotations
 import csv
 import gc
 import hashlib
+import importlib.metadata
 import json
 import sys
 import time
@@ -20,6 +21,13 @@ from advface.models import load_embedder
 
 MANIFEST = ROOT / "data/datasets/lfw/evaluation_splits/v2/development.csv"
 OUTPUT = ROOT / "results/transfer/lfw_dev_100_five_model_v1/clean_eligibility.json"
+CHECKPOINTS = {
+    "arcface": ROOT / "models/insightface/buffalo_l/w600k_r50.onnx",
+    "facenet": ROOT / "models/facenet/20180402-114759-vggface2.pt",
+    "adaface": ROOT / "models/adaface/adaface_ir50_ms1mv2.ckpt",
+    "mobilefacenet": ROOT / "models/insightface/buffalo_sc/w600k_mbf.onnx",
+    "magface": ROOT / "models/magface/magface_iresnet100_ms1mv2.pth",
+}
 
 
 def main() -> int:
@@ -56,6 +64,11 @@ def main() -> int:
         gc.collect()
     report = {"manifest_sha256": hashlib.sha256(MANIFEST.read_bytes()).hexdigest(),
               "thresholds": thresholds, "timings_seconds": timings,
+              "checkpoint_sha256": {name: hashlib.sha256(path.read_bytes()).hexdigest()
+                                    for name, path in CHECKPOINTS.items()},
+              "environment": {name: importlib.metadata.version(name) for name in
+                              ("torch", "numpy", "opencv-python", "onnxruntime",
+                               "insightface", "facenet-pytorch")},
               "summary": summarize(rows, thresholds), "rows": rows}
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     temp = OUTPUT.with_suffix(".json.tmp")

@@ -4,6 +4,7 @@ from __future__ import annotations
 import csv
 import gc
 import hashlib
+import importlib.metadata
 import json
 import os
 import platform
@@ -14,7 +15,6 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
-from skimage.metrics import structural_similarity
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -31,6 +31,13 @@ SPLIT = ROOT / 'data/datasets/lfw/evaluation_splits/v2/development.csv'
 METHODS = ('PGD', 'MI-FGSM', 'PGD+Mask', 'MI-FGSM+Mask')
 CONFIG = {'epsilon': .04, 'alpha': .0002, 'steps': 200, 'momentum': 1.0, 'tv_weight': 0.0,
           'mask': 'landmark_superpixel_mask', 'split': 'development_v2'}
+
+
+def environment():
+    packages = ('torch', 'torchvision', 'numpy', 'opencv-python', 'onnxruntime',
+                'insightface', 'facenet-pytorch', 'scikit-image', 'lpips', 'DISTS-pytorch')
+    return {'python': platform.python_version(), 'platform': platform.platform(),
+            'packages': {name: importlib.metadata.version(name) for name in packages}}
 
 
 def write_json(path, value):
@@ -69,7 +76,10 @@ def provenance(row, method):
 
 
 def check_image(png, meta, expected, probe, method):
-    record = validate(png, meta, expected, probe)
+    # The creation commit is retained in metadata, but a later analysis commit
+    # must not invalidate otherwise identical saved attack inputs and bytes.
+    validation = {key: value for key, value in expected.items() if key != 'git_commit'}
+    record = validate(png, meta, validation, probe)
     adv = load_bgr(png)
     linf = float(np.abs(adv.astype(np.int16) - probe.astype(np.int16)).max() / 255)
     if linf > CONFIG['epsilon'] + 1/255 + 1e-12:
@@ -146,11 +156,14 @@ def evaluate(row, method, thresholds, model_hashes, *, force=False):
         finally:
             del embedder
             gc.collect()
-    clean_rgb, adv_rgb = probe[:, :, ::-1], adv[:, :, ::-1]
-    quality = {'serialized_linf': artifact['serialized_linf'],
-               'ssim': float(structural_similarity(clean_rgb, adv_rgb, channel_axis=2, data_range=255))}
+    from scripts.run_lfw_dev_v2 import metrics_from_png
+    linf, ssim, lpips, dists = metrics_from_png(ROOT / row['probe_image'], png)
+    quality = {'serialized_linf': linf, 'ssim': ssim, 'lpips': lpips, 'dists': dists}
+    if abs(linf - artifact['serialized_linf']) > 1e-12:
+        raise ValueError('perceptual input differs from validated PNG')
     result = {'identity_id': row['identity_id'], 'method': method, 'key': key, 'models': scores,
-              'quality': quality, 'evaluated_at_utc': datetime.now(timezone.utc).isoformat()}
+              'quality': quality, 'environment': environment(),
+              'evaluated_at_utc': datetime.now(timezone.utc).isoformat()}
     write_json(target, result)
     return result, True
 
@@ -165,7 +178,7 @@ def summary(method, selected, thresholds):
         records.append(record)
     result = {'method': method, 'complete': len(records), 'expected': len(selected),
               'metrics': summarize(records, thresholds) if records else None,
-              'quality_means': {k: float(np.mean([r['quality'][k] for r in records])) for k in ('serialized_linf', 'ssim')} if records else None}
+              'quality_means': {k: float(np.mean([r['quality'][k] for r in records])) for k in ('serialized_linf', 'ssim', 'lpips', 'dists')} if records else None}
     write_json(OUT / method.lower().replace('-', '_').replace('+', '_') / 'summary.json', result)
     return result
 
@@ -192,9 +205,12 @@ def run(args, preflight):
     run_metadata = OUT / 'run.json'
     state = {'config': CONFIG, 'split_sha256': sha256(SPLIT), 'thresholds': thresholds,
              'model_hashes': model_hashes, 'python': platform.python_version(),
-             'platform': platform.platform(), 'git_commit': provenance(selected[0], methods[0])['git_commit']}
+             'platform': platform.platform(), 'environment': environment(),
+             'git_commit': provenance(selected[0], methods[0])['git_commit']}
     if run_metadata.exists():
-        if json.loads(run_metadata.read_text()) != state:
+        previous = json.loads(run_metadata.read_text())
+        descriptive = ('git_commit', 'environment', 'python', 'platform')
+        if {k: v for k, v in previous.items() if k not in descriptive} != {k: v for k, v in state.items() if k not in descriptive}:
             raise ValueError('run metadata changed; refusing to reuse formal output')
     elif args.execute:
         write_json(run_metadata, state)

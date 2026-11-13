@@ -111,7 +111,7 @@ PGD update: `delta ← project_L∞(delta − α sign(gradient), ε×255)`. MI-F
 
 ## Expansion protocol v2 (proposed five-model benchmark)
 
-The frozen v2 split audit defines 100 Development identities and 228 OOS identities. Five evaluation models are ArcFace, FaceNet, AdaFace R50, MobileFaceNet and MagFace iResNet100; their exact weights and preprocessing are in `models/checkpoint_manifest.json`. Calibration v2 thresholds are under `results/calibration/*_lfw_v2/`. Development 100 clean eligibility and a two-person PGD+Mask engineering smoke exist. The formal 100-person four-method benchmark has **not** run; `scripts/run_lfw_five_model_benchmark.py` currently fails closed on its timing gate. OOS 228 is held out. Do not cite the two-person smoke as efficacy.
+The frozen v2 split audit defines 100 Development identities and 228 OOS identities. Five evaluation models are ArcFace, FaceNet, AdaFace R50, MobileFaceNet and MagFace iResNet100; their exact weights and preprocessing are in `models/checkpoint_manifest.json`. Calibration v2 thresholds are under `results/calibration/*_lfw_v2/`. Development 100 clean eligibility and bounded one-person four-method executor acceptance exist. The formal 100-person four-method benchmark has **not** run; `scripts/run_lfw_five_model_benchmark.py` requires passing asset, dependency, calibration, split and offline perceptual-weight preflight gates. OOS 228 is held out. Do not cite the one-person smoke as efficacy.
 
 Momentum ablation `scripts/run_momentum_mask_v2.py` is separate from v3 and uses μ ∈ {{0, 0.5}} for two allowlisted Development identities at the same ε, steps and mask. Its output is under `results/transfer/lfw_momentum_mask_v2/`; do not merge it into the formal v3 denominator.
 """

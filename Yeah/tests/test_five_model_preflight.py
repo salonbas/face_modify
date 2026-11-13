@@ -2,8 +2,6 @@
 from __future__ import annotations
 
 import importlib.util
-import subprocess
-import sys
 from pathlib import Path
 
 
@@ -18,10 +16,12 @@ def load_script():
     return module
 
 
-def test_preflight_fails_closed_without_required_assets():
-    report = load_script().preflight()
+def test_preflight_fails_closed_without_required_assets(monkeypatch):
+    module = load_script()
+    monkeypatch.setitem(module.MODELS, "arcface", module.ROOT / "models/missing_test.onnx")
+    report = module.preflight()
     assert report["decision"] == "NOT READY"
-    assert report["problems"]
+    assert any("arcface checkpoint" in p for p in report["problems"])
     assert report["evidence"]["attack_contract"]["steps"] == 200
     assert report["evidence"]["attack_contract"]["alpha"] == 0.0002
 
@@ -39,12 +39,11 @@ def test_calibration_isolation_uses_identity_fields():
         assert not any(r["identity_a"] in attack_ids or r["identity_b"] in attack_ids for r in pairs)
 
 
-def test_execute_refuses_before_creating_formal_artifacts():
+def test_preflight_does_not_create_formal_artifacts(monkeypatch):
+    module = load_script()
+    monkeypatch.setitem(module.MODELS, "arcface", module.ROOT / "models/missing_test.onnx")
     formal = SCRIPT.parents[1] / "results/transfer/lfw_dev_100_five_model_v1/formal"
     before = set(formal.rglob("*")) if formal.exists() else set()
-    result = subprocess.run([sys.executable, str(SCRIPT), "--execute"],
-                            capture_output=True, text=True, check=False)
+    assert module.preflight()["decision"] == "NOT READY"
     after = set(formal.rglob("*")) if formal.exists() else set()
-    assert result.returncode != 0
-    assert "Formal execute refused" in result.stdout
     assert after == before

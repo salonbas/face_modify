@@ -1,0 +1,2812 @@
+{
+  "manifest_sha256": "c3adce046fb1a8996bc048253895d906f50f40f80b89207e22551e2f08ce6e91",
+  "thresholds": {
+    "arcface": 0.14072093367576602,
+    "facenet": 0.4088586568832398,
+    "adaface": 0.14697599411010745,
+    "mobilefacenet": 0.1633139401674271,
+    "magface": 0.18449912965297702
+  },
+  "timings_seconds": {
+    "arcface": 44.554543999998714,
+    "facenet": 9.54471787500006,
+    "adaface": 17.79811070800133,
+    "mobilefacenet": 5.78660070800106,
+    "magface": 18.029197042000305
+  },
+  "checkpoint_sha256": {
+    "arcface": "4c06341c33c2ca1f86781dab0e829f88ad5b64be9fba56e56bc9ebdefc619e43",
+    "facenet": "281cebca8662831adb987a874bdcb36e73f5b1c6dc5ee5878f305e985625d99b",
+    "adaface": "234da6ce931f821e0a8e920063dc2091d8122ea46285c159d2f25d3f762fecb3",
+    "mobilefacenet": "9cc6e4a75f0e2bf0b1aed94578f144d15175f357bdc05e815e5c4a02b319eb4f",
+    "magface": "cfeba792dada6f1f30d1e118aff077d493dd95dd76c77c30f57f90fd0164ad58"
+  },
+  "environment": {
+    "torch": "2.2.2",
+    "numpy": "1.26.4",
+    "opencv-python": "4.10.0.84",
+    "onnxruntime": "1.26.0",
+    "insightface": "0.7.3",
+    "facenet-pytorch": "2.6.0"
+  },
+  "summary": {
+    "original_denominator": 100,
+    "joint_eligible": 83,
+    "models": {
+      "arcface": {
+        "clean_valid": 93,
+        "clean_errors": 7,
+        "clean_eligible": 93,
+        "clean_tar": 0.93,
+        "conditional_asr": null,
+        "conditional_denominator": 0,
+        "paired_asr": null,
+        "paired_denominator": 0
+      },
+      "facenet": {
+        "clean_valid": 100,
+        "clean_errors": 0,
+        "clean_eligible": 96,
+        "clean_tar": 0.96,
+        "conditional_asr": null,
+        "conditional_denominator": 0,
+        "paired_asr": null,
+        "paired_denominator": 0
+      },
+      "adaface": {
+        "clean_valid": 99,
+        "clean_errors": 1,
+        "clean_eligible": 93,
+        "clean_tar": 0.93,
+        "conditional_asr": null,
+        "conditional_denominator": 0,
+        "paired_asr": null,
+        "paired_denominator": 0
+      },
+      "mobilefacenet": {
+        "clean_valid": 93,
+        "clean_errors": 7,
+        "clean_eligible": 93,
+        "clean_tar": 0.93,
+        "conditional_asr": null,
+        "conditional_denominator": 0,
+        "paired_asr": null,
+        "paired_denominator": 0
+      },
+      "magface": {
+        "clean_valid": 93,
+        "clean_errors": 7,
+        "clean_eligible": 93,
+        "clean_tar": 0.93,
+        "conditional_asr": null,
+        "conditional_denominator": 0,
+        "paired_asr": null,
+        "paired_denominator": 0
+      }
+    }
+  },
+  "rows": [
+    {
+      "identity_id": "Adrian_McPherson",
+      "reference_image": "data/datasets/lfw/images/Adrian_McPherson/Adrian_McPherson_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Adrian_McPherson/Adrian_McPherson_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6521693856817118,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8061700098311889,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.666845440864563,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.5350752195760738,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.6886787398337945,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Ahmad_Masood",
+      "reference_image": "data/datasets/lfw/images/Ahmad_Masood/Ahmad_Masood_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Ahmad_Masood/Ahmad_Masood_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.5716543197631836,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.599181819059632,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.4916323433360644,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.47039696397763275,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.571903002666683,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Aleksander_Kwasniewski",
+      "reference_image": "data/datasets/lfw/images/Aleksander_Kwasniewski/Aleksander_Kwasniewski_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Aleksander_Kwasniewski/Aleksander_Kwasniewski_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7877252571419034,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7822958827018738,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7779201136779853,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.751615852310163,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8348457552816727,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Alexander_Rumyantsev",
+      "reference_image": "data/datasets/lfw/images/Alexander_Rumyantsev/Alexander_Rumyantsev_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Alexander_Rumyantsev/Alexander_Rumyantsev_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6995062828063965,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8871944546699524,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7021548748016357,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6946398019790649,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7555661552014552,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Amram_Mitzna",
+      "reference_image": "data/datasets/lfw/images/Amram_Mitzna/Amram_Mitzna_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Amram_Mitzna/Amram_Mitzna_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.8232819332648476,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.9233379364013672,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": -0.014610452396056484,
+          "eligible": false
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.7817692756652832,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8666707005041495,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Andrew_Niccol",
+      "reference_image": "data/datasets/lfw/images/Andrew_Niccol/Andrew_Niccol_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Andrew_Niccol/Andrew_Niccol_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7475123254962162,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8179714679718018,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7483748197555542,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.7021604002809763,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8155891497411544,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Angela_Lansbury",
+      "reference_image": "data/datasets/lfw/images/Angela_Lansbury/Angela_Lansbury_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Angela_Lansbury/Angela_Lansbury_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6270441786673175,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7934724338683565,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6043006181716919,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.5130711793899536,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7228290948766153,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Arnold_Schwarzenegger",
+      "reference_image": "data/datasets/lfw/images/Arnold_Schwarzenegger/Arnold_Schwarzenegger_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Arnold_Schwarzenegger/Arnold_Schwarzenegger_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6748128533363342,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.6607892513275146,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7072974443435669,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.5719520194501888,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7236258685380795,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Augusto_Pinochet",
+      "reference_image": "data/datasets/lfw/images/Augusto_Pinochet/Augusto_Pinochet_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Augusto_Pinochet/Augusto_Pinochet_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.8327692151069641,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.904653787612915,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.8440750148341069,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.8371106885141545,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8666016811457042,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Aung_San_Suu_Kyi",
+      "reference_image": "data/datasets/lfw/images/Aung_San_Suu_Kyi/Aung_San_Suu_Kyi_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Aung_San_Suu_Kyi/Aung_San_Suu_Kyi_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.614014066100959,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.5781908631324768,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.626245379447937,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.5948587656021118,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.724853047860057,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Biljana_Plavsic",
+      "reference_image": "data/datasets/lfw/images/Biljana_Plavsic/Biljana_Plavsic_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Biljana_Plavsic/Biljana_Plavsic_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7769162058830261,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.877957060580604,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.8067971948860404,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.7267283038335027,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8595653831919794,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Bill_Paxton",
+      "reference_image": "data/datasets/lfw/images/Bill_Paxton/Bill_Paxton_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Bill_Paxton/Bill_Paxton_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.5871710777282715,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.6502014398574829,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.5348414182662964,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.49416232109069824,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.6528947795993443,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Bo_Pelini",
+      "reference_image": "data/datasets/lfw/images/Bo_Pelini/Bo_Pelini_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Bo_Pelini/Bo_Pelini_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.8255677715282304,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.9206550215893958,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.8374171160112093,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.7936349388143383,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.873056746674205,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Brian_Heidik",
+      "reference_image": "data/datasets/lfw/images/Brian_Heidik/Brian_Heidik_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Brian_Heidik/Brian_Heidik_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6681001584589575,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.6971508264541626,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.635672926902771,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6105557084083557,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.6976448602128328,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Carl_Reiner",
+      "reference_image": "data/datasets/lfw/images/Carl_Reiner/Carl_Reiner_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Carl_Reiner/Carl_Reiner_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7966851945740216,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7685489058494568,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7420369982719421,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.7040245776205751,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8302348298778462,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Celso_Amorim",
+      "reference_image": "data/datasets/lfw/images/Celso_Amorim/Celso_Amorim_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Celso_Amorim/Celso_Amorim_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6565961241722107,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7011281847953796,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.5882161364813013,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.5536076756481931,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.6407724304330374,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Christine_Baumgartner",
+      "reference_image": "data/datasets/lfw/images/Christine_Baumgartner/Christine_Baumgartner_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Christine_Baumgartner/Christine_Baumgartner_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.554870578936969,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.5797066688537598,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.5819862983243109,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.4835159182548523,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.6541864711218528,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Cindy_Crawford",
+      "reference_image": "data/datasets/lfw/images/Cindy_Crawford/Cindy_Crawford_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Cindy_Crawford/Cindy_Crawford_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.766811192035675,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7642523646354675,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7897342914184505,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.746202692163151,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8365592974073415,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Clare_Short",
+      "reference_image": "data/datasets/lfw/images/Clare_Short/Clare_Short_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Clare_Short/Clare_Short_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.5886709444922772,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7558103058225099,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.5702836513519287,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.5533530712127686,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.6893493367936259,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Cyndi_Thompson",
+      "reference_image": "data/datasets/lfw/images/Cyndi_Thompson/Cyndi_Thompson_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Cyndi_Thompson/Cyndi_Thompson_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7405792474746704,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8153475522994995,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7216346859931946,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6503237873508804,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.776028933526859,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Daniel_Radcliffe",
+      "reference_image": "data/datasets/lfw/images/Daniel_Radcliffe/Daniel_Radcliffe_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Daniel_Radcliffe/Daniel_Radcliffe_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6504360616726949,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7259896830314209,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6620277166366577,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.5427990879296712,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.6947617266855555,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Daniela_Hantuchova",
+      "reference_image": "data/datasets/lfw/images/Daniela_Hantuchova/Daniela_Hantuchova_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Daniela_Hantuchova/Daniela_Hantuchova_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6826192547452006,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8480422406221771,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6499028593243873,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6368709206581116,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7111784298332604,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Dino_de_Laurentis",
+      "reference_image": "data/datasets/lfw/images/Dino_de_Laurentis/Dino_de_Laurentis_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Dino_de_Laurentis/Dino_de_Laurentis_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7374246120452881,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8684400916099548,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7718690037727356,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.7502508163452148,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.765640102657686,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Doris_Schroeder",
+      "reference_image": "data/datasets/lfw/images/Doris_Schroeder/Doris_Schroeder_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Doris_Schroeder/Doris_Schroeder_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.747330904006958,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8557865619659424,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7312033291822665,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6854480504989624,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7510154674647146,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Doug_Collins",
+      "reference_image": "data/datasets/lfw/images/Doug_Collins/Doug_Collins_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Doug_Collins/Doug_Collins_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: \u5716\u7247\u4e2d\u6c92\u6709\u5075\u6e2c\u5230\u4eba\u81c9\uff1aDoug_Collins:B"
+        },
+        "facenet": {
+          "clean_cosine": 0.739175021648407,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.588076686148446,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: no face detected in Doug_Collins:B"
+        },
+        "magface": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: MagFace alignment failed: Doug_Collins:B"
+        }
+      }
+    },
+    {
+      "identity_id": "Eric_Hinske",
+      "reference_image": "data/datasets/lfw/images/Eric_Hinske/Eric_Hinske_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Eric_Hinske/Eric_Hinske_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.44358312411107115,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.19783139850718992,
+          "eligible": false
+        },
+        "adaface": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: AdaFace alignment failed: Eric_Hinske:A"
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.38677871227264404,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7035580597871228,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Franco_Dragone",
+      "reference_image": "data/datasets/lfw/images/Franco_Dragone/Franco_Dragone_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Franco_Dragone/Franco_Dragone_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6413416862487793,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.6921183237888427,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6246606111526489,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.5666251520291061,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7255258392782294,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Geno_Auriemma",
+      "reference_image": "data/datasets/lfw/images/Geno_Auriemma/Geno_Auriemma_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Geno_Auriemma/Geno_Auriemma_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: \u5716\u7247\u4e2d\u6c92\u6709\u5075\u6e2c\u5230\u4eba\u81c9\uff1aGeno_Auriemma:A"
+        },
+        "facenet": {
+          "clean_cosine": 0.7428485751152039,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6370538473129272,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: no face detected in Geno_Auriemma:A"
+        },
+        "magface": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: MagFace alignment failed: Geno_Auriemma:A"
+        }
+      }
+    },
+    {
+      "identity_id": "Heizo_Takenaka",
+      "reference_image": "data/datasets/lfw/images/Heizo_Takenaka/Heizo_Takenaka_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Heizo_Takenaka/Heizo_Takenaka_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7202767467168871,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.9186524249729604,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.71579710935337,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.7221907807702291,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8125792456450797,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Howard_Dean",
+      "reference_image": "data/datasets/lfw/images/Howard_Dean/Howard_Dean_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Howard_Dean/Howard_Dean_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.719111008591116,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7462568283081055,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7384393655323604,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6956374645233154,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8353153584074708,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Jay_Garner",
+      "reference_image": "data/datasets/lfw/images/Jay_Garner/Jay_Garner_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Jay_Garner/Jay_Garner_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.694808983183978,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8163610100746155,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6764772341535827,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6850152015686035,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.759066293330776,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Jay_Rasulo",
+      "reference_image": "data/datasets/lfw/images/Jay_Rasulo/Jay_Rasulo_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Jay_Rasulo/Jay_Rasulo_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6620842218399048,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7243421077728271,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7033588532637183,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6535784006118774,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7595565801632218,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Jennifer_Rodriguez",
+      "reference_image": "data/datasets/lfw/images/Jennifer_Rodriguez/Jennifer_Rodriguez_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Jennifer_Rodriguez/Jennifer_Rodriguez_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.5401299917775387,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.6401137495108693,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.5290367603302002,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.45132213540805194,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.5325793958428521,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Jerry_Springer",
+      "reference_image": "data/datasets/lfw/images/Jerry_Springer/Jerry_Springer_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Jerry_Springer/Jerry_Springer_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6389559888217442,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.750505268573761,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6349036693572998,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.56128747001737,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.6872469385532565,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "John_Banko",
+      "reference_image": "data/datasets/lfw/images/John_Banko/John_Banko_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/John_Banko/John_Banko_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7659267783164978,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8572731018066406,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7003374517165095,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.7396549427303638,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7523349142633432,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "John_Timoney",
+      "reference_image": "data/datasets/lfw/images/John_Timoney/John_Timoney_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/John_Timoney/John_Timoney_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7983640908219869,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.9279470443725586,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.8153825402259827,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.7413541078567505,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8294297293473096,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Johnny_Unitas",
+      "reference_image": "data/datasets/lfw/images/Johnny_Unitas/Johnny_Unitas_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Johnny_Unitas/Johnny_Unitas_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7664785385131836,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7510421872138977,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7476925699527603,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.7047630968548714,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.790252544181781,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Johnson_Panjaitan",
+      "reference_image": "data/datasets/lfw/images/Johnson_Panjaitan/Johnson_Panjaitan_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Johnson_Panjaitan/Johnson_Panjaitan_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.8645885506027073,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.9266425371170044,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.8847643664338807,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.813045859336853,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8971420049843082,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Jolanta_Kwasniewski",
+      "reference_image": "data/datasets/lfw/images/Jolanta_Kwasniewski/Jolanta_Kwasniewski_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Jolanta_Kwasniewski/Jolanta_Kwasniewski_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.5968382714294357,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.536882758140564,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6406864309720058,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.506240964679833,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.6589953765710719,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Jon_Voight",
+      "reference_image": "data/datasets/lfw/images/Jon_Voight/Jon_Voight_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Jon_Voight/Jon_Voight_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6521720290184021,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8202117895827544,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6727032867316349,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.5917786359786987,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.6643330713336887,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Jorge_Rodolfo_Canicoba_Corral",
+      "reference_image": "data/datasets/lfw/images/Jorge_Rodolfo_Canicoba_Corral/Jorge_Rodolfo_Canicoba_Corral_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Jorge_Rodolfo_Canicoba_Corral/Jorge_Rodolfo_Canicoba_Corral_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7425309266168432,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8170632342024763,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7430319786071777,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6926524043083191,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7695562806009759,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Julianna_Margulies",
+      "reference_image": "data/datasets/lfw/images/Julianna_Margulies/Julianna_Margulies_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Julianna_Margulies/Julianna_Margulies_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.8019551038742065,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": -0.17064477030305686,
+          "eligible": false
+        },
+        "adaface": {
+          "clean_cosine": 0.797462153283486,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.7698009610176086,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.824807596590108,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Junichiro_Koizumi",
+      "reference_image": "data/datasets/lfw/images/Junichiro_Koizumi/Junichiro_Koizumi_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Junichiro_Koizumi/Junichiro_Koizumi_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7045530080795288,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8772517442703247,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7166482637314954,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6393185257911682,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.772307598541522,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Justin_Gatlin",
+      "reference_image": "data/datasets/lfw/images/Justin_Gatlin/Justin_Gatlin_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Justin_Gatlin/Justin_Gatlin_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6965870676390569,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8671693801879883,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7313635945320129,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6057628754236027,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7801175711916469,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Justin_Timberlake",
+      "reference_image": "data/datasets/lfw/images/Justin_Timberlake/Justin_Timberlake_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Justin_Timberlake/Justin_Timberlake_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6275995969772339,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.6584892084015359,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6335640549659729,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.5719683511238307,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.727064149236473,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Kim_Jin-sun",
+      "reference_image": "data/datasets/lfw/images/Kim_Jin-sun/Kim_Jin-sun_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Kim_Jin-sun/Kim_Jin-sun_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.745496392250061,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.9467877713911397,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.690076630716123,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6680260896682739,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8253568611100451,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Klaus_Zwickel",
+      "reference_image": "data/datasets/lfw/images/Klaus_Zwickel/Klaus_Zwickel_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Klaus_Zwickel/Klaus_Zwickel_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.8002066612243652,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8930346965789795,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7514871210746241,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.7389810525763663,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8148984565174151,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Larry_Ellison",
+      "reference_image": "data/datasets/lfw/images/Larry_Ellison/Larry_Ellison_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Larry_Ellison/Larry_Ellison_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7805164194722676,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8390084505081177,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7575576016375544,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6956285238265991,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7733855347175258,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Leszek_Miller",
+      "reference_image": "data/datasets/lfw/images/Leszek_Miller/Leszek_Miller_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Leszek_Miller/Leszek_Miller_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.713879270188765,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.6786298751831055,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.04246529072316234,
+          "eligible": false
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6233766822071889,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.777414643250921,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Liam_Neeson",
+      "reference_image": "data/datasets/lfw/images/Liam_Neeson/Liam_Neeson_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Liam_Neeson/Liam_Neeson_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7057573795318604,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.687948919779191,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7215062379837036,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.5841764211654663,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7299168787916583,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Lyle_Vanclief",
+      "reference_image": "data/datasets/lfw/images/Lyle_Vanclief/Lyle_Vanclief_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Lyle_Vanclief/Lyle_Vanclief_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7229190468788147,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8537430763244629,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7150053977966309,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6498537450941649,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7357590351997997,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Lynn_Redgrave",
+      "reference_image": "data/datasets/lfw/images/Lynn_Redgrave/Lynn_Redgrave_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Lynn_Redgrave/Lynn_Redgrave_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.628592952657586,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.6867307833868732,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6177325704416549,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6039053921586742,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.6754785879092523,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Maria_Shriver",
+      "reference_image": "data/datasets/lfw/images/Maria_Shriver/Maria_Shriver_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Maria_Shriver/Maria_Shriver_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.5385980927108581,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7045390362096982,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.5284357385895097,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.49564301941651223,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.5634561425706802,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Mark_Wahlberg",
+      "reference_image": "data/datasets/lfw/images/Mark_Wahlberg/Mark_Wahlberg_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Mark_Wahlberg/Mark_Wahlberg_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.5149841886777653,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.5644468741949646,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.3947228193283081,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.34895914793014526,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.6203033308276851,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Martin_Verkerk",
+      "reference_image": "data/datasets/lfw/images/Martin_Verkerk/Martin_Verkerk_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Martin_Verkerk/Martin_Verkerk_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7675752639770508,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8009381294250488,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7178516219765915,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.7263060808181763,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8110693925643451,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Megan_Mullally",
+      "reference_image": "data/datasets/lfw/images/Megan_Mullally/Megan_Mullally_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Megan_Mullally/Megan_Mullally_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.4947499331682881,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.49434760212898254,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.43984624026372915,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.29369473457336426,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.5841563246987285,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Meryl_Streep",
+      "reference_image": "data/datasets/lfw/images/Meryl_Streep/Meryl_Streep_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Meryl_Streep/Meryl_Streep_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6619805097579956,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7972723841667175,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6851584315299988,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6382814645767212,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7291777981185743,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Michael_Kostelnik",
+      "reference_image": "data/datasets/lfw/images/Michael_Kostelnik/Michael_Kostelnik_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Michael_Kostelnik/Michael_Kostelnik_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: \u5716\u7247\u4e2d\u6c92\u6709\u5075\u6e2c\u5230\u4eba\u81c9\uff1aMichael_Kostelnik:B"
+        },
+        "facenet": {
+          "clean_cosine": 0.7719260454177856,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.607250677674928,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: no face detected in Michael_Kostelnik:B"
+        },
+        "magface": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: MagFace alignment failed: Michael_Kostelnik:B"
+        }
+      }
+    },
+    {
+      "identity_id": "Michel_Temer",
+      "reference_image": "data/datasets/lfw/images/Michel_Temer/Michel_Temer_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Michel_Temer/Michel_Temer_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7098530954034982,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8404982089996338,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7547704577445984,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6654858985832869,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7810453521116935,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Michelle_Collins",
+      "reference_image": "data/datasets/lfw/images/Michelle_Collins/Michelle_Collins_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Michelle_Collins/Michelle_Collins_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.8272519111633301,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8860031366348267,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7763298020559432,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.7636584498678713,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8489277702069213,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Mike_Brey",
+      "reference_image": "data/datasets/lfw/images/Mike_Brey/Mike_Brey_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Mike_Brey/Mike_Brey_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6686226528062017,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7472694221413825,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6535943127145134,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6119731566857975,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7138296976649265,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Muammar_Gaddafi",
+      "reference_image": "data/datasets/lfw/images/Muammar_Gaddafi/Muammar_Gaddafi_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Muammar_Gaddafi/Muammar_Gaddafi_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6122788555788312,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.6651663780212402,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.5741179331611355,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.5479126303143877,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.6907048336887828,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Nadia_Petrova",
+      "reference_image": "data/datasets/lfw/images/Nadia_Petrova/Nadia_Petrova_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Nadia_Petrova/Nadia_Petrova_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: \u5716\u7247\u4e2d\u6c92\u6709\u5075\u6e2c\u5230\u4eba\u81c9\uff1aNadia_Petrova:A"
+        },
+        "facenet": {
+          "clean_cosine": 0.7696274381653928,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.5998068332902392,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: no face detected in Nadia_Petrova:A"
+        },
+        "magface": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: MagFace alignment failed: Nadia_Petrova:A"
+        }
+      }
+    },
+    {
+      "identity_id": "Nestor_Kirchner",
+      "reference_image": "data/datasets/lfw/images/Nestor_Kirchner/Nestor_Kirchner_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Nestor_Kirchner/Nestor_Kirchner_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7675535678863525,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7383278012275696,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7928057312965393,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.7417635917663574,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8156045745251607,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Nikki_Reed",
+      "reference_image": "data/datasets/lfw/images/Nikki_Reed/Nikki_Reed_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Nikki_Reed/Nikki_Reed_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.748824641038456,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7642107009887695,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7334009687186442,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.682254054277652,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7454530607510715,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Nora_Bendijo",
+      "reference_image": "data/datasets/lfw/images/Nora_Bendijo/Nora_Bendijo_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Nora_Bendijo/Nora_Bendijo_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.2526118905908996,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.5059613578365615,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.2605289674120526,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.2059459090232849,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.3949798863665633,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Olivia_Newton-John",
+      "reference_image": "data/datasets/lfw/images/Olivia_Newton-John/Olivia_Newton-John_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Olivia_Newton-John/Olivia_Newton-John_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.782191276550293,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7535990770341066,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.07883361726999283,
+          "eligible": false
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.7290008068084717,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7526127217202491,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Orrin_Hatch",
+      "reference_image": "data/datasets/lfw/images/Orrin_Hatch/Orrin_Hatch_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Orrin_Hatch/Orrin_Hatch_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: \u5716\u7247\u4e2d\u6c92\u6709\u5075\u6e2c\u5230\u4eba\u81c9\uff1aOrrin_Hatch:A"
+        },
+        "facenet": {
+          "clean_cosine": 0.8041140074594012,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6287248066767704,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: no face detected in Orrin_Hatch:A"
+        },
+        "magface": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: MagFace alignment failed: Orrin_Hatch:A"
+        }
+      }
+    },
+    {
+      "identity_id": "Oscar_Elias_Biscet",
+      "reference_image": "data/datasets/lfw/images/Oscar_Elias_Biscet/Oscar_Elias_Biscet_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Oscar_Elias_Biscet/Oscar_Elias_Biscet_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.8355993032455444,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8279618825957915,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.8039288158501606,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.7847051620483398,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8700266874172686,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Padraig_Harrington",
+      "reference_image": "data/datasets/lfw/images/Padraig_Harrington/Padraig_Harrington_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Padraig_Harrington/Padraig_Harrington_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.5537149906158447,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.6302101612091064,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.5728671550750732,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.42113217241359785,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.6449814714139211,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Pascal_Quignard",
+      "reference_image": "data/datasets/lfw/images/Pascal_Quignard/Pascal_Quignard_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Pascal_Quignard/Pascal_Quignard_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7981703281402588,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7452126145362854,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7935250874474696,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.744972273407714,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.864889776837679,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Patrick_McEnroe",
+      "reference_image": "data/datasets/lfw/images/Patrick_McEnroe/Patrick_McEnroe_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Patrick_McEnroe/Patrick_McEnroe_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.5621750689849299,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.5260359644889832,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6097002756238312,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.4804988526703295,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.6025931046526203,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Patrick_Stewart",
+      "reference_image": "data/datasets/lfw/images/Patrick_Stewart/Patrick_Stewart_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Patrick_Stewart/Patrick_Stewart_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: \u5716\u7247\u4e2d\u6c92\u6709\u5075\u6e2c\u5230\u4eba\u81c9\uff1aPatrick_Stewart:A"
+        },
+        "facenet": {
+          "clean_cosine": 0.6233919711837803,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6970154047012329,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: no face detected in Patrick_Stewart:A"
+        },
+        "magface": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: MagFace alignment failed: Patrick_Stewart:A"
+        }
+      }
+    },
+    {
+      "identity_id": "Paul_Bremer",
+      "reference_image": "data/datasets/lfw/images/Paul_Bremer/Paul_Bremer_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Paul_Bremer/Paul_Bremer_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7115301145947116,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7105745673179626,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7155402898788452,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6291295289993286,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7415737445551893,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Paul_Byrd",
+      "reference_image": "data/datasets/lfw/images/Paul_Byrd/Paul_Byrd_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Paul_Byrd/Paul_Byrd_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6638651289859491,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7571593523025513,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7198881840839166,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6384686016123653,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7870080429463034,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Paul_Kagame",
+      "reference_image": "data/datasets/lfw/images/Paul_Kagame/Paul_Kagame_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Paul_Kagame/Paul_Kagame_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7741683721542358,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8033692602359367,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7743500202119374,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6435173749923706,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8088071014964957,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Paula_Zahn",
+      "reference_image": "data/datasets/lfw/images/Paula_Zahn/Paula_Zahn_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Paula_Zahn/Paula_Zahn_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7165494392245674,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8285336988290369,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7503435611724854,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6740109130150624,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8040170142698878,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Peter_Costello",
+      "reference_image": "data/datasets/lfw/images/Peter_Costello/Peter_Costello_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Peter_Costello/Peter_Costello_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.5651382207870483,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.6433520913124084,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.5555879473686218,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.5209375023841858,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.61012892338778,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Petro_Symonenko",
+      "reference_image": "data/datasets/lfw/images/Petro_Symonenko/Petro_Symonenko_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Petro_Symonenko/Petro_Symonenko_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.685261070728302,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7824659088213335,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7374198876273566,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6576671992341995,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7819183008791215,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Phan_Van_Khai",
+      "reference_image": "data/datasets/lfw/images/Phan_Van_Khai/Phan_Van_Khai_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Phan_Van_Khai/Phan_Van_Khai_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.8004996538757865,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.9437199234962463,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.11116947398549629,
+          "eligible": false
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.7487066238347664,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8582980347395176,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Phil_Gramm",
+      "reference_image": "data/datasets/lfw/images/Phil_Gramm/Phil_Gramm_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Phil_Gramm/Phil_Gramm_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6225035190582275,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": -0.1925583779811859,
+          "eligible": false
+        },
+        "adaface": {
+          "clean_cosine": 0.4968627691268921,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.48168757448718397,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.6375157581516149,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Pierre_Pettigrew",
+      "reference_image": "data/datasets/lfw/images/Pierre_Pettigrew/Pierre_Pettigrew_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Pierre_Pettigrew/Pierre_Pettigrew_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7496345043182373,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7142003774642944,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.013417053836110462,
+          "eligible": false
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6666617790855037,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7666956095232169,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Rafael_Ramirez",
+      "reference_image": "data/datasets/lfw/images/Rafael_Ramirez/Rafael_Ramirez_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Rafael_Ramirez/Rafael_Ramirez_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.8460872677616637,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.9036717953486321,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.8387731313705444,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.8106469882305847,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8950694577095891,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Richard_Myers",
+      "reference_image": "data/datasets/lfw/images/Richard_Myers/Richard_Myers_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Richard_Myers/Richard_Myers_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7263561487197876,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.18642208738063723,
+          "eligible": false
+        },
+        "adaface": {
+          "clean_cosine": 0.746495887428277,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6410102034217241,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7639304490474274,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Rick_Carlisle",
+      "reference_image": "data/datasets/lfw/images/Rick_Carlisle/Rick_Carlisle_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Rick_Carlisle/Rick_Carlisle_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.609891951084137,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.779152512550354,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": -0.08143637329339981,
+          "eligible": false
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.5562148161190529,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.664290085123795,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Ricky_Barnes",
+      "reference_image": "data/datasets/lfw/images/Ricky_Barnes/Ricky_Barnes_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Ricky_Barnes/Ricky_Barnes_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6118625998497009,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7024441957473755,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.45858993879496684,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.48674485087394714,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.46781118676741495,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Robert_Blake",
+      "reference_image": "data/datasets/lfw/images/Robert_Blake/Robert_Blake_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Robert_Blake/Robert_Blake_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.5479857382757352,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.6219981908798218,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.5493344605762409,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.4956966934023317,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.660412857902105,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Roberto_Marinho",
+      "reference_image": "data/datasets/lfw/images/Roberto_Marinho/Roberto_Marinho_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Roberto_Marinho/Roberto_Marinho_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7788831924060813,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.857775092124939,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7749364972114563,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.7273680405240083,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8189073185692101,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Sally_Field",
+      "reference_image": "data/datasets/lfw/images/Sally_Field/Sally_Field_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Sally_Field/Sally_Field_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.740445077419281,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8277722597122192,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7971526626166507,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6956808981705247,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7757625216834735,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Sally_Kirkland",
+      "reference_image": "data/datasets/lfw/images/Sally_Kirkland/Sally_Kirkland_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Sally_Kirkland/Sally_Kirkland_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.5976443290710449,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7478809356689453,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6418449069169109,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.5309269744710311,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7359305726727466,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Scott_Ritter",
+      "reference_image": "data/datasets/lfw/images/Scott_Ritter/Scott_Ritter_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Scott_Ritter/Scott_Ritter_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.719796359539032,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7918152809143066,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.735632761456535,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6468843607237554,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8242854545082333,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Sophia_Loren",
+      "reference_image": "data/datasets/lfw/images/Sophia_Loren/Sophia_Loren_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Sophia_Loren/Sophia_Loren_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.757043287577825,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.8520144047754293,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7578698396682739,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.7636685089669835,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.8131799347432813,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Sourav_Ganguly",
+      "reference_image": "data/datasets/lfw/images/Sourav_Ganguly/Sourav_Ganguly_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Sourav_Ganguly/Sourav_Ganguly_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6220778597639716,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.684631626882054,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.537385106086731,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.5305393934249878,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.6424196615965853,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Stan_Heath",
+      "reference_image": "data/datasets/lfw/images/Stan_Heath/Stan_Heath_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Stan_Heath/Stan_Heath_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: \u5716\u7247\u4e2d\u6c92\u6709\u5075\u6e2c\u5230\u4eba\u81c9\uff1aStan_Heath:A"
+        },
+        "facenet": {
+          "clean_cosine": 0.8070576190948486,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6798704862594604,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: no face detected in Stan_Heath:A"
+        },
+        "magface": {
+          "clean_cosine": null,
+          "eligible": false,
+          "error": "ValueError: MagFace alignment failed: Stan_Heath:A"
+        }
+      }
+    },
+    {
+      "identity_id": "Tariq_Aziz",
+      "reference_image": "data/datasets/lfw/images/Tariq_Aziz/Tariq_Aziz_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Tariq_Aziz/Tariq_Aziz_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.9113292694091797,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.9317612051963806,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.9221963286399841,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.9152750221386592,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.9319205929955531,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Thabo_Mbeki",
+      "reference_image": "data/datasets/lfw/images/Thabo_Mbeki/Thabo_Mbeki_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Thabo_Mbeki/Thabo_Mbeki_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.5260748580738818,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.6756336688995361,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.4487801492214203,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.3857541084289551,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.4477231984902794,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Tom_Jones",
+      "reference_image": "data/datasets/lfw/images/Tom_Jones/Tom_Jones_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Tom_Jones/Tom_Jones_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6240154504776001,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7862488627433777,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6207254076868781,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.5964593646800139,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.6733429241835853,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Tony_Parker",
+      "reference_image": "data/datasets/lfw/images/Tony_Parker/Tony_Parker_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Tony_Parker/Tony_Parker_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6255606785750794,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.6393642425537109,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6420880556106567,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.5382598088097345,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.6857190099233764,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Tony_Stewart",
+      "reference_image": "data/datasets/lfw/images/Tony_Stewart/Tony_Stewart_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Tony_Stewart/Tony_Stewart_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.7007754684418999,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.7629736661911011,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.7034748792648315,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.6641674833497385,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.7777977453300337,
+          "eligible": true
+        }
+      }
+    },
+    {
+      "identity_id": "Woody_Allen",
+      "reference_image": "data/datasets/lfw/images/Woody_Allen/Woody_Allen_0001.jpg",
+      "probe_image": "data/datasets/lfw/images/Woody_Allen/Woody_Allen_0002.jpg",
+      "models": {
+        "arcface": {
+          "clean_cosine": 0.6164206266403198,
+          "eligible": true
+        },
+        "facenet": {
+          "clean_cosine": 0.6628137826919556,
+          "eligible": true
+        },
+        "adaface": {
+          "clean_cosine": 0.6358898444044404,
+          "eligible": true
+        },
+        "mobilefacenet": {
+          "clean_cosine": 0.5504204958927927,
+          "eligible": true
+        },
+        "magface": {
+          "clean_cosine": 0.6670685101589434,
+          "eligible": true
+        }
+      }
+    }
+  ]
+}

@@ -25,7 +25,8 @@ dodging、transfer 與 perceptual quality。
 
 Frozen 20-person v3 four-method baseline 的主要 summary 位於
 `results/transfer/lfw_attack_dev_20_four_method_v3/`。五模型 Development 100
-仍在 preflight 階段，未執行正式 benchmark；Momentum ablation 與其結果分開。
+已完成一人四方法 executor 驗收，尚未執行正式 100 人 benchmark；Momentum
+ablation 與其結果分開。
 `archive/` 與 `results/archive/` 的內容只供歷史追溯，**不得作為正式分析依據**。
 
 ## 開發與驗證
@@ -61,7 +62,7 @@ FaceNet 與 MobileFaceNet，並驗證 SHA-256。AdaFace／MagFace 作者權重�
 | v2 五模型校準 | `calibrate_lfw_v2_victims.py`；正式門檻已固定，勿隨意重跑 |
 | v3 frozen 20 生成與評估 | `run_face_verification_benchmark.py --config configs/lfw_dev_20_v3.json --attack pgd_full\|mi_fgsm --phase generate\|evaluate\|regression` |
 | v3 結果彙總與機制分析 | `aggregate_lfw_four_method_v3.py`、`analyze_lfw_four_method_mechanisms.py` |
-| 五模型 Development 100 | `run_face_verification_benchmark.py --config configs/lfw_dev_100_v2.json --preflight`；目前 gate 為 hard stop |
+| 五模型 Development 100 | `run_face_verification_benchmark.py --config configs/lfw_dev_100_v2.json --preflight`；正式執行方式與重驗證見 `docs/FORMAL_BENCHMARK_OPERATIONS.md` |
 | 1 人端到端 smoke | `smoke_lfw_five_model_pgd_mask.py --max-identities 1` |
 
 跑 smoke 前先確認 [split audit](data/datasets/lfw/evaluation_splits/v2/audit.json)

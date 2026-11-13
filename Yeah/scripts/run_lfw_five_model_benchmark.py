@@ -16,6 +16,7 @@ os.environ.setdefault("TRANSFORMERS_OFFLINE", "1")
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+os.environ.setdefault("TORCH_HOME", str(ROOT / ".cache/torch"))
 SPLITS = ROOT / "data/datasets/lfw/evaluation_splits/v2"
 MODELS = {
     "arcface": ROOT / "models/insightface/buffalo_l/w600k_r50.onnx",
@@ -158,6 +159,13 @@ def preflight() -> dict:
                 problems.append("Development 100 clean eligibility is incomplete")
             if value["thresholds"] != evidence["calibration"]:
                 problems.append("Development 100 eligibility thresholds differ from calibration")
+            if value.get("checkpoint_sha256") != {name: item.get("sha256") for name, item in evidence["models"].items()}:
+                problems.append("Development 100 eligibility checkpoint provenance differs from current models")
+            import importlib.metadata
+            versions = {name: importlib.metadata.version(name) for name in
+                        ("torch", "numpy", "opencv-python", "onnxruntime", "insightface", "facenet-pytorch")}
+            if value.get("environment") != versions:
+                problems.append("Development 100 eligibility environment differs from current environment")
         except (OSError, ValueError, KeyError) as exc:
             problems.append(f"invalid clean eligibility artifact: {exc}")
     for module in ("torch", "onnxruntime", "insightface", "facenet_pytorch", "skimage", "cv2"):
@@ -165,11 +173,31 @@ def preflight() -> dict:
             __import__(module)
         except (ImportError, OSError) as exc:
             problems.append(f"dependency unavailable: {module}: {exc}")
+    try:
+        import torch
+        cache = Path(torch.hub.get_dir()) / "checkpoints"
+        evidence["perceptual_weights"] = {}
+        for filename, expected in {
+            "alexnet-owt-7be5be79.pth": "7be5be791159472b1fbf3c69796f7cb30dca7ad8466c2df70058c37116cdee02",
+            "vgg16-397923af.pth": "397923af8e79cdbb6a7127f12361acd7a2f83e06b05044ddf496e83de57a5bf0",
+        }.items():
+            path = cache / filename
+            actual = hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else None
+            evidence["perceptual_weights"][filename] = {"path": str(path), "sha256": actual}
+            if actual != expected:
+                problems.append(f"missing or invalid offline perceptual weight: {path}")
+    except (ImportError, OSError) as exc:
+        problems.append(f"perceptual weight verification failed: {exc}")
     dependency_check = subprocess.run([sys.executable, "-m", "pip", "check"],
                                       capture_output=True, text=True, check=False)
     evidence["pip_check"] = dependency_check.stdout.strip() or dependency_check.stderr.strip()
     if dependency_check.returncode:
         problems.append("installed dependency versions conflict; see evidence.pip_check")
+    git_check = subprocess.run(["git", "status", "--porcelain", "--untracked-files=no"],
+                               cwd=ROOT, capture_output=True, text=True, check=False)
+    evidence["tracked_worktree_clean"] = git_check.returncode == 0 and not git_check.stdout.strip()
+    if not evidence["tracked_worktree_clean"]:
+        problems.append("tracked source files are modified; commit before the formal run")
     return {"decision": "READY" if not problems else "NOT READY", "problems": problems, "evidence": evidence}
 
 

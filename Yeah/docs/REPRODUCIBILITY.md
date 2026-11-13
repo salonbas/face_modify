@@ -19,6 +19,7 @@ clone is not presently a one-command five-model reproduction.
 - FaceNet VGGFace2 weight.
 - MobileFaceNet `buffalo_sc` weight.
 - AdaFace R50 and MagFace iResNet100 author weights and source modules.
+- LPIPS AlexNet and DISTS VGG16 perceptual-model cache files.
 
 These third-party dataset / pretrained model binaries are not redistributed
 directly with this Git repository.
@@ -63,6 +64,19 @@ Then run
 without downloading. A matching hash proves equivalence to the recorded local
 artifact; no independent author-published digest was located for AdaFace or
 MagFace.
+
+The formal five-model evaluator also needs two torchvision cache files for
+LPIPS/DISTS. On a connected setup machine, run the existing
+`scripts/run_lfw_dev_v2.py` `metrics_from_png` helper once on a saved clean/attack
+image pair to fetch them from PyTorch's official model URLs, then copy them
+into the repository-local `Yeah/.cache/torch/hub/checkpoints/`:
+`alexnet-owt-7be5be79.pth` (SHA-256
+`7be5be791159472b1fbf3c69796f7cb30dca7ad8466c2df70058c37116cdee02`)
+and `vgg16-397923af.pth` (SHA-256
+`397923af8e79cdbb6a7127f12361acd7a2f83e06b05044ddf496e83de57a5bf0`).
+Their sources are `https://download.pytorch.org/models/alexnet-owt-7be5be79.pth`
+and `https://download.pytorch.org/models/vgg16-397923af.pth`. Preflight verifies
+both full hashes in that local cache, so the formal run stays offline.
 
 Then verify the environment:
 
@@ -153,6 +167,10 @@ identity, A/B hashes, ArcFace checkpoint hash, attack config hash and
 preprocessing version before reuse. A bare PNG is never sufficient. Back up
 before changing machines; Git intentionally contains neither raw LFW images
 nor complete large attack output.
+Back up `data/datasets/lfw/images/`, `models/`, the two perceptual cache files,
+and `results/transfer/lfw_dev_100_five_model_v1/formal/` to private storage.
+Keep the full directory structure and verify a restored copy with the same
+manifest hashes and `--verify`; a checksum list alone cannot restore images.
 
 The artifact helper currently records Python, PyTorch, dependency versions and
 Git commit, but the five-model formal runner has not integrated it. Its
